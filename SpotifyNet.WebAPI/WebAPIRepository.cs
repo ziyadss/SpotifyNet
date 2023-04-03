@@ -20,6 +20,25 @@ public class WebAPIRepository : IWebAPIRepository
         _webAPIClient = webAPIClient;
     }
 
+    // Albums
+
+    // Artists
+
+    // Audiobooks
+
+    // Categories
+
+    // Chapters
+
+    // Episodes
+
+    // Genres
+
+    // Markets
+
+    // Player
+
+    // Playlists
     public async Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
         string? ownerId,
@@ -57,9 +76,31 @@ public class WebAPIRepository : IWebAPIRepository
         return items;
     }
 
+    // Search
+
+    // Shows
+
+    // Tracks
+    public async Task<IReadOnlyList<Track>> GetTracks(
+        string[] trackIds,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        Ensure.Between(trackIds.Length, 0, 50, inclusive: true);
+
+        var url = Endpoints.GetSeveralTracks(trackIds);
+
+        var tracks = await _webAPIClient.GetAsync<TracksSet>(
+            url,
+            accessToken,
+            cancellationToken);
+
+        return tracks.Tracks;
+    }
+
     public async Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var url = Endpoints.GetUserSavedTracks();
 
@@ -74,7 +115,7 @@ public class WebAPIRepository : IWebAPIRepository
     public async Task<IReadOnlyList<AudioFeatures>> GetTracksAudioFeatures(
         string[] trackIds,
         string accessToken,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         Ensure.Between(trackIds.Length, 0, 100, inclusive: true);
 
@@ -85,23 +126,6 @@ public class WebAPIRepository : IWebAPIRepository
             cancellationToken);
 
         return features.AudioFeatures;
-    }
-
-    public async Task<IReadOnlyList<Track>> GetTracks(
-        string[] trackIds,
-        string accessToken,
-        CancellationToken cancellationToken = default)
-    {
-        Ensure.Between(trackIds.Length, 0, 50, inclusive: true);
-
-        var url = Endpoints.GetSeveralTracks(trackIds);
-
-        var tracks = await _webAPIClient.GetAsync<TracksSet>(
-            url,
-            accessToken,
-            cancellationToken);
-
-        return tracks.Tracks;
     }
 
     public async Task<AudioAnalysis> GetAudioAnalysis(
@@ -118,6 +142,8 @@ public class WebAPIRepository : IWebAPIRepository
 
         return analysis;
     }
+
+    // Users
 
     //private async Task<List<T>> GetPaginated<T>(
     //    string initialUrl,

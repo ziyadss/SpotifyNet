@@ -9,15 +9,44 @@ namespace SpotifyNet.WebAPI.Interfaces;
 
 public interface IWebAPIRepository
 {
+    // Albums
+
+    // Artists
+
+    // Audiobooks
+
+    // Categories
+
+    // Chapters
+
+    // Episodes
+
+    // Genres
+
+    // Markets
+
+    // Player
+
+    // Playlists
     Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
         string? ownerId = null,
         CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
-        string playlistId, 
+        string playlistId,
         string accessToken,
         CancellationToken cancellationToken = default);
+
+    // Search
+
+    // Shows
+
+    // Tracks
+    Task<IReadOnlyList<Track>> GetTracks(
+    string[] trackIds,
+    string accessToken,
+    CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,
@@ -28,13 +57,10 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<Track>> GetTracks(
-        string[] trackIds,
-        string accessToken,
-        CancellationToken cancellationToken = default);
-
     Task<AudioAnalysis> GetAudioAnalysis(
         string trackId,
         string accessToken,
         CancellationToken cancellationToken = default);
+
+    // Users
 }
