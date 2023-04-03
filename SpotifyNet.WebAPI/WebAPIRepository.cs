@@ -19,7 +19,7 @@ public class WebAPIRepository : IWebAPIRepository
 
     public async Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
-        string? ownerId = null,
+        string? ownerId,
         CancellationToken cancellationToken)
     {
         var url = Endpoints.GetCurrentUserPlaylists();
