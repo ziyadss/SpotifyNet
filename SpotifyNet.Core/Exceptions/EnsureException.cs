@@ -15,8 +15,8 @@ internal class EnsureException : Exception
     {
     }
 
-    public EnsureException(string message, Exception inner)
-        : base(message, inner)
+    public EnsureException(string message, Exception innerException)
+        : base(message, innerException)
     {
     }
 
