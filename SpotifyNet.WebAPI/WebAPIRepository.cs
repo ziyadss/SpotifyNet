@@ -2,6 +2,7 @@
 using SpotifyNet.Datastructures.Spotify;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 using SpotifyNet.WebAPI.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +102,21 @@ public class WebAPIRepository : IWebAPIRepository
             cancellationToken);
 
         return tracks.Tracks;
+    }
+
+    public async Task<AudioAnalysis> GetAudioAnalysis(
+        string trackId,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetTrackAudioAnalysis(trackId);
+
+        var analysis = await _webAPIClient.GetAsync<AudioAnalysis>(
+            url,
+            accessToken,
+            cancellationToken);
+
+        return analysis;
     }
 
     //private async Task<List<T>> GetPaginated<T>(

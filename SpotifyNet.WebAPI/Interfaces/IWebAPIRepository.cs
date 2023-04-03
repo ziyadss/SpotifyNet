@@ -1,5 +1,6 @@
 ﻿using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +30,11 @@ public interface IWebAPIRepository
 
     Task<IReadOnlyList<Track>> GetTracks(
         string[] trackIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<AudioAnalysis> GetAudioAnalysis(
+        string trackId,
         string accessToken,
         CancellationToken cancellationToken = default);
 }
