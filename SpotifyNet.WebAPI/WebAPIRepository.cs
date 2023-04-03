@@ -20,7 +20,7 @@ public class WebAPIRepository : IWebAPIRepository
     public async Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
         string? ownerId = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var url = Endpoints.GetCurrentUserPlaylists();
 
@@ -42,7 +42,7 @@ public class WebAPIRepository : IWebAPIRepository
     public async Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
         string accessToken,
         string playlistId,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var url = Endpoints.GetPlaylistItems(playlistId);
 

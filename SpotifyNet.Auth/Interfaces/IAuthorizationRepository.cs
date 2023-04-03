@@ -6,13 +6,13 @@ namespace SpotifyNet.Auth.Interfaces;
 
 public interface IAuthorizationRepository
 {
-    Task<UserAuthorizationMetadata> ReadAuthorizationMetadata(CancellationToken cancellationToken);
+    Task<UserAuthorizationMetadata> ReadAuthorizationMetadata(CancellationToken cancellationToken = default);
 
-    Task WriteAuthorizationMetadata(UserAuthorizationMetadata userAuthorizationMetadata, CancellationToken cancellationToken);
+    Task WriteAuthorizationMetadata(UserAuthorizationMetadata userAuthorizationMetadata, CancellationToken cancellationToken = default);
 
-    Task<bool> AccessTokenExists(CancellationToken cancellationToken);
+    Task<bool> AccessTokenExists(CancellationToken cancellationToken = default);
 
-    Task<AccessTokenMetadata> ReadAccessToken(CancellationToken cancellationToken);
+    Task<AccessTokenMetadata> ReadAccessToken(CancellationToken cancellationToken = default);
 
-    Task WriteAccessToken(AccessTokenMetadata accessTokenMetadata, CancellationToken cancellationToken);
+    Task WriteAccessToken(AccessTokenMetadata accessTokenMetadata, CancellationToken cancellationToken = default);
 }

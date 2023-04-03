@@ -8,5 +8,5 @@ public interface IWebAPIClient
     Task<T> GetAsync<T>(
         string url,
         string accessToken,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken = default);
 }

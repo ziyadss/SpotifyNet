@@ -1,6 +1,7 @@
 ﻿using SpotifyNet.Auth;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.WebAPI;
+using SpotifyNet.WebAPI.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,20 +21,20 @@ internal class Program
         var authorizationClient = new AuthorizationClient(AppClientId, AppRedirectUri);
         var authorizationRepository = new AuthorizationRepository();
         var authorizationService = new AuthorizationService(authorizationClient, authorizationRepository);
-        var tokenAcquirer = new TokenAcquirer(AppRedirectUri, authorizationService);
+        ITokenAcquirer tokenAcquirer = new TokenAcquirer(AppRedirectUri, authorizationService);
 
         string token;
         if (newToken)
         {
-            token = await tokenAcquirer.GetToken(scopes, cancellationToken: default);
+            token = await tokenAcquirer.GetToken(scopes);
         }
         else
         {
-            token = await tokenAcquirer.GetExistingToken(cancellationToken: default);
+            token = await tokenAcquirer.GetExistingToken();
         }
 
         var webAPIClient = new WebAPIClient();
-        var webAPIRepository = new WebAPIRepository(webAPIClient);
+        IWebAPIRepository webAPIRepository = new WebAPIRepository(webAPIClient);
 
         var playlists = await webAPIRepository.GetCurrentUserPlaylists(token, ownerId: "ziyad.ss");
 
