@@ -12,6 +12,10 @@ public class AuthorizationRepository : IAuthorizationRepository
     private const string AuthorizationMetadataFilePath = "AuthorizationMetadata.json";
     private const string AccessTokenFilePath = "AccessToken.json";
 
+    public AuthorizationRepository()
+    {
+    }
+
     public async Task<UserAuthorizationMetadata> ReadAuthorizationMetadata(CancellationToken cancellationToken)
     {
         using var fs = File.OpenRead(AuthorizationMetadataFilePath);
