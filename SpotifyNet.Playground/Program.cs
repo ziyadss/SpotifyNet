@@ -6,9 +6,6 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.WebAPI;
 using SpotifyNet.WebAPI.Interfaces;
 using System;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SpotifyNet.Playground;
@@ -62,6 +59,8 @@ internal class Program
         var albumIds = new[] { "0e9GjrztzBw8oMC6n2CDeI", "6zxHzgT0fKSMEgIi7BpoyQ" };
 
         var result = await webAPIRepository.AreAlbumsSaved(albumIds, accessToken);
-        var array = result.ToArray();
+        var resultString = string.Join(',', result);
+
+        Console.WriteLine(resultString);
     }
 }
