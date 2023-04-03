@@ -1,4 +1,7 @@
-﻿using SpotifyNet.Auth;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SpotifyNet.Auth;
+using SpotifyNet.Auth.Interfaces;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.WebAPI;
 using SpotifyNet.WebAPI.Interfaces;
@@ -13,28 +16,46 @@ internal class Program
     private const string AppClientId = "";
     private const string AppRedirectUri = "http://localhost:3000";
 
-    static async Task Main()
+    public static async Task Main(string[] args)
+    {
+        var builder = Host.CreateDefaultBuilder(args);
+
+        builder.ConfigureServices(services =>
+        {
+            services
+            .AddAuthorizationService(AppClientId, AppRedirectUri)
+            .AddWebAPIService();
+
+            AddTokenAcquirer(services, AppRedirectUri);
+        });
+
+        var host = builder.Build();
+
+        await Test(host.Services);
+    }
+
+    private static IServiceCollection AddTokenAcquirer(IServiceCollection services, string appRedirectUri)
+    {
+        services.AddSingleton<ITokenAcquirer, TokenAcquirer>(p =>
+        {
+            var authorizationService = p.GetRequiredService<IAuthorizationService>();
+
+            return new TokenAcquirer(appRedirectUri, authorizationService);
+        });
+
+        return services;
+    }
+
+    private static async Task Test(IServiceProvider serviceProvider)
     {
         var newToken = false;
         var scopes = new[] { AuthorizationScope.PlaylistReadPrivate, AuthorizationScope.UserFollowRead };
 
-        var authorizationClient = new AuthorizationClient(AppClientId, AppRedirectUri);
-        var authorizationRepository = new AuthorizationRepository();
-        var authorizationService = new AuthorizationService(authorizationClient, authorizationRepository);
-        ITokenAcquirer tokenAcquirer = new TokenAcquirer(AppRedirectUri, authorizationService);
+        var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
 
-        string token;
-        if (newToken)
-        {
-            token = await tokenAcquirer.GetToken(scopes);
-        }
-        else
-        {
-            token = await tokenAcquirer.GetExistingToken();
-        }
+        var token = newToken ? await tokenAcquirer.GetToken(scopes) : await tokenAcquirer.GetExistingToken();
 
-        var webAPIClient = new WebAPIClient();
-        IWebAPIRepository webAPIRepository = new WebAPIRepository(webAPIClient);
+        var webAPIRepository = serviceProvider.GetRequiredService<IWebAPIRepository>();
 
         var playlists = await webAPIRepository.GetCurrentUserPlaylists(token, ownerId: "ziyad.ss");
 
