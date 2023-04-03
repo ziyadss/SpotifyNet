@@ -45,6 +45,10 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<SimplifiedAlbum>> GetNewReleases(
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     // Artists
 
     // Audiobooks

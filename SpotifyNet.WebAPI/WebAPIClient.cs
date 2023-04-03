@@ -96,20 +96,6 @@ public class WebAPIClient : IWebAPIClient
         }
     }
 
-    private async Task SendAsync(
-        HttpMethod httpMethod,
-        string url,
-        string accessToken,
-        HttpStatusCode expectedStatusCode,
-        CancellationToken cancellationToken)
-    {
-        var request = new HttpRequestMessage(httpMethod, url);
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-        var response = await _httpClient.SendAsync(request, cancellationToken);
-        await Ensure.RequestSuccess(response, expectedStatusCode);
-    }
-
     private async Task SendAsync<TPayload>(
         HttpMethod httpMethod,
         string url,

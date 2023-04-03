@@ -10,6 +10,7 @@ internal static class Endpoints
     public static string SaveAlbumsForUser() => $"https://api.spotify.com/v1/me/albums";
     public static string RemoveUserSavedAlbums() => $"https://api.spotify.com/v1/me/albums";
     public static string CheckUserSavedAlbums(string[] albumIds) => $"https://api.spotify.com/v1/me/albums/contains?ids={string.Join(',', albumIds)}";
+    public static string GetNewReleases() => $"https://api.spotify.com/v1/browse/new-releases";
 
     // Artists
 

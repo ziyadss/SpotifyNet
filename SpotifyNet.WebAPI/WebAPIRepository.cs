@@ -131,6 +131,18 @@ public class WebAPIRepository : IWebAPIRepository
             cancellationToken);
     }
 
+    public Task<IEnumerable<SimplifiedAlbum>> GetNewReleases(
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetNewReleases();
+
+        return GetPaginated<SimplifiedAlbum>(
+            url,
+            accessToken,
+            cancellationToken);
+    }
+
     // Artists
 
     // Audiobooks
