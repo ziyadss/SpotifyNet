@@ -6,7 +6,9 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.WebAPI;
 using SpotifyNet.WebAPI.Interfaces;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SpotifyNet.Playground;
@@ -49,21 +51,61 @@ internal class Program
     private static async Task Test(IServiceProvider serviceProvider)
     {
         var newToken = false;
-        var scopes = new[] { AuthorizationScope.PlaylistReadPrivate, AuthorizationScope.UserFollowRead };
+        var scopes = new[] { AuthorizationScope.UserLibraryRead };
 
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
 
-        var token = newToken ? await tokenAcquirer.GetToken(scopes) : await tokenAcquirer.GetExistingToken();
+        var accessToken = newToken ? await tokenAcquirer.GetToken(scopes) : await tokenAcquirer.GetExistingToken();
 
         var webAPIRepository = serviceProvider.GetRequiredService<IWebAPIRepository>();
 
-        var playlists = await webAPIRepository.GetCurrentUserPlaylists(token, ownerId: "ziyad.ss");
+        var savedTracks = await webAPIRepository.GetCurrentUserSavedTracks(accessToken);
 
-        Console.WriteLine(playlists[0].Name);
-        Console.WriteLine(playlists[0].Tracks!.Total);
+        var chunkedIds = savedTracks.Select(st => st.Track!.Id!).Chunk(100).ToArray();
+        await Write("chunkedIds.json", chunkedIds);
 
-        var tracks = await webAPIRepository.GetPlaylistItems(token, playlists[0].Id!);
-        Console.WriteLine(tracks.Count);
-        Console.WriteLine(string.Join(',', tracks.Select(t => t.Track!.Name)));
+        //var chunkedIds = await Read<string[][]>("chunkedIds.json");
+
+        //var features = new List<AudioFeatures>(chunkedIds.Sum(chunk => chunk.Length));
+        //foreach (var chunk in chunkedIds)
+        //{
+        //    var chunkFeatures = await webAPIRepository.GetTracksAudioFeatures(chunk, accessToken);
+        //    features.AddRange(chunkFeatures.Where(cf => cf is not null));
+        //}
+
+        //await Write("features.json", features.ToArray());
+
+        //var features = await Read<AudioFeatures[]>("features.json");
+        //var processedFeaturesList = new List<CustomAudioFeatures>(features.Length);
+        //foreach (var feature in features)
+        //{
+        //    var custom = await MapAudioFeatures(feature, webAPIRepository, accessToken);
+        //    if (custom is not null)
+        //    {
+        //        processedFeaturesList.Add(custom);
+        //    }
+        //}
+        //var processedFeatures = processedFeaturesList.ToArray();
+        //Console.WriteLine($"{processedFeatures.Length}/{features.Length}");
+        //await Write("full-features-processed.json", processedFeatures);
+
+        //var processedFeatures = await Read<CustomAudioFeatures[]>("full-features-processed.json");
+        //Console.WriteLine(processedFeatures.Length);
+    }
+
+    private static async Task<T> Read<T>(string fileName)
+    {
+        using var fs = File.OpenRead(fileName);
+
+        var item = await JsonSerializer.DeserializeAsync<T>(fs);
+
+        return item!;
+    }
+
+    private static async Task Write<T>(string fileName, T item)
+    {
+        using var fs = File.OpenWrite(fileName);
+
+        await JsonSerializer.SerializeAsync(fs, item);
     }
 }
