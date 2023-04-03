@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Threading;
-using SpotifyNet.Datastructures.Spotify;
+using SpotifyNet.Datastructures.Spotify.Authorization;
 
 namespace SpotifyNet.Auth.Interfaces;
 

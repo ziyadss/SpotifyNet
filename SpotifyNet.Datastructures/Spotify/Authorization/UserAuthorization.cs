@@ -1,4 +1,4 @@
-﻿namespace SpotifyNet.Datastructures.Spotify;
+﻿namespace SpotifyNet.Datastructures.Spotify.Authorization;
 
 public class UserAuthorization
 {

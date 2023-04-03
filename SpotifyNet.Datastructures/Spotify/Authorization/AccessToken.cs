@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SpotifyNet.Datastructures.Spotify;
+namespace SpotifyNet.Datastructures.Spotify.Authorization;
 
 public class AccessToken
 {

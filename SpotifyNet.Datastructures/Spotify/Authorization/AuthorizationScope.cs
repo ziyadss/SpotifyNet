@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SpotifyNet.Datastructures.Spotify;
+namespace SpotifyNet.Datastructures.Spotify.Authorization;
 
 public static class AuthorizationScope
 {

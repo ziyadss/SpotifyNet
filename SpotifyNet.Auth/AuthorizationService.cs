@@ -1,7 +1,7 @@
 ﻿using SpotifyNet.Auth.Interfaces;
 using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Internal;
-using SpotifyNet.Datastructures.Spotify;
+using SpotifyNet.Datastructures.Spotify.Authorization;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using SpotifyNet.Auth.Interfaces;
 using SpotifyNet.Core.Utilities;
-using SpotifyNet.Datastructures.Spotify;
+using SpotifyNet.Datastructures.Spotify.Authorization;
 
 namespace SpotifyNet.Auth;
 
