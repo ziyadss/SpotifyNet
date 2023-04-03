@@ -1,11 +1,11 @@
 ﻿using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify;
+using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 using SpotifyNet.WebAPI.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +21,58 @@ public class WebAPIRepository : IWebAPIRepository
     }
 
     // Albums
+    public Task<Album> GetAlbum(
+        string albumId,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetAlbum(albumId);
+
+        return _webAPIClient.GetAsync<Album>(
+            url,
+            accessToken,
+            cancellationToken);
+    }
+
+    public async Task<IEnumerable<Album>> GetAlbums(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetSeveralAlbums(albumIds);
+
+        var albums = await _webAPIClient.GetAsync<AlbumsSet>(
+            url,
+            accessToken,
+            cancellationToken);
+
+        return albums.Albums;
+    }
+
+    public Task<IEnumerable<SimplifiedTrack>> GetAlbumTracks(
+        string albumId,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetAlbumTracks(albumId);
+
+        return GetPaginated<SimplifiedTrack>(
+            url,
+            accessToken,
+            cancellationToken);
+    }
+
+    public Task<IEnumerable<SavedAlbum>> GetSavedAlbums(
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetUserSavedAlbums();
+
+        return GetPaginated<SavedAlbum>(
+            url,
+            accessToken,
+            cancellationToken);
+    }
 
     // Artists
 
@@ -39,41 +91,29 @@ public class WebAPIRepository : IWebAPIRepository
     // Player
 
     // Playlists
-    public async Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+    public Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
-        string? ownerId,
         CancellationToken cancellationToken)
     {
         var url = Endpoints.GetCurrentUserPlaylists();
 
-        var playlists = await GetPaginated<SimplifiedPlaylist>(
+        return GetPaginated<SimplifiedPlaylist>(
             url,
             accessToken,
             cancellationToken);
-
-        if (ownerId is null)
-        {
-            return playlists;
-        }
-        else
-        {
-            return playlists.Where(p => p.Owner?.Id == ownerId).ToList();
-        }
     }
 
-    public async Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
+    public Task<IEnumerable<PlaylistTrack>> GetPlaylistItems(
         string playlistId,
         string accessToken,
         CancellationToken cancellationToken)
     {
         var url = Endpoints.GetPlaylistItems(playlistId);
 
-        var items = await GetPaginated<PlaylistTrack>(
+        return GetPaginated<PlaylistTrack>(
             url,
             accessToken,
             cancellationToken);
-
-        return items;
     }
 
     // Search
@@ -81,7 +121,7 @@ public class WebAPIRepository : IWebAPIRepository
     // Shows
 
     // Tracks
-    public async Task<IReadOnlyList<Track>> GetTracks(
+    public async Task<IEnumerable<Track>> GetTracks(
         string[] trackIds,
         string accessToken,
         CancellationToken cancellationToken)
@@ -98,21 +138,19 @@ public class WebAPIRepository : IWebAPIRepository
         return tracks.Tracks;
     }
 
-    public async Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
+    public Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,
         CancellationToken cancellationToken)
     {
         var url = Endpoints.GetUserSavedTracks();
 
-        var tracks = await GetPaginated<SavedTrack>(
+        return GetPaginated<SavedTrack>(
             url,
             accessToken,
             cancellationToken);
-
-        return tracks;
     }
 
-    public async Task<IReadOnlyList<AudioFeatures>> GetTracksAudioFeatures(
+    public async Task<IEnumerable<AudioFeatures>> GetTracksAudioFeatures(
         string[] trackIds,
         string accessToken,
         CancellationToken cancellationToken)
@@ -135,17 +173,15 @@ public class WebAPIRepository : IWebAPIRepository
     {
         var url = Endpoints.GetTrackAudioAnalysis(trackId);
 
-        var analysis = await _webAPIClient.GetAsync<AudioAnalysis>(
+        return await _webAPIClient.GetAsync<AudioAnalysis>(
             url,
             accessToken,
             cancellationToken);
-
-        return analysis;
     }
 
     // Users
 
-    //private async Task<List<T>> GetPaginated<T>(
+    //private async Task<IEnumerable<T>> GetPaginated<T>(
     //    string initialUrl,
     //    string accessToken,
     //    CancellationToken cancellationToken)
@@ -171,7 +207,7 @@ public class WebAPIRepository : IWebAPIRepository
     //    return items;
     //}
 
-    private async Task<List<T>> GetPaginated<T>(
+    private async Task<IEnumerable<T>> GetPaginated<T>(
         string initialUrl,
         string accessToken,
         CancellationToken cancellationToken)

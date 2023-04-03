@@ -1,4 +1,5 @@
-﻿using SpotifyNet.Datastructures.Spotify.Playlists;
+﻿using SpotifyNet.Datastructures.Spotify.Albums;
+using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 using System.Collections.Generic;
@@ -10,6 +11,24 @@ namespace SpotifyNet.WebAPI.Interfaces;
 public interface IWebAPIRepository
 {
     // Albums
+    Task<Album> GetAlbum(
+        string albumId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Album>> GetAlbums(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<SimplifiedTrack>> GetAlbumTracks(
+        string albumId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<SavedAlbum>> GetSavedAlbums(
+        string accessToken,
+        CancellationToken cancellationToken = default);
 
     // Artists
 
@@ -28,12 +47,11 @@ public interface IWebAPIRepository
     // Player
 
     // Playlists
-    Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+    Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
-        string? ownerId = null,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
+    Task<IEnumerable<PlaylistTrack>> GetPlaylistItems(
         string playlistId,
         string accessToken,
         CancellationToken cancellationToken = default);
@@ -43,16 +61,16 @@ public interface IWebAPIRepository
     // Shows
 
     // Tracks
-    Task<IReadOnlyList<Track>> GetTracks(
+    Task<IEnumerable<Track>> GetTracks(
     string[] trackIds,
     string accessToken,
     CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
+    Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<AudioFeatures>> GetTracksAudioFeatures(
+    Task<IEnumerable<AudioFeatures>> GetTracksAudioFeatures(
         string[] trackIds,
         string accessToken,
         CancellationToken cancellationToken = default);

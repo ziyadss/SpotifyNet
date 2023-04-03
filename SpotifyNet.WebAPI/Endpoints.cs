@@ -3,6 +3,10 @@
 internal static class Endpoints
 {
     // Albums
+    public static string GetAlbum(string albumId) => $"https://api.spotify.com/v1/albums/{albumId}";
+    public static string GetSeveralAlbums(string[] albumIds) => $"https://api.spotify.com/v1/albums?ids={string.Join(',', albumIds)}";
+    public static string GetAlbumTracks(string albumId) => $"https://api.spotify.com/v1/albums/{albumId}/tracks";
+    public static string GetUserSavedAlbums() => $"https://api.spotify.com/v1/me/albums";
 
     // Artists
 
