@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SpotifyNet.Auth.Interfaces;
+using SpotifyNet.Core.Utilities;
+using SpotifyNet.Datastructures.Spotify.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
@@ -7,9 +10,6 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using SpotifyNet.Auth.Interfaces;
-using SpotifyNet.Core.Utilities;
-using SpotifyNet.Datastructures.Spotify.Authorization;
 
 namespace SpotifyNet.Auth;
 

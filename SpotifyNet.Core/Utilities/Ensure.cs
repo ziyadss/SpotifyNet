@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SpotifyNet.Core.Exceptions;
+using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
-using SpotifyNet.Core.Exceptions;
 
 namespace SpotifyNet.Core.Utilities;
 
