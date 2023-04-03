@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace SpotifyNet.WebAPI.Interfaces;
 
-internal interface IWebAPIClient
+public interface IWebAPIClient
 {
     Task<T> GetAsync<T>(
         string url,

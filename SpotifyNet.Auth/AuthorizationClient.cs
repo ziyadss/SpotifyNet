@@ -13,7 +13,7 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 
 namespace SpotifyNet.Auth;
 
-internal class AuthorizationClient : IAuthorizationClient
+public class AuthorizationClient : IAuthorizationClient
 {
     private readonly string _appClientId;
     private readonly string _appRedirectUri;

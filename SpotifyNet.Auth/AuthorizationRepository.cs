@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.Auth;
 
-internal class AuthorizationRepository : IAuthorizationRepository
+public class AuthorizationRepository : IAuthorizationRepository
 {
     private const string AuthorizationMetadataFilePath = "AuthorizationMetadata.json";
     private const string AccessTokenFilePath = "AccessToken.json";

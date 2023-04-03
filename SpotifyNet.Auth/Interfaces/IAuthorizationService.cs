@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace SpotifyNet.Auth.Interfaces;
 
-internal interface IAuthorizationService
+public interface IAuthorizationService
 {
     Task<string> GetUserAuthorizeUrl(string[] scopes, CancellationToken cancellationToken);
 

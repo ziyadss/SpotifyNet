@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.Auth.Interfaces;
 
-internal interface IAuthorizationRepository
+public interface IAuthorizationRepository
 {
     Task<UserAuthorizationMetadata> ReadAuthorizationMetadata(CancellationToken cancellationToken);
 

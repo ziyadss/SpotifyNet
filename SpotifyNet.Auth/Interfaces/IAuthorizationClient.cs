@@ -4,7 +4,7 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 
 namespace SpotifyNet.Auth.Interfaces;
 
-internal interface IAuthorizationClient
+public interface IAuthorizationClient
 {
     Task<UserAuthorization> GetUserAuthorizeUrl(string[] scopes, CancellationToken cancellationToken);
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.WebAPI;
 
-internal class WebAPIClient : IWebAPIClient
+public class WebAPIClient : IWebAPIClient
 {
     private readonly HttpClient _httpClient;
 

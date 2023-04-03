@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.Auth;
 
-internal class AuthorizationService : IAuthorizationService
+public class AuthorizationService : IAuthorizationService
 {
     private readonly IAuthorizationClient _authorizationClient;
     private readonly IAuthorizationRepository _authorizationRepository;
