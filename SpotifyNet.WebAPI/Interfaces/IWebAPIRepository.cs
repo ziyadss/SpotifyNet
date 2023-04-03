@@ -30,6 +30,21 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
+    Task SaveAlbums(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task RemoveAlbums(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<bool>> AreAlbumsSaved(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     // Artists
 
     // Audiobooks

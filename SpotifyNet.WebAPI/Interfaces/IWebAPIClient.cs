@@ -5,8 +5,20 @@ namespace SpotifyNet.WebAPI.Interfaces;
 
 public interface IWebAPIClient
 {
-    Task<T> GetAsync<T>(
+    Task<TResponse> GetAsync<TResponse>(
         string url,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task PutAsync<TPayload>(
+        string url,
+        TPayload payload,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task DeleteAsync<TPayload>(
+        string url,
+        TPayload payload,
         string accessToken,
         CancellationToken cancellationToken = default);
 }

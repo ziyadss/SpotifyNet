@@ -74,6 +74,63 @@ public class WebAPIRepository : IWebAPIRepository
             cancellationToken);
     }
 
+    public Task SaveAlbums(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        Ensure.Between(albumIds.Length, 0, 50, inclusive: true);
+
+        var url = Endpoints.SaveAlbumsForUser();
+
+        var payload = new
+        {
+            ids = albumIds,
+        };
+
+        return _webAPIClient.PutAsync(
+            url,
+            payload,
+            accessToken,
+            cancellationToken);
+    }
+
+    public Task RemoveAlbums(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        Ensure.Between(albumIds.Length, 0, 50, inclusive: true);
+
+        var url = Endpoints.RemoveUserSavedAlbums();
+
+        var payload = new
+        {
+            ids = albumIds,
+        };
+
+        return _webAPIClient.DeleteAsync(
+            url,
+            payload,
+            accessToken,
+            cancellationToken);
+    }
+
+    public Task<IEnumerable<bool>> AreAlbumsSaved(
+        string[] albumIds,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        Ensure.Between(albumIds.Length, 0, 20, inclusive: true);
+
+        var url = Endpoints.CheckUserSavedAlbums(albumIds);
+
+        return _webAPIClient.GetAsync<IEnumerable<bool>>(
+            url,
+            accessToken,
+            cancellationToken);
+    }
+
     // Artists
 
     // Audiobooks

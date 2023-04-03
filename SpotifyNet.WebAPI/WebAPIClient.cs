@@ -19,24 +19,56 @@ public class WebAPIClient : IWebAPIClient
         _httpClient = new();
     }
 
-    public async Task<T> GetAsync<T>(
+    public Task<TResponse> GetAsync<TResponse>(
         string url,
         string accessToken,
         CancellationToken cancellationToken)
     {
         var method = HttpMethod.Get;
 
-        var result = await SendAsync<T>(
+        return SendAsync<TResponse>(
             method,
             url,
             accessToken,
             HttpStatusCode.OK,
             cancellationToken);
-
-        return result;
     }
 
-    private async Task<T> SendAsync<T>(
+    public Task PutAsync<TPayload>(
+        string url,
+        TPayload payload,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var method = HttpMethod.Put;
+
+        return SendAsync(
+            method,
+            url,
+            payload,
+            accessToken,
+            HttpStatusCode.OK,
+            cancellationToken);
+    }
+
+    public Task DeleteAsync<TPayload>(
+        string url,
+        TPayload payload,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var method = HttpMethod.Delete;
+
+        return SendAsync(
+            method,
+            url,
+            payload,
+            accessToken,
+            HttpStatusCode.OK,
+            cancellationToken);
+    }
+
+    private async Task<TResponse> SendAsync<TResponse>(
         HttpMethod httpMethod,
         string url,
         string accessToken,
@@ -51,7 +83,7 @@ public class WebAPIClient : IWebAPIClient
 
         try
         {
-            var result = await response.Content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+            var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
 
             return result!;
         }
@@ -62,5 +94,40 @@ public class WebAPIClient : IWebAPIClient
                 message: $"Failed to deserialize response from `{url}`. Response: `{content}`",
                 innerException: ex);
         }
+    }
+
+    private async Task SendAsync(
+        HttpMethod httpMethod,
+        string url,
+        string accessToken,
+        HttpStatusCode expectedStatusCode,
+        CancellationToken cancellationToken)
+    {
+        var request = new HttpRequestMessage(httpMethod, url);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = await _httpClient.SendAsync(request, cancellationToken);
+        await Ensure.RequestSuccess(response, expectedStatusCode);
+    }
+
+    private async Task SendAsync<TPayload>(
+        HttpMethod httpMethod,
+        string url,
+        TPayload payload,
+        string accessToken,
+        HttpStatusCode expectedStatusCode,
+        CancellationToken cancellationToken)
+    {
+        using var content = JsonContent.Create(payload);
+
+        var request = new HttpRequestMessage(httpMethod, url)
+        {
+            Content = content
+        };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = await _httpClient.SendAsync(request, cancellationToken);
+        await Ensure.RequestSuccess(response, expectedStatusCode);
     }
 }

@@ -59,53 +59,9 @@ internal class Program
 
         var webAPIRepository = serviceProvider.GetRequiredService<IWebAPIRepository>();
 
-        var savedTracks = await webAPIRepository.GetCurrentUserSavedTracks(accessToken);
+        var albumIds = new[] { "0e9GjrztzBw8oMC6n2CDeI", "6zxHzgT0fKSMEgIi7BpoyQ" };
 
-        var chunkedIds = savedTracks.Select(st => st.Track!.Id!).Chunk(100).ToArray();
-        await Write("chunkedIds.json", chunkedIds);
-
-        //var chunkedIds = await Read<string[][]>("chunkedIds.json");
-
-        //var features = new List<AudioFeatures>(chunkedIds.Sum(chunk => chunk.Length));
-        //foreach (var chunk in chunkedIds)
-        //{
-        //    var chunkFeatures = await webAPIRepository.GetTracksAudioFeatures(chunk, accessToken);
-        //    features.AddRange(chunkFeatures.Where(cf => cf is not null));
-        //}
-
-        //await Write("features.json", features.ToArray());
-
-        //var features = await Read<AudioFeatures[]>("features.json");
-        //var processedFeaturesList = new List<CustomAudioFeatures>(features.Length);
-        //foreach (var feature in features)
-        //{
-        //    var custom = await MapAudioFeatures(feature, webAPIRepository, accessToken);
-        //    if (custom is not null)
-        //    {
-        //        processedFeaturesList.Add(custom);
-        //    }
-        //}
-        //var processedFeatures = processedFeaturesList.ToArray();
-        //Console.WriteLine($"{processedFeatures.Length}/{features.Length}");
-        //await Write("full-features-processed.json", processedFeatures);
-
-        //var processedFeatures = await Read<CustomAudioFeatures[]>("full-features-processed.json");
-        //Console.WriteLine(processedFeatures.Length);
-    }
-
-    private static async Task<T> Read<T>(string fileName)
-    {
-        using var fs = File.OpenRead(fileName);
-
-        var item = await JsonSerializer.DeserializeAsync<T>(fs);
-
-        return item!;
-    }
-
-    private static async Task Write<T>(string fileName, T item)
-    {
-        using var fs = File.OpenWrite(fileName);
-
-        await JsonSerializer.SerializeAsync(fs, item);
+        var result = await webAPIRepository.AreAlbumsSaved(albumIds, accessToken);
+        var array = result.ToArray();
     }
 }
