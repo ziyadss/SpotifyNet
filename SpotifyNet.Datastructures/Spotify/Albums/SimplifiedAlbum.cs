@@ -51,13 +51,13 @@ public class SimplifiedAlbum
     public ExternalIds? ExternalIds { get; init; }
 
     [JsonPropertyName("genres")]
-    public required string[]? Genres { get; init; }
+    public string[]? Genres { get; init; }
 
     [JsonPropertyName("label")]
     public string? Label { get; init; }
 
     [JsonPropertyName("popularity")]
-    public required int? Popularity { get; init; }
+    public int? Popularity { get; init; }
 
     [JsonPropertyName("album_group")]
     public AlbumGroup? AlbumGroup { get; init; }
