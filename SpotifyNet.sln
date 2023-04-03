@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Datastructures",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Core", "SpotifyNet.Core\SpotifyNet.Core.csproj", "{028C98DF-6497-4F8B-9BE1-4EAB77E915CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyNet.Playground", "SpotifyNet.Playground\SpotifyNet.Playground.csproj", "{12ADE71F-A3A6-4A58-9592-1F1D99A1100B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Playground", "SpotifyNet.Playground\SpotifyNet.Playground.csproj", "{12ADE71F-A3A6-4A58-9592-1F1D99A1100B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyNet.WebAPI", "SpotifyNet.WebAPI\SpotifyNet.WebAPI.csproj", "{E64D3F7A-9655-4D24-8588-822D8FFEA733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.WebAPI", "SpotifyNet.WebAPI\SpotifyNet.WebAPI.csproj", "{E64D3F7A-9655-4D24-8588-822D8FFEA733}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
