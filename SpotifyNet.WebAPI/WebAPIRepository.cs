@@ -35,7 +35,7 @@ public class WebAPIRepository : IWebAPIRepository
         }
         else
         {
-            return playlists.Where(p => p.Owner.Id == ownerId).ToList();
+            return playlists.Where(p => p.Owner?.Id == ownerId).ToList();
         }
     }
 
