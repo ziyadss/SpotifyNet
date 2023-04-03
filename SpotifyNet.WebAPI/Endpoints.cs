@@ -29,6 +29,7 @@ internal static class Endpoints
     // Shows
 
     // Tracks
+    public static string GetSeveralTracks(string[] trackIds) => $"https://api.spotify.com/v1/tracks?ids={string.Join(',', trackIds)}";
     public static string GetUserSavedTracks() => $"https://api.spotify.com/v1/me/tracks";
     public static string GetTracksAudioFeatures(string[] trackIds) => $"https://api.spotify.com/v1/audio-features?ids={string.Join(',', trackIds)}";
 

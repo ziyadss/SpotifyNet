@@ -3,7 +3,6 @@ using SpotifyNet.Datastructures.Spotify;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.WebAPI.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -80,9 +79,28 @@ public class WebAPIRepository : IWebAPIRepository
 
         var url = Endpoints.GetTracksAudioFeatures(trackIds);
 
-        var features = await _webAPIClient.GetAsync <AudioFeaturesSet>(url, accessToken, cancellationToken);
+        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(url,
+            accessToken,
+            cancellationToken);
 
         return features.AudioFeatures;
+    }
+
+    public async Task<IReadOnlyList<Track>> GetTracks(
+        string[] trackIds,
+        string accessToken,
+        CancellationToken cancellationToken = default)
+    {
+        Ensure.Between(trackIds.Length, 0, 50, inclusive: true);
+
+        var url = Endpoints.GetSeveralTracks(trackIds);
+
+        var tracks = await _webAPIClient.GetAsync<TracksSet>(
+            url,
+            accessToken,
+            cancellationToken);
+
+        return tracks.Tracks;
     }
 
     //private async Task<List<T>> GetPaginated<T>(
@@ -90,14 +108,21 @@ public class WebAPIRepository : IWebAPIRepository
     //    string accessToken,
     //    CancellationToken cancellationToken)
     //{
-    //    var items = new List<T>();
+    //    var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
+    //        initialUrl,
+    //        accessToken,
+    //        cancellationToken);
 
-    //    var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(initialUrl, accessToken, cancellationToken);
+    //    var items = new List<T>(batch.Total);
     //    items.AddRange(batch.Items);
 
     //    while (batch.Next is not null)
     //    {
-    //        batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(batch.Next, accessToken, cancellationToken);
+    //        batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
+    //            batch.Next,
+    //            accessToken,
+    //            cancellationToken);
+
     //        items.AddRange(batch.Items);
     //    }
 
@@ -109,23 +134,29 @@ public class WebAPIRepository : IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var items = new List<T>();
-
         var offset = 0;
         var limit = 50;
         var url = $"{initialUrl}?offset={offset}&limit={limit}";
 
-        var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(url, accessToken, cancellationToken);
+        var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
+            url,
+            accessToken,
+            cancellationToken);
+
+        var items = new List<T>(batch.Total);
         items.AddRange(batch.Items);
 
         while (batch.Items.Length != 0)
         {
             offset += 50;
             url = $"{initialUrl}?offset={offset}&limit={limit}";
-            batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(url, accessToken, cancellationToken);
-            items.AddRange(batch.Items);
 
-            Console.WriteLine($"{items.Count}/{batch.Total}");
+            batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
+                url,
+                accessToken,
+                cancellationToken);
+
+            items.AddRange(batch.Items);
         }
 
         return items;
