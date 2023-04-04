@@ -25,7 +25,7 @@ public class AuthorizationService : IAuthorizationService
     {
         var authorization = await _authorizationClient.GetUserAuthorizeUrl(scopes, cancellationToken);
 
-        var authorizationUrl = await WriteAndReturnAuthorizationUrl(authorization, cancellationToken);
+        var authorizationUrl = await WriteAndReturnAuthorizationUrl(authorization, scopes, cancellationToken);
 
         return authorizationUrl;
     }
@@ -78,10 +78,11 @@ public class AuthorizationService : IAuthorizationService
         return tokenString;
     }
 
-    private async Task<string> WriteAndReturnAuthorizationUrl(UserAuthorization authorization, CancellationToken cancellationToken)
+    private async Task<string> WriteAndReturnAuthorizationUrl(UserAuthorization authorization, string[] scopes, CancellationToken cancellationToken)
     {
         var authorizationMetadata = new UserAuthorizationMetadata
         {
+            AuthorizationScopes = scopes,
             AuthorizationUrl = authorization.AuthorizationUrl,
             CodeVerifier = authorization.CodeVerifier,
             State = authorization.State,
