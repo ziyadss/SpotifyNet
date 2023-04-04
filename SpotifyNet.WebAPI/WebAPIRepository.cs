@@ -228,7 +228,8 @@ public class WebAPIRepository : IWebAPIRepository
 
         var url = Endpoints.GetTracksAudioFeatures(trackIds);
 
-        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(url,
+        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(
+            url,
             accessToken,
             cancellationToken);
 
