@@ -4,7 +4,6 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
@@ -61,7 +60,7 @@ public class AuthorizationClient : IAuthorizationClient
         builder.Query = queryParameters.ToString();
 
         using var response = await _httpClient.GetAsync(builder.Uri, cancellationToken);
-        await Ensure.RequestSuccess(response, HttpStatusCode.OK);
+        await Ensure.RequestSuccess(response, cancellationToken);
 
         return new UserAuthorization
         {
@@ -102,7 +101,7 @@ public class AuthorizationClient : IAuthorizationClient
         using var content = new FormUrlEncodedContent(payload);
 
         using var response = await _httpClient.PostAsync(TokenEndpoint, content, cancellationToken);
-        await Ensure.RequestSuccess(response, HttpStatusCode.OK);
+        await Ensure.RequestSuccess(response, cancellationToken);
 
         var token = await response.Content.ReadFromJsonAsync<AccessToken>(cancellationToken: cancellationToken);
 

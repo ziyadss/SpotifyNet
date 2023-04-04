@@ -1,7 +1,6 @@
 ﻿using SpotifyNet.Core.Utilities;
 using SpotifyNet.WebAPI.Interfaces;
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -30,7 +29,6 @@ public class WebAPIClient : IWebAPIClient
             method,
             url,
             accessToken,
-            HttpStatusCode.OK,
             cancellationToken);
     }
 
@@ -47,7 +45,6 @@ public class WebAPIClient : IWebAPIClient
             url,
             payload,
             accessToken,
-            HttpStatusCode.OK,
             cancellationToken);
     }
 
@@ -64,7 +61,6 @@ public class WebAPIClient : IWebAPIClient
             url,
             payload,
             accessToken,
-            HttpStatusCode.OK,
             cancellationToken);
     }
 
@@ -72,14 +68,13 @@ public class WebAPIClient : IWebAPIClient
         HttpMethod httpMethod,
         string url,
         string accessToken,
-        HttpStatusCode expectedStatusCode,
         CancellationToken cancellationToken)
     {
         var request = new HttpRequestMessage(httpMethod, url);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
         var response = await _httpClient.SendAsync(request, cancellationToken);
-        await Ensure.RequestSuccess(response, expectedStatusCode);
+        await Ensure.RequestSuccess(response, cancellationToken);
 
         try
         {
@@ -101,7 +96,6 @@ public class WebAPIClient : IWebAPIClient
         string url,
         TPayload payload,
         string accessToken,
-        HttpStatusCode expectedStatusCode,
         CancellationToken cancellationToken)
     {
         using var content = JsonContent.Create(payload);
@@ -114,6 +108,6 @@ public class WebAPIClient : IWebAPIClient
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
         var response = await _httpClient.SendAsync(request, cancellationToken);
-        await Ensure.RequestSuccess(response, expectedStatusCode);
+        await Ensure.RequestSuccess(response, cancellationToken);
     }
 }

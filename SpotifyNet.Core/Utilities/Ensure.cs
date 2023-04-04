@@ -1,8 +1,8 @@
 ﻿using SpotifyNet.Core.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpotifyNet.Core.Utilities;
@@ -39,17 +39,19 @@ public static class Ensure
 
     public static async Task RequestSuccess(
         HttpResponseMessage response,
-        HttpStatusCode expectedStatusCode)
+        CancellationToken cancellationToken)
     {
         try
         {
-            Equal(response.StatusCode, expectedStatusCode);
+            response.EnsureSuccessStatusCode();
         }
-        catch (EnsureException)
+        catch (HttpRequestException ex)
         {
-            var content = await response.Content.ReadAsStringAsync();
-            var errorMessage = $"Request failed with status code `{response.StatusCode}`. Content: `{content}`";
-            throw new EnsureException(errorMessage);
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            throw new WebAPIException(
+                message: $"Request failed with status code `{response.StatusCode}`. Content: `{responseContent}`",
+                innerException: ex);
         }
     }
 }
