@@ -94,6 +94,11 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
+    Task<AudioFeatures> GetTrackAudioFeatures(
+        string trackId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     Task<AudioAnalysis> GetAudioAnalysis(
         string trackId,
         string accessToken,

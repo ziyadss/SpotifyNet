@@ -236,6 +236,21 @@ public class WebAPIRepository : IWebAPIRepository
         return features.AudioFeatures;
     }
 
+    public async Task<AudioFeatures> GetTrackAudioFeatures(
+        string trackId,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var url = Endpoints.GetTrackAudioFeatures(trackId);
+
+        var features = await _webAPIClient.GetAsync<AudioFeatures>(
+            url,
+            accessToken,
+            cancellationToken);
+
+        return features;
+    }
+
     public async Task<AudioAnalysis> GetAudioAnalysis(
         string trackId,
         string accessToken,
