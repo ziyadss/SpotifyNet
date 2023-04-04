@@ -6,7 +6,6 @@ using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Repositories;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services;
-using SpotifyNet.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,26 +32,14 @@ internal class Program
             .AddAuthorizationService()
             .AddWebAPIClient()
             .AddWebAPIRepository()
-            .AddWebAPIService();
+            .AddWebAPIService()
 
-            AddTokenAcquirer(services, AppRedirectUri);
+            .AddTokenAcquirer(AppRedirectUri);
         });
 
         var host = builder.Build();
 
         await Test(host.Services);
-    }
-
-    private static IServiceCollection AddTokenAcquirer(IServiceCollection services, string appRedirectUri)
-    {
-        services.AddSingleton<ITokenAcquirer, TokenAcquirer>(p =>
-        {
-            var authorizationService = p.GetRequiredService<IAuthorizationService>();
-
-            return new TokenAcquirer(appRedirectUri, authorizationService);
-        });
-
-        return services;
     }
 
     private static async Task Test(IServiceProvider serviceProvider)
