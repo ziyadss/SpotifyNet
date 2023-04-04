@@ -5,7 +5,7 @@ namespace SpotifyNet.Playground;
 
 internal interface ITokenAcquirer
 {
-    Task<string> GetToken(string[] scopes, CancellationToken cancellationToken = default);
-
-    Task<string> GetExistingToken(CancellationToken cancellationToken = default);
+    Task GenerateToken(
+        string[] scopes,
+        CancellationToken cancellationToken = default);
 }

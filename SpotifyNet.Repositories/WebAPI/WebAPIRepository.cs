@@ -11,7 +11,8 @@ public partial class WebAPIRepository : IWebAPIRepository
 {
     private readonly IWebAPIClient _webAPIClient;
 
-    public WebAPIRepository(IWebAPIClient webAPIClient)
+    public WebAPIRepository(
+        IWebAPIClient webAPIClient)
     {
         _webAPIClient = webAPIClient;
     }

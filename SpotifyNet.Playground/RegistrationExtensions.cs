@@ -1,16 +1,27 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SpotifyNet.Services.Interfaces;
+using System.Net;
 
 namespace SpotifyNet.Playground;
 
 internal static class RegistrationExtensions
 {
-    public static IServiceCollection AddTokenAcquirer(
-        this IServiceCollection services,
-        string appRedirectUri) => services.AddSingleton<ITokenAcquirer, TokenAcquirer>(p =>
-        {
-            var authorizationService = p.GetRequiredService<IAuthorizationService>();
+    public static IServiceCollection AddTokenAcquirer(this IServiceCollection services) => services.AddSingleton<ITokenAcquirer, TokenAcquirer>();
 
-            return new TokenAcquirer(appRedirectUri, authorizationService);
+    public static IServiceCollection AddRedirectUriListener(
+        this IServiceCollection services,
+        string appRedirectUri) => services.AddSingleton(p =>
+        {
+            var httpListener = new HttpListener();
+
+            if (appRedirectUri.EndsWith('/'))
+            {
+                httpListener.Prefixes.Add(appRedirectUri);
+            }
+            else
+            {
+                httpListener.Prefixes.Add(appRedirectUri + '/');
+            }
+
+            return httpListener;
         });
 }

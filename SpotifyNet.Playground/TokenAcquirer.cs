@@ -1,4 +1,4 @@
-﻿using SpotifyNet.Services.Interfaces;
+﻿using SpotifyNet.Repositories.Interfaces;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -8,36 +8,29 @@ namespace SpotifyNet.Playground;
 
 internal class TokenAcquirer : ITokenAcquirer
 {
-    private readonly IAuthorizationService _authorizationService;
-
+    private readonly IAuthorizationRepository _authorizationRepository;
     private readonly HttpListener _httpListener;
 
     public TokenAcquirer(
-        string appRedirectUri,
-        IAuthorizationService authorizationService)
+        IAuthorizationRepository authorizationRepository,
+        HttpListener httpListener)
     {
-        _authorizationService = authorizationService;
-
-        _httpListener = new();
-        if (appRedirectUri.EndsWith('/'))
-        {
-            _httpListener.Prefixes.Add(appRedirectUri);
-        }
-        else
-        {
-            _httpListener.Prefixes.Add(appRedirectUri + '/');
-        }
+        _authorizationRepository = authorizationRepository;
+        _httpListener = httpListener;
     }
 
-    public async Task<string> GetToken(string[] scopes, CancellationToken cancellationToken)
+    public async Task GenerateToken(
+        string[] scopes,
+        CancellationToken cancellationToken)
     {
-        var uri = await _authorizationService.GetUserAuthorizeUri(scopes, cancellationToken);
+        var uri = await _authorizationRepository.GetUserAuthorizeUri(scopes, cancellationToken);
 
         var processInfo = new ProcessStartInfo
         {
             FileName = uri,
             UseShellExecute = true
         };
+
         Process.Start(processInfo);
 
         _httpListener.Start();
@@ -46,14 +39,8 @@ internal class TokenAcquirer : ITokenAcquirer
 
         var code = query["code"]!;
         var state = query["state"]!;
-        var token = await _authorizationService.GetNewAccessToken(code, state, cancellationToken);
+        await _authorizationRepository.GetNewAccessToken(code, state, cancellationToken);
 
         _httpListener.Stop();
-        return token;
-    }
-
-    public Task<string> GetExistingToken(CancellationToken cancellationToken)
-    {
-        return _authorizationService.GetExistingAccessToken(cancellationToken);
     }
 }

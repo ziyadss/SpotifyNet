@@ -5,6 +5,7 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
@@ -15,15 +16,17 @@ namespace SpotifyNet.Clients.Authorization;
 
 public class AuthorizationClient : IAuthorizationClient
 {
-    private readonly string _appClientId;
-    private readonly string _appRedirectUri;
-
     private const string AuthorizeEndpoint = "https://accounts.spotify.com/authorize";
     private const string TokenEndpoint = "https://accounts.spotify.com/api/token";
 
+    private readonly string _appClientId;
+    private readonly string _appRedirectUri;
+
     private readonly HttpClient _httpClient;
 
-    public AuthorizationClient(string appClientId, string appRedirectUri)
+    public AuthorizationClient(
+        string appClientId,
+        string appRedirectUri)
     {
         _appClientId = appClientId;
         _appRedirectUri = appRedirectUri;
@@ -31,16 +34,17 @@ public class AuthorizationClient : IAuthorizationClient
         _httpClient = new();
     }
 
-    public async Task<UserAuthorization> GetUserAuthorizeUri(string[] scopes, CancellationToken cancellationToken)
+    public async Task<UserAuthorization> GetUserAuthorizeUri(
+        string[] scopes,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(scopes, nameof(scopes));
 
-        foreach (var scope in scopes)
+        var invalidScopes = scopes.Except(AuthorizationScope.ValidScopes).ToList();
+
+        if (invalidScopes.Count != 0)
         {
-            if (!AuthorizationScope.ValidScopes.Contains(scope))
-            {
-                throw new AuthorizationException($"Invalid scope: `{scope}`");
-            }
+            throw new AuthorizationException($"Invalid authorzation scopes `{string.Join(", ", invalidScopes)}`");
         }
 
         var (verifier, challenge) = PKCE.GetCodeVerifierAndChallenge(verifierLength: 64);
@@ -74,7 +78,10 @@ public class AuthorizationClient : IAuthorizationClient
         };
     }
 
-    public Task<AccessToken> GetUserAccessToken(string code, string codeVerifier, CancellationToken cancellationToken)
+    public Task<AccessToken> GetUserAccessToken(
+        string code,
+        string codeVerifier,
+        CancellationToken cancellationToken)
     {
         var payload = new Dictionary<string, string>
         {
@@ -88,7 +95,9 @@ public class AuthorizationClient : IAuthorizationClient
         return PostForAccessToken(payload, cancellationToken);
     }
 
-    public Task<AccessToken> RefreshUserAccessToken(string refreshToken, CancellationToken cancellationToken)
+    public Task<AccessToken> RefreshUserAccessToken(
+        string refreshToken,
+        CancellationToken cancellationToken)
     {
         var payload = new Dictionary<string, string>
         {
@@ -100,7 +109,9 @@ public class AuthorizationClient : IAuthorizationClient
         return PostForAccessToken(payload, cancellationToken);
     }
 
-    private async Task<AccessToken> PostForAccessToken(IReadOnlyDictionary<string, string> payload, CancellationToken cancellationToken)
+    private async Task<AccessToken> PostForAccessToken(
+        IReadOnlyDictionary<string, string> payload,
+        CancellationToken cancellationToken)
     {
         using var content = new FormUrlEncodedContent(payload);
 

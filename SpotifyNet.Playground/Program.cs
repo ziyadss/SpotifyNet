@@ -2,12 +2,10 @@
 using Microsoft.Extensions.Hosting;
 using SpotifyNet.Clients;
 using SpotifyNet.Datastructures.Spotify.Authorization;
-using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Repositories;
-using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services;
+using SpotifyNet.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -34,7 +32,8 @@ sealed internal class Program
             .AddWebAPIRepository()
             .AddWebAPIService()
 
-            .AddTokenAcquirer(AppRedirectUri);
+            .AddRedirectUriListener(AppRedirectUri)
+            .AddTokenAcquirer();
         });
 
         var host = builder.Build();
@@ -44,51 +43,20 @@ sealed internal class Program
 
     private static async Task Test(IServiceProvider serviceProvider)
     {
-        var newToken = false;
+        var newToken = true;
         var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
-        var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
-
-        var accessToken = newToken ? await tokenAcquirer.GetToken(scopes) : await tokenAcquirer.GetExistingToken();
-
-        var webAPIRepository = serviceProvider.GetRequiredService<IWebAPIRepository>();
-
-        var playlistUri = "https://open.spotify.com/playlist/6XUE4OxR8LtmVpxOnC11aX?si=31b9e163ede04b23&pt=ecaff3da232c0808bc736b4402773bfc";
-        var playlistId = new Uri(playlistUri).AbsolutePath.Split('/').Last();
-
-        var tracks = await webAPIRepository.GetPlaylistItems(playlistId, accessToken);
-
-        var chunks = tracks.Select(t => t.Track!.Id!).Chunk(100);
-
-        var features = new List<AudioFeatures>();
-        foreach (var chunk in chunks)
+        if (newToken)
         {
-            var chunkFeatures = await webAPIRepository.GetTracksAudioFeatures(chunk, accessToken);
-            features.AddRange(chunkFeatures.Where(cf => cf is not null));
+            var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
+            await tokenAcquirer.GenerateToken(scopes);
         }
 
-        var processedFeatures = features.Join(
-            tracks,
-            f => f.Id,
-            t => t.Track!.Id,
-            (f, t) => new
-            {
-                name = $"{t.Track!.Name} - {string.Join(", ", t.Track.Artists!.Select(a => a.Name))}",
-                acousticness = f.Acousticness!.Value,
-                danceability = f.Danceability!.Value,
-                energy = f.Energy!.Value,
-                instrumentalness = f.Instrumentalness!.Value,
-                key = f.Key!.Value,
-                liveness = f.Liveness!.Value,
-                loudness = f.Loudness!.Value,
-                mode = f.Mode!.Value,
-                speechiness = f.Speechiness!.Value,
-                tempo = f.Tempo!.Value,
-                time_signature = f.TimeSignature!.Value,
-                valence = f.Valence!.Value,
-            }).ToArray();
+        var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();
 
-        await Write("tracks.json", processedFeatures);
+        var savedTracks = await webAPIService.GetCurrentUserSavedTracks();
+
+        Console.WriteLine(savedTracks.Count());
     }
 
     private static async Task<T> Read<T>(string fileName)
