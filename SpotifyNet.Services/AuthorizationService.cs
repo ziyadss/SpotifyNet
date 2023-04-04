@@ -40,7 +40,7 @@ public class AuthorizationService : IAuthorizationService
 
         var token = await _authorizationClient.GetUserAccessToken(code, metadata.CodeVerifier, cancellationToken);
 
-        var tokenString = await WriteAndReturnToken(token, cancellationToken);
+        var tokenString = await WriteAndReturnToken(token, metadata.AuthorizationScopes, cancellationToken);
 
         return tokenString;
     }
@@ -75,7 +75,7 @@ public class AuthorizationService : IAuthorizationService
     {
         var token = await _authorizationClient.RefreshUserAccessToken(existingTokenMetadata.RefreshToken, cancellationToken);
 
-        var tokenString = await WriteAndReturnToken(token, cancellationToken);
+        var tokenString = await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken);
 
         return tokenString;
     }
@@ -95,10 +95,11 @@ public class AuthorizationService : IAuthorizationService
         return authorization.AuthorizationUri;
     }
 
-    private async Task<string> WriteAndReturnToken(AccessToken token, CancellationToken cancellationToken)
+    private async Task<string> WriteAndReturnToken(AccessToken token, string[] scopes, CancellationToken cancellationToken)
     {
         var tokenMetadata = new AccessTokenMetadata
         {
+            AuthorizationScopes = scopes,
             Token = token.Token,
             ExpiresAtUtc = DateTimeOffset.UtcNow.AddSeconds(token.ExpiresIn),
             RefreshToken = token.RefreshToken,
