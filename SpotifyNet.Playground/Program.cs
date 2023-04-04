@@ -3,9 +3,14 @@ using Microsoft.Extensions.Hosting;
 using SpotifyNet.Auth;
 using SpotifyNet.Auth.Interfaces;
 using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.WebAPI;
 using SpotifyNet.WebAPI.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SpotifyNet.Playground;
@@ -48,7 +53,7 @@ internal class Program
     private static async Task Test(IServiceProvider serviceProvider)
     {
         var newToken = false;
-        var scopes = new[] { AuthorizationScope.UserLibraryRead };
+        var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
 
@@ -56,11 +61,55 @@ internal class Program
 
         var webAPIRepository = serviceProvider.GetRequiredService<IWebAPIRepository>();
 
-        var albumIds = new[] { "0e9GjrztzBw8oMC6n2CDeI", "6zxHzgT0fKSMEgIi7BpoyQ" };
+        var playlistUrl = "https://open.spotify.com/playlist/6XUE4OxR8LtmVpxOnC11aX?si=31b9e163ede04b23&pt=ecaff3da232c0808bc736b4402773bfc";
+        var playlistId = new Uri(playlistUrl).AbsolutePath.Split('/').Last();
 
-        var result = await webAPIRepository.AreAlbumsSaved(albumIds, accessToken);
-        var resultString = string.Join(',', result);
+        var tracks = await webAPIRepository.GetPlaylistItems(playlistId, accessToken);
 
-        Console.WriteLine(resultString);
+        var chunks = tracks.Select(t => t.Track!.Id!).Chunk(100);
+
+        var features = new List<AudioFeatures>();
+        foreach (var chunk in chunks)
+        {
+            var chunkFeatures = await webAPIRepository.GetTracksAudioFeatures(chunk, accessToken);
+            features.AddRange(chunkFeatures.Where(cf => cf is not null));
+        }
+
+        var processedFeatures = features.Join(
+            tracks,
+            f => f.Id,
+            t => t.Track!.Id,
+            (f, t) => new
+            {
+                name = $"{t.Track!.Name} - {string.Join(',', t.Track.Artists!.Select(a => a.Name))}",
+                acousticness = f.Acousticness!.Value,
+                danceability = f.Danceability!.Value,
+                energy = f.Energy!.Value,
+                instrumentalness = f.Instrumentalness!.Value,
+                key = f.Key!.Value,
+                liveness = f.Liveness!.Value,
+                loudness = f.Loudness!.Value,
+                mode = f.Mode!.Value,
+                speechiness = f.Speechiness!.Value,
+                tempo = f.Tempo!.Value,
+                time_signature = f.TimeSignature!.Value,
+                valence = f.Valence!.Value,
+            }).ToArray();
+
+        await Write("tracks.json", processedFeatures);
+    }
+
+    private static async Task<T> Read<T>(string fileName)
+    {
+        using var fs = File.OpenRead(fileName);
+        var item = await JsonSerializer.DeserializeAsync<T>(fs);
+        return item!;
+    }
+
+    private static async Task Write<T>(string fileName, T item)
+    {
+        File.Delete(fileName);
+        using var fs = File.OpenWrite(fileName);
+        await JsonSerializer.SerializeAsync(fs, item);
     }
 }
