@@ -1,4 +1,4 @@
-﻿using SpotifyNet.Auth.Interfaces;
+﻿using SpotifyNet.Services.Interfaces;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;

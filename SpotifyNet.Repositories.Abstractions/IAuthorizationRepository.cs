@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Auth.Interfaces;
+namespace SpotifyNet.Repositories.Interfaces;
 
 public interface IAuthorizationRepository
 {

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpotifyNet.Auth;
-using SpotifyNet.Auth.Interfaces;
+using SpotifyNet.Clients;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Tracks;
-using SpotifyNet.WebAPI;
-using SpotifyNet.WebAPI.Interfaces;
+using SpotifyNet.Repositories;
+using SpotifyNet.Repositories.Interfaces;
+using SpotifyNet.Services;
+using SpotifyNet.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,11 @@ internal class Program
         builder.ConfigureServices(services =>
         {
             services
-            .AddAuthorizationService(AppClientId, AppRedirectUri)
+            .AddAuthorizationClient(AppClientId, AppRedirectUri)
+            .AddAuthorizationRepository()
+            .AddAuthorizationService()
+            .AddWebAPIClient()
+            .AddWebAPIRepository()
             .AddWebAPIService();
 
             AddTokenAcquirer(services, AppRedirectUri);

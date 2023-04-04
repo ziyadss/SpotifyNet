@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.WebAPI.Interfaces;
+namespace SpotifyNet.Repositories.Interfaces;
 
 public interface IWebAPIRepository
 {

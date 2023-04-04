@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.WebAPI.Interfaces;
+namespace SpotifyNet.Clients.Interfaces;
 
 public interface IWebAPIClient
 {

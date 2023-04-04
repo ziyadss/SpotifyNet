@@ -1,4 +1,4 @@
-﻿namespace SpotifyNet.WebAPI;
+﻿namespace SpotifyNet.Repositories.WebAPI;
 
 internal static class Endpoints
 {

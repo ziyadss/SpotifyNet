@@ -3,15 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Auth", "SpotifyNet.Auth\SpotifyNet.Auth.csproj", "{CAB43C2E-9175-40BB-B27B-5D997AB961EB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Datastructures", "SpotifyNet.Datastructures\SpotifyNet.Datastructures.csproj", "{6755427A-DA82-47C1-9ECC-D20A81FE1891}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Core", "SpotifyNet.Core\SpotifyNet.Core.csproj", "{028C98DF-6497-4F8B-9BE1-4EAB77E915CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Playground", "SpotifyNet.Playground\SpotifyNet.Playground.csproj", "{12ADE71F-A3A6-4A58-9592-1F1D99A1100B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.WebAPI", "SpotifyNet.WebAPI\SpotifyNet.WebAPI.csproj", "{E64D3F7A-9655-4D24-8588-822D8FFEA733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Repositories.Abstractions", "SpotifyNet.Repositories.Abstractions\SpotifyNet.Repositories.Abstractions.csproj", "{9ADB8809-54D9-4F80-9345-781DBADD819B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Repositories", "SpotifyNet.Repositories\SpotifyNet.Repositories.csproj", "{6F8D9614-BD71-4DF3-858F-ACBC13C83DF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Clients.Abstractions", "SpotifyNet.Clients.Abstractions\SpotifyNet.Clients.Abstractions.csproj", "{4BB76D4E-D82D-4A0B-8FC2-E68D467EAFB8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Clients", "SpotifyNet.Clients\SpotifyNet.Clients.csproj", "{2D053A92-3C50-4819-A049-09251576369F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Services.Abstractions", "SpotifyNet.Services.Abstractions\SpotifyNet.Services.Abstractions.csproj", "{2C7EBFFF-C792-4C67-930D-C0E5F4AC8AC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyNet.Services", "SpotifyNet.Services\SpotifyNet.Services.csproj", "{81AFD832-AAD0-469B-B718-B471680C09C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CAB43C2E-9175-40BB-B27B-5D997AB961EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAB43C2E-9175-40BB-B27B-5D997AB961EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAB43C2E-9175-40BB-B27B-5D997AB961EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAB43C2E-9175-40BB-B27B-5D997AB961EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6755427A-DA82-47C1-9ECC-D20A81FE1891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6755427A-DA82-47C1-9ECC-D20A81FE1891}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6755427A-DA82-47C1-9ECC-D20A81FE1891}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,10 +39,30 @@ Global
 		{12ADE71F-A3A6-4A58-9592-1F1D99A1100B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12ADE71F-A3A6-4A58-9592-1F1D99A1100B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12ADE71F-A3A6-4A58-9592-1F1D99A1100B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E64D3F7A-9655-4D24-8588-822D8FFEA733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E64D3F7A-9655-4D24-8588-822D8FFEA733}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E64D3F7A-9655-4D24-8588-822D8FFEA733}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E64D3F7A-9655-4D24-8588-822D8FFEA733}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ADB8809-54D9-4F80-9345-781DBADD819B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADB8809-54D9-4F80-9345-781DBADD819B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADB8809-54D9-4F80-9345-781DBADD819B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADB8809-54D9-4F80-9345-781DBADD819B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F8D9614-BD71-4DF3-858F-ACBC13C83DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F8D9614-BD71-4DF3-858F-ACBC13C83DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F8D9614-BD71-4DF3-858F-ACBC13C83DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F8D9614-BD71-4DF3-858F-ACBC13C83DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BB76D4E-D82D-4A0B-8FC2-E68D467EAFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BB76D4E-D82D-4A0B-8FC2-E68D467EAFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BB76D4E-D82D-4A0B-8FC2-E68D467EAFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BB76D4E-D82D-4A0B-8FC2-E68D467EAFB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D053A92-3C50-4819-A049-09251576369F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D053A92-3C50-4819-A049-09251576369F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D053A92-3C50-4819-A049-09251576369F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D053A92-3C50-4819-A049-09251576369F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C7EBFFF-C792-4C67-930D-C0E5F4AC8AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C7EBFFF-C792-4C67-930D-C0E5F4AC8AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C7EBFFF-C792-4C67-930D-C0E5F4AC8AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C7EBFFF-C792-4C67-930D-C0E5F4AC8AC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81AFD832-AAD0-469B-B718-B471680C09C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81AFD832-AAD0-469B-B718-B471680C09C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81AFD832-AAD0-469B-B718-B471680C09C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81AFD832-AAD0-469B-B718-B471680C09C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

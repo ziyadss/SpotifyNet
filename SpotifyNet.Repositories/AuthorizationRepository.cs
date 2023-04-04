@@ -1,11 +1,11 @@
-﻿using SpotifyNet.Auth.Interfaces;
-using SpotifyNet.Datastructures.Internal;
+﻿using SpotifyNet.Datastructures.Internal;
+using SpotifyNet.Repositories.Interfaces;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Auth;
+namespace SpotifyNet.Repositories.Authorization;
 
 public class AuthorizationRepository : IAuthorizationRepository
 {

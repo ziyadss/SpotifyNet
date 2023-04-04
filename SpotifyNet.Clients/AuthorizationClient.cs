@@ -1,4 +1,4 @@
-﻿using SpotifyNet.Auth.Interfaces;
+﻿using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using System;
@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace SpotifyNet.Auth;
+namespace SpotifyNet.Clients.Authorization;
 
 public class AuthorizationClient : IAuthorizationClient
 {

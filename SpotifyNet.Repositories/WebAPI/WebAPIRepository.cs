@@ -1,10 +1,11 @@
+using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Datastructures.Spotify;
-using SpotifyNet.WebAPI.Interfaces;
+using SpotifyNet.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.WebAPI;
+namespace SpotifyNet.Repositories.WebAPI;
 
 public partial class WebAPIRepository : IWebAPIRepository
 {
