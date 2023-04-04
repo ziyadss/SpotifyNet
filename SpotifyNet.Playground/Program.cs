@@ -81,7 +81,7 @@ internal class Program
             t => t.Track!.Id,
             (f, t) => new
             {
-                name = $"{t.Track!.Name} - {string.Join(',', t.Track.Artists!.Select(a => a.Name))}",
+                name = $"{t.Track!.Name} - {string.Join(", ", t.Track.Artists!.Select(a => a.Name))}",
                 acousticness = f.Acousticness!.Value,
                 danceability = f.Danceability!.Value,
                 energy = f.Energy!.Value,
