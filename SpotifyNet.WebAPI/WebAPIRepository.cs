@@ -1,4 +1,4 @@
-﻿using SpotifyNet.Core.Utilities;
+using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify;
 using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Playlists;
@@ -251,56 +251,23 @@ public class WebAPIRepository : IWebAPIRepository
 
     // Users
 
-    //private async Task<IEnumerable<T>> GetPaginated<T>(
-    //    string initialUrl,
-    //    string accessToken,
-    //    CancellationToken cancellationToken)
-    //{
-    //    var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
-    //        initialUrl,
-    //        accessToken,
-    //        cancellationToken);
-
-    //    var items = new List<T>(batch.Total);
-    //    items.AddRange(batch.Items);
-
-    //    while (batch.Next is not null)
-    //    {
-    //        batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
-    //            batch.Next,
-    //            accessToken,
-    //            cancellationToken);
-
-    //        items.AddRange(batch.Items);
-    //    }
-
-    //    return items;
-    //}
-
     private async Task<IEnumerable<T>> GetPaginated<T>(
         string initialUrl,
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var offset = 0;
-        var limit = 50;
-        var url = $"{initialUrl}?offset={offset}&limit={limit}";
-
         var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
-            url,
+            initialUrl,
             accessToken,
             cancellationToken);
 
         var items = new List<T>(batch.Total);
         items.AddRange(batch.Items);
 
-        while (batch.Items.Length != 0)
+        while (batch.Next is not null)
         {
-            offset += 50;
-            url = $"{initialUrl}?offset={offset}&limit={limit}";
-
             batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
-                url,
+                batch.Next,
                 accessToken,
                 cancellationToken);
 
