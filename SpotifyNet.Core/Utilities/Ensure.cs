@@ -41,6 +41,8 @@ public static class Ensure
         HttpResponseMessage response,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(response, nameof(response));
+
         try
         {
             response.EnsureSuccessStatusCode();

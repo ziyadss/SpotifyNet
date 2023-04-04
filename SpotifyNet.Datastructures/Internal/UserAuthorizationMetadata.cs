@@ -4,7 +4,7 @@ public class UserAuthorizationMetadata
 {
     public required string[] AuthorizationScopes { get; init; }
 
-    public required string AuthorizationUrl { get; init; }
+    public required string AuthorizationUri { get; init; }
 
     public required string CodeVerifier { get; init; }
 

@@ -9,6 +9,7 @@ namespace SpotifyNet.Playground;
 internal class TokenAcquirer : ITokenAcquirer
 {
     private readonly IAuthorizationService _authorizationService;
+
     private readonly HttpListener _httpListener;
 
     public TokenAcquirer(
@@ -16,8 +17,8 @@ internal class TokenAcquirer : ITokenAcquirer
         IAuthorizationService authorizationService)
     {
         _authorizationService = authorizationService;
-        _httpListener = new();
 
+        _httpListener = new();
         if (appRedirectUri.EndsWith('/'))
         {
             _httpListener.Prefixes.Add(appRedirectUri);
@@ -30,11 +31,11 @@ internal class TokenAcquirer : ITokenAcquirer
 
     public async Task<string> GetToken(string[] scopes, CancellationToken cancellationToken)
     {
-        var url = await _authorizationService.GetUserAuthorizeUrl(scopes, cancellationToken);
+        var uri = await _authorizationService.GetUserAuthorizeUri(scopes, cancellationToken);
 
         var processInfo = new ProcessStartInfo
         {
-            FileName = url,
+            FileName = uri,
             UseShellExecute = true
         };
         Process.Start(processInfo);

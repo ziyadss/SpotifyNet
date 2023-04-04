@@ -6,7 +6,7 @@ namespace SpotifyNet.Clients.Interfaces;
 
 public interface IAuthorizationClient
 {
-    Task<UserAuthorization> GetUserAuthorizeUrl(string[] scopes, CancellationToken cancellationToken = default);
+    Task<UserAuthorization> GetUserAuthorizeUri(string[] scopes, CancellationToken cancellationToken = default);
 
     Task<AccessToken> GetUserAccessToken(string code, string codeVerifier, CancellationToken cancellationToken = default);
 

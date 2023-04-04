@@ -17,12 +17,12 @@ public partial class WebAPIRepository : IWebAPIRepository
     }
 
     private async Task<IEnumerable<T>> GetPaginated<T>(
-        string initialUrl,
+        string initialUri,
         string accessToken,
         CancellationToken cancellationToken)
     {
         var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
-            initialUrl,
+            initialUri,
             accessToken,
             cancellationToken);
 

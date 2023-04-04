@@ -1,6 +1,7 @@
 ﻿using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Tracks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,10 +15,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetAlbum(albumId);
+        var uri = Endpoints.GetAlbum(albumId);
 
         return _webAPIClient.GetAsync<Album>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
@@ -27,10 +28,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetSeveralAlbums(albumIds);
+        var uri = Endpoints.GetSeveralAlbums(albumIds);
 
         var albums = await _webAPIClient.GetAsync<AlbumsSet>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
 
@@ -42,10 +43,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetAlbumTracks(albumId);
+        var uri = Endpoints.GetAlbumTracks(albumId);
 
         return GetPaginated<SimplifiedTrack>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
@@ -54,10 +55,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetUserSavedAlbums();
+        var uri = Endpoints.GetUserSavedAlbums();
 
         return GetPaginated<SavedAlbum>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
@@ -67,9 +68,11 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
+
         Ensure.Between(albumIds.Length, 0, 50, inclusive: true);
 
-        var url = Endpoints.SaveAlbumsForUser();
+        var uri = Endpoints.SaveAlbumsForUser();
 
         var payload = new
         {
@@ -77,7 +80,7 @@ public partial class WebAPIRepository
         };
 
         return _webAPIClient.PutAsync(
-            url,
+            uri,
             payload,
             accessToken,
             cancellationToken);
@@ -88,9 +91,11 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
+
         Ensure.Between(albumIds.Length, 0, 50, inclusive: true);
 
-        var url = Endpoints.RemoveUserSavedAlbums();
+        var uri = Endpoints.RemoveUserSavedAlbums();
 
         var payload = new
         {
@@ -98,7 +103,7 @@ public partial class WebAPIRepository
         };
 
         return _webAPIClient.DeleteAsync(
-            url,
+            uri,
             payload,
             accessToken,
             cancellationToken);
@@ -109,12 +114,14 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
+
         Ensure.Between(albumIds.Length, 0, 20, inclusive: true);
 
-        var url = Endpoints.CheckUserSavedAlbums(albumIds);
+        var uri = Endpoints.CheckUserSavedAlbums(albumIds);
 
         return _webAPIClient.GetAsync<IEnumerable<bool>>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
@@ -123,10 +130,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetNewReleases();
+        var uri = Endpoints.GetNewReleases();
 
         return GetPaginated<SimplifiedAlbum>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }

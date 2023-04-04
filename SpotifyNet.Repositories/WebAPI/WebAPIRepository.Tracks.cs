@@ -1,6 +1,7 @@
 ﻿using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,14 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(trackIds, nameof(trackIds));
+
         Ensure.Between(trackIds.Length, 0, 50, inclusive: true);
 
-        var url = Endpoints.GetSeveralTracks(trackIds);
+        var uri = Endpoints.GetSeveralTracks(trackIds);
 
         var tracks = await _webAPIClient.GetAsync<TracksSet>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
 
@@ -30,10 +33,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetUserSavedTracks();
+        var uri = Endpoints.GetUserSavedTracks();
 
         return GetPaginated<SavedTrack>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
@@ -43,12 +46,14 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(trackIds, nameof(trackIds));
+
         Ensure.Between(trackIds.Length, 0, 100, inclusive: true);
 
-        var url = Endpoints.GetTracksAudioFeatures(trackIds);
+        var uri = Endpoints.GetTracksAudioFeatures(trackIds);
 
         var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
 
@@ -60,10 +65,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetTrackAudioFeatures(trackId);
+        var uri = Endpoints.GetTrackAudioFeatures(trackId);
 
         var features = await _webAPIClient.GetAsync<AudioFeatures>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
 
@@ -75,10 +80,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetTrackAudioAnalysis(trackId);
+        var uri = Endpoints.GetTrackAudioAnalysis(trackId);
 
         return await _webAPIClient.GetAsync<AudioAnalysis>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }

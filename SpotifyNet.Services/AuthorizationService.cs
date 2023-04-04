@@ -23,13 +23,13 @@ public class AuthorizationService : IAuthorizationService
         _authorizationRepository = authorizationRepository;
     }
 
-    public async Task<string> GetUserAuthorizeUrl(string[] scopes, CancellationToken cancellationToken)
+    public async Task<string> GetUserAuthorizeUri(string[] scopes, CancellationToken cancellationToken)
     {
-        var authorization = await _authorizationClient.GetUserAuthorizeUrl(scopes, cancellationToken);
+        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopes, cancellationToken);
 
-        var authorizationUrl = await WriteAndReturnAuthorizationUrl(authorization, scopes, cancellationToken);
+        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopes, cancellationToken);
 
-        return authorizationUrl;
+        return authorizationUri;
     }
 
     public async Task<string> GetNewAccessToken(string code, string state, CancellationToken cancellationToken)
@@ -80,19 +80,19 @@ public class AuthorizationService : IAuthorizationService
         return tokenString;
     }
 
-    private async Task<string> WriteAndReturnAuthorizationUrl(UserAuthorization authorization, string[] scopes, CancellationToken cancellationToken)
+    private async Task<string> WriteAndReturnAuthorizationUri(UserAuthorization authorization, string[] scopes, CancellationToken cancellationToken)
     {
         var authorizationMetadata = new UserAuthorizationMetadata
         {
             AuthorizationScopes = scopes,
-            AuthorizationUrl = authorization.AuthorizationUrl,
+            AuthorizationUri = authorization.AuthorizationUri,
             CodeVerifier = authorization.CodeVerifier,
             State = authorization.State,
         };
 
         await _authorizationRepository.WriteAuthorizationMetadata(authorizationMetadata, cancellationToken);
 
-        return authorization.AuthorizationUrl;
+        return authorization.AuthorizationUri;
     }
 
     private async Task<string> WriteAndReturnToken(AccessToken token, CancellationToken cancellationToken)

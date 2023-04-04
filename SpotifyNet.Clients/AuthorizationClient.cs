@@ -1,4 +1,5 @@
 ﻿using SpotifyNet.Clients.Interfaces;
+using SpotifyNet.Core.Exceptions;
 using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using System;
@@ -26,16 +27,19 @@ public class AuthorizationClient : IAuthorizationClient
     {
         _appClientId = appClientId;
         _appRedirectUri = appRedirectUri;
+
         _httpClient = new();
     }
 
-    public async Task<UserAuthorization> GetUserAuthorizeUrl(string[] scopes, CancellationToken cancellationToken)
+    public async Task<UserAuthorization> GetUserAuthorizeUri(string[] scopes, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(scopes, nameof(scopes));
+
         foreach (var scope in scopes)
         {
             if (!AuthorizationScope.ValidScopes.Contains(scope))
             {
-                throw new Exception($"Invalid scope: `{scope}`");
+                throw new AuthorizationException($"Invalid scope: `{scope}`");
             }
         }
 
@@ -64,7 +68,7 @@ public class AuthorizationClient : IAuthorizationClient
 
         return new UserAuthorization
         {
-            AuthorizationUrl = response.RequestMessage!.RequestUri!.AbsoluteUri,
+            AuthorizationUri = response.RequestMessage!.RequestUri!.AbsoluteUri,
             CodeVerifier = verifier,
             State = state,
         };

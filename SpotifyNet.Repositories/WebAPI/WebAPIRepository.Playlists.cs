@@ -11,10 +11,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetCurrentUserPlaylists();
+        var uri = Endpoints.GetCurrentUserPlaylists();
 
         return GetPaginated<SimplifiedPlaylist>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
@@ -24,10 +24,10 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var url = Endpoints.GetPlaylistItems(playlistId);
+        var uri = Endpoints.GetPlaylistItems(playlistId);
 
         return GetPaginated<PlaylistTrack>(
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }

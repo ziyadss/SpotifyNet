@@ -1,4 +1,5 @@
 ﻿using SpotifyNet.Clients.Interfaces;
+using SpotifyNet.Core.Exceptions;
 using SpotifyNet.Core.Utilities;
 using System;
 using System.Net.Http;
@@ -19,7 +20,7 @@ public class WebAPIClient : IWebAPIClient
     }
 
     public Task<TResponse> GetAsync<TResponse>(
-        string url,
+        string uri,
         string accessToken,
         CancellationToken cancellationToken)
     {
@@ -27,13 +28,13 @@ public class WebAPIClient : IWebAPIClient
 
         return SendAsync<TResponse>(
             method,
-            url,
+            uri,
             accessToken,
             cancellationToken);
     }
 
     public Task PutAsync<TPayload>(
-        string url,
+        string uri,
         TPayload payload,
         string accessToken,
         CancellationToken cancellationToken)
@@ -42,14 +43,14 @@ public class WebAPIClient : IWebAPIClient
 
         return SendAsync(
             method,
-            url,
+            uri,
             payload,
             accessToken,
             cancellationToken);
     }
 
     public Task DeleteAsync<TPayload>(
-        string url,
+        string uri,
         TPayload payload,
         string accessToken,
         CancellationToken cancellationToken)
@@ -58,7 +59,7 @@ public class WebAPIClient : IWebAPIClient
 
         return SendAsync(
             method,
-            url,
+            uri,
             payload,
             accessToken,
             cancellationToken);
@@ -66,11 +67,11 @@ public class WebAPIClient : IWebAPIClient
 
     private async Task<TResponse> SendAsync<TResponse>(
         HttpMethod httpMethod,
-        string url,
+        string uri,
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var request = new HttpRequestMessage(httpMethod, url);
+        using var request = new HttpRequestMessage(httpMethod, uri);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
         var response = await _httpClient.SendAsync(request, cancellationToken);
@@ -85,22 +86,22 @@ public class WebAPIClient : IWebAPIClient
         catch (Exception ex)
         {
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new Exception(
-                message: $"Failed to deserialize response from `{url}`. Response: `{content}`",
+            throw new WebAPIException(
+                message: $"Failed to deserialize response from `{uri}`. Response: `{content}`",
                 innerException: ex);
         }
     }
 
     private async Task SendAsync<TPayload>(
         HttpMethod httpMethod,
-        string url,
+        string uri,
         TPayload payload,
         string accessToken,
         CancellationToken cancellationToken)
     {
         using var content = JsonContent.Create(payload);
 
-        var request = new HttpRequestMessage(httpMethod, url)
+        using var request = new HttpRequestMessage(httpMethod, uri)
         {
             Content = content
         };

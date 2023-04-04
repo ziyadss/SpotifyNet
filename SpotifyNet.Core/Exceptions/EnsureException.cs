@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace SpotifyNet.Core.Exceptions;
 
 [Serializable]
-internal class EnsureException : Exception
+public class EnsureException : Exception
 {
     public EnsureException()
     {

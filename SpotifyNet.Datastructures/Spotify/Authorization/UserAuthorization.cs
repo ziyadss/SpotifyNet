@@ -2,7 +2,7 @@
 
 public class UserAuthorization
 {
-    public required string AuthorizationUrl { get; init; }
+    public required string AuthorizationUri { get; init; }
 
     public required string CodeVerifier { get; init; }
 

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.Playground;
 
-internal class Program
+sealed internal class Program
 {
     private const string AppClientId = "";
     private const string AppRedirectUri = "http://localhost:3000";
@@ -53,8 +53,8 @@ internal class Program
 
         var webAPIRepository = serviceProvider.GetRequiredService<IWebAPIRepository>();
 
-        var playlistUrl = "https://open.spotify.com/playlist/6XUE4OxR8LtmVpxOnC11aX?si=31b9e163ede04b23&pt=ecaff3da232c0808bc736b4402773bfc";
-        var playlistId = new Uri(playlistUrl).AbsolutePath.Split('/').Last();
+        var playlistUri = "https://open.spotify.com/playlist/6XUE4OxR8LtmVpxOnC11aX?si=31b9e163ede04b23&pt=ecaff3da232c0808bc736b4402773bfc";
+        var playlistId = new Uri(playlistUri).AbsolutePath.Split('/').Last();
 
         var tracks = await webAPIRepository.GetPlaylistItems(playlistId, accessToken);
 
