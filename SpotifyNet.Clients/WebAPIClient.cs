@@ -74,7 +74,7 @@ public class WebAPIClient : IWebAPIClient
         using var request = new HttpRequestMessage(httpMethod, uri);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-        var response = await _httpClient.SendAsync(request, cancellationToken);
+        using var response = await _httpClient.SendAsync(request, cancellationToken);
         await Ensure.RequestSuccess(response, cancellationToken);
 
         try
@@ -86,6 +86,7 @@ public class WebAPIClient : IWebAPIClient
         catch (Exception ex)
         {
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
             throw new WebAPIException(
                 message: $"Failed to deserialize response from `{uri}`. Response: `{content}`",
                 innerException: ex);
@@ -108,7 +109,7 @@ public class WebAPIClient : IWebAPIClient
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-        var response = await _httpClient.SendAsync(request, cancellationToken);
+        using var response = await _httpClient.SendAsync(request, cancellationToken);
         await Ensure.RequestSuccess(response, cancellationToken);
     }
 }
