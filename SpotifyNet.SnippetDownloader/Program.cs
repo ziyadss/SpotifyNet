@@ -27,7 +27,7 @@ sealed internal class Program
     private static async Task Run(IServiceProvider serviceProvider)
     {
         var newToken = true;
-        var scopes = new[] { AuthorizationScope.PlaylistReadPrivate };
+        var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
         if (newToken)
         {
