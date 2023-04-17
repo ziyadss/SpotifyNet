@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpotifyNet.Common;
 using SpotifyNet.Datastructures.Spotify.Authorization;
@@ -13,8 +12,10 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.SnippetDownloader;
 
-sealed internal class Program
+internal sealed class Program
 {
+    private static readonly string[] _requiredScopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
+
     public static async Task Main(
         string[] args)
     {
@@ -67,7 +68,9 @@ sealed internal class Program
             trackIdsOption,
         };
 
-        trackCommand.SetHandler(async (trackIds, newToken) => await DownloadTracks(newToken, trackIds, serviceProvider), trackIdsOption, newTokenOption);
+        trackCommand.SetHandler(
+            async (trackIds, outputDirectory, newToken) => await DownloadTracks(newToken, trackIds, outputDirectory.FullName, serviceProvider),
+            trackIdsOption, outputDirectoryOption, newTokenOption);
 
         // Playlist command options.
         var playlistIdOption = new Option<string>("--playlist-id", "The id of the playlist to download.")
@@ -80,7 +83,9 @@ sealed internal class Program
             playlistIdOption,
         };
 
-        playlistCommand.SetHandler(async (playlistId, newToken) => await DownloadPlaylist(newToken, playlistId, serviceProvider), playlistIdOption, newTokenOption);
+        playlistCommand.SetHandler(
+            async (playlistId, outputDirectory, newToken) => await DownloadPlaylist(newToken, playlistId, outputDirectory.FullName, serviceProvider),
+            playlistIdOption, outputDirectoryOption, newTokenOption);
 
         // Root command.
         var rootCommand = new RootCommand("Snippet Downloader using Spotify APIs.")
@@ -100,6 +105,7 @@ sealed internal class Program
     private static async Task DownloadTracks(
         bool newAccessToken,
         string[] trackIds,
+        string outputDirectory,
         IServiceProvider serviceProvider)
     {
         var snippetDownloader = await GetSnippetDownloader(newAccessToken, serviceProvider);
@@ -111,12 +117,13 @@ sealed internal class Program
             output[fileName] = status;
         }
 
-        await WriteOutput(serviceProvider, output);
+        await WriteOutput(outputDirectory, output);
     }
 
     private static async Task DownloadPlaylist(
         bool newAccessToken,
         string playlistId,
+        string outputDirectory,
         IServiceProvider serviceProvider)
     {
         var snippetDownloader = await GetSnippetDownloader(newAccessToken, serviceProvider);
@@ -125,39 +132,28 @@ sealed internal class Program
 
         var output = result.ToDictionary(pair => pair.FileName, pair => pair.Status);
 
-        await WriteOutput(serviceProvider, output);
+        await WriteOutput(outputDirectory, output);
     }
 
     private static async Task<ISnippetDownloader> GetSnippetDownloader(
         bool newAccessToken,
         IServiceProvider serviceProvider)
     {
-        var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
-
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
-        await tokenAcquirer.EnsureTokenExists(scopes, newAccessToken);
+        await tokenAcquirer.EnsureTokenExists(_requiredScopes, newAccessToken);
 
         return serviceProvider.GetRequiredService<ISnippetDownloader>();
     }
 
     private static async Task WriteOutput(
-        IServiceProvider serviceProvider,
+        string outputDirectory,
         IReadOnlyDictionary<string, SnippetDownloadStatus> output)
     {
-        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var outputDirectory = configuration["output-directory"]!;
-
         Directory.CreateDirectory(outputDirectory);
         var outputFilePath = Path.Combine(outputDirectory, "output.json");
-        await Write(outputFilePath, output);
-    }
 
-    private static async Task Write<T>(
-        string fileName,
-        T item)
-    {
-        File.Delete(fileName);
-        using var fs = File.OpenWrite(fileName);
-        await JsonSerializer.SerializeAsync(fs, item);
+        File.Delete(outputFilePath);
+        using var fs = File.OpenWrite(outputFilePath);
+        await JsonSerializer.SerializeAsync(fs, output);
     }
 }
