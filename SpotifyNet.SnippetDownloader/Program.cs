@@ -26,7 +26,7 @@ sealed internal class Program
 
     private static async Task Run(IServiceProvider serviceProvider)
     {
-        var newToken = true;
+        var newToken = false;
         var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
         if (newToken)
@@ -41,10 +41,10 @@ sealed internal class Program
 
         var output = result.ToDictionary(pair => pair.TrackName, pair => pair.Status);
 
-
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var outputDirectory = configuration["outputDirectory"]!;
 
+        Directory.CreateDirectory(outputDirectory);
         var outputFilePath = Path.Combine(outputDirectory, "output.json");
         await Write(outputFilePath, output);
     }

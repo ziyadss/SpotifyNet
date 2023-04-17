@@ -12,6 +12,8 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal class SnippetDownloader : ISnippetDownloader
 {
+    private readonly static char[] _invalidFileNameChars = Path.GetInvalidFileNameChars();
+
     private readonly string _outputDirectory;
 
     private readonly IWebAPIService _webAPIService;
@@ -26,6 +28,8 @@ internal class SnippetDownloader : ISnippetDownloader
         _webAPIService = webAPIService;
 
         _httpClient = new HttpClient();
+
+        Directory.CreateDirectory(_outputDirectory);
     }
 
     public async Task<(string, SnippetDownloadStatus)> DownloadTrack(string trackId)
@@ -59,6 +63,10 @@ internal class SnippetDownloader : ISnippetDownloader
         var artistsNames = string.Join(", ", track.Artists!.Select(a => a.Name));
 
         var fileName = $"{trackName} - {artistsNames}.mp3";
+
+        var validSections = fileName.Split(_invalidFileNameChars, StringSplitOptions.RemoveEmptyEntries);
+        fileName = string.Join('_', validSections);
+
         var filePath = Path.Combine(_outputDirectory, fileName);
 
         try
