@@ -21,8 +21,8 @@ internal static class Registrations
         {
             var configuration = p.GetRequiredService<IConfiguration>();
 
-            var appClientId = configuration["appClientId"]!;
-            var appRedirectUri = configuration["appRedirectUri"]!;
+            var appClientId = configuration["app-client-id"]!;
+            var appRedirectUri = configuration["app-redirect-uri"]!;
 
             return new AuthorizationClient(appClientId, appRedirectUri);
         })
@@ -38,7 +38,7 @@ internal static class Registrations
 
             var httpListener = new HttpListener();
 
-            var appRedirectUri = configuration["appRedirectUri"]!;
+            var appRedirectUri = configuration["app-redirect-uri"]!;
             if (appRedirectUri.EndsWith('/'))
             {
                 httpListener.Prefixes.Add(appRedirectUri);
@@ -56,7 +56,7 @@ internal static class Registrations
         {
             var configuration = p.GetRequiredService<IConfiguration>();
 
-            var outputDirectory = configuration["outputDirectory"]!;
+            var outputDirectory = configuration["output-directory"]!;
             var webAPIService = p.GetRequiredService<IWebAPIService>();
 
             return new SnippetDownloader(outputDirectory, webAPIService);
