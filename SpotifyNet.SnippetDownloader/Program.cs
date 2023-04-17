@@ -145,15 +145,20 @@ internal sealed class Program
         return serviceProvider.GetRequiredService<ISnippetDownloader>();
     }
 
-    private static async Task WriteOutput(
+    private static Task WriteOutput(
         string outputDirectory,
         IReadOnlyDictionary<string, SnippetDownloadStatus> output)
     {
         Directory.CreateDirectory(outputDirectory);
         var outputFilePath = Path.Combine(outputDirectory, "output.json");
 
-        File.Delete(outputFilePath);
+        if (File.Exists(outputFilePath))
+        {
+            File.Delete(outputFilePath);
+        }
+
         using var fs = File.OpenWrite(outputFilePath);
-        await JsonSerializer.SerializeAsync(fs, output);
+
+        return JsonSerializer.SerializeAsync(fs, output);
     }
 }
