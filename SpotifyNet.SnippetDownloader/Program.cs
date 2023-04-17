@@ -15,7 +15,8 @@ namespace SpotifyNet.SnippetDownloader;
 
 sealed internal class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task Main(
+        string[] args)
     {
         var builder = Host.CreateDefaultBuilder(args);
 
@@ -23,74 +24,92 @@ sealed internal class Program
 
         var host = builder.Build();
 
-        var appClientIdOption = new Option<string>(
-            name: "--app-client-id",
-            description: "The Spotify Developer App's client id.");
-
-        var appRedirectUriOption = new Option<string>(
-            name: "--app-redirect-uri",
-            description: "The Spotify Developer App's redirect id.");
-
-        var outputDirectoryOption = new Option<DirectoryInfo>(
-            name: "--output-directory",
-            description: "The directory to place the downloader's outputs.");
-
-        var newTokenOption = new Option<bool>(
-            name: "--force-generate-token",
-            description: "Whether to force the generation of a new access token.",
-            getDefaultValue: () => false);
-
-        var trackIdOption = new Option<string>(
-            name: "--track-id",
-            description: "The id of the track to download.");
-
-        var playlistIdOption = new Option<string>(
-            name: "--playlist-id",
-            description: "The id of the playlist to download.");
-
-        var trackCommand = new Command("track", "Download a track.")
-        {
-            appClientIdOption,
-            appRedirectUriOption,
-            outputDirectoryOption,
-            newTokenOption,
-            trackIdOption,
-        };
-        trackCommand.SetHandler(async (trackId, newToken) => await DownloadTrack(newToken, trackId, host.Services), trackIdOption, newTokenOption);
-
-        var playlistCommand = new Command("playlist", "Download a playlist.")
-        {
-            appClientIdOption,
-            appRedirectUriOption,
-            outputDirectoryOption,
-            newTokenOption,
-            playlistIdOption,
-        };
-        playlistCommand.SetHandler(async (playlistId, newToken) => await DownloadPlaylist(newToken, playlistId, host.Services), playlistIdOption, newTokenOption);
-
-        var rootCommand = new RootCommand("Snippet Downloader using Spotify APIs.")
-        {
-            appClientIdOption,
-            appRedirectUriOption,
-            outputDirectoryOption,
-            newTokenOption,
-            trackCommand,
-            playlistCommand
-        };
+        var rootCommand = GetRootCommand(host.Services);
 
         await rootCommand.InvokeAsync(args);
     }
 
-    private static async Task DownloadTrack(
+    private static RootCommand GetRootCommand(
+        IServiceProvider serviceProvider)
+    {
+        // Global options.
+        var appClientIdOption = new Option<string>("--app-client-id", "The Spotify Developer App's client id.")
+        {
+            IsRequired = true,
+        };
+
+        var appRedirectUriOption = new Option<string>("--app-redirect-uri", "The Spotify Developer App's redirect id.")
+        {
+            IsRequired = true,
+        };
+
+        var outputDirectoryOption = new Option<DirectoryInfo>("--output-directory", "The directory to place the downloader's outputs.")
+        {
+            IsRequired = true,
+        };
+
+        var newTokenOption = new Option<bool>("--force-generate-token", () => false, "Whether to force the generation of a new access token.")
+        {
+            IsRequired = false,
+        };
+
+        var globalOptions = new Option[] { appClientIdOption, appRedirectUriOption, outputDirectoryOption, newTokenOption };
+
+        // Track command options.
+        var trackIdsOption = new Option<string[]>("--track-ids", "The ids of the tracks to download.")
+        {
+            IsRequired = true,
+            AllowMultipleArgumentsPerToken = true,
+        };
+
+        var trackCommand = new Command("track", "Download a track.")
+        {
+            trackIdsOption,
+        };
+
+        trackCommand.SetHandler(async (trackIds, newToken) => await DownloadTracks(newToken, trackIds, serviceProvider), trackIdsOption, newTokenOption);
+
+        // Playlist command options.
+        var playlistIdOption = new Option<string>("--playlist-id", "The id of the playlist to download.")
+        {
+            IsRequired = true,
+        };
+
+        var playlistCommand = new Command("playlist", "Download a playlist's tracks.")
+        {
+            playlistIdOption,
+        };
+
+        playlistCommand.SetHandler(async (playlistId, newToken) => await DownloadPlaylist(newToken, playlistId, serviceProvider), playlistIdOption, newTokenOption);
+
+        // Root command.
+        var rootCommand = new RootCommand("Snippet Downloader using Spotify APIs.")
+        {
+            trackCommand,
+            playlistCommand
+        };
+
+        foreach (var option in globalOptions)
+        {
+            rootCommand.AddGlobalOption(option);
+        }
+
+        return rootCommand;
+    }
+
+    private static async Task DownloadTracks(
         bool newAccessToken,
-        string trackId,
+        string[] trackIds,
         IServiceProvider serviceProvider)
     {
         var snippetDownloader = await GetSnippetDownloader(newAccessToken, serviceProvider);
 
-        var (fileName, status) = await snippetDownloader.DownloadTrack(trackId);
-
-        var output = new Dictionary<string, SnippetDownloadStatus> { [fileName] = status };
+        var output = new Dictionary<string, SnippetDownloadStatus>(trackIds.Length);
+        foreach (var trackId in trackIds)
+        {
+            var (fileName, status) = await snippetDownloader.DownloadTrack(trackId);
+            output[fileName] = status;
+        }
 
         await WriteOutput(serviceProvider, output);
     }
@@ -126,7 +145,7 @@ sealed internal class Program
         IReadOnlyDictionary<string, SnippetDownloadStatus> output)
     {
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var outputDirectory = configuration["outputDirectory"]!;
+        var outputDirectory = configuration["output-directory"]!;
 
         Directory.CreateDirectory(outputDirectory);
         var outputFilePath = Path.Combine(outputDirectory, "output.json");
