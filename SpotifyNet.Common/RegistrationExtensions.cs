@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
-namespace SpotifyNet.Playground;
+namespace SpotifyNet.Common;
 
-internal static class RegistrationExtensions
+public static class RegistrationExtensions
 {
     public static IServiceCollection AddTokenAcquirer(this IServiceCollection services) => services.AddSingleton<ITokenAcquirer, TokenAcquirer>();
 

@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Playground;
+namespace SpotifyNet.Common;
 
-internal interface ITokenAcquirer
+public interface ITokenAcquirer
 {
     Task GenerateToken(
         string[] scopes,

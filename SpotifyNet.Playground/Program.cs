@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpotifyNet.Clients;
+using SpotifyNet.Common;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Repositories;
 using SpotifyNet.Services;

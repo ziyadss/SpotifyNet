@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Playground;
+namespace SpotifyNet.Common;
 
 internal class TokenAcquirer : ITokenAcquirer
 {
