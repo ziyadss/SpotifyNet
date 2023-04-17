@@ -17,4 +17,7 @@ public interface IAuthorizationRepository
 
     Task<AccessTokenMetadata> GetAccessToken(
         CancellationToken cancellationToken = default);
+
+    Task<bool> AccessTokenExists(
+        CancellationToken cancellationToken = default);
 }

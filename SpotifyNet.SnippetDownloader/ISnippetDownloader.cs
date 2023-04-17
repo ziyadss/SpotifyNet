@@ -5,7 +5,7 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal interface ISnippetDownloader
 {
-    public Task<(string, SnippetDownloadStatus)> DownloadTrack(string trackId);
+    public Task<(string FileName, SnippetDownloadStatus Status)> DownloadTrack(string trackId);
 
-    public Task<IEnumerable<(string TrackName, SnippetDownloadStatus Status)>> DownloadPlaylist(string playlistId);
+    public Task<IEnumerable<(string FileName, SnippetDownloadStatus Status)>> DownloadPlaylist(string playlistId);
 }

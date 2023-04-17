@@ -64,6 +64,13 @@ public class AuthorizationRepository : IAuthorizationRepository
         return token;
     }
 
+    public Task<bool> AccessTokenExists(CancellationToken cancellationToken = default)
+    {
+        var exists = File.Exists(AccessTokenFilePath);
+
+        return Task.FromResult(exists);
+    }
+
     private async Task<AccessTokenMetadata> RefreshUserAccessToken(
         AccessTokenMetadata existingTokenMetadata,
         CancellationToken cancellationToken)

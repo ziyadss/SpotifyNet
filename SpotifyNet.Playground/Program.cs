@@ -74,7 +74,7 @@ sealed internal class Program
         if (newToken)
         {
             var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
-            await tokenAcquirer.GenerateToken(scopes);
+            await tokenAcquirer.EnsureTokenExists(scopes, newToken);
         }
 
         var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();

@@ -1,5 +1,6 @@
 ﻿using SpotifyNet.Repositories.Interfaces;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,46 @@ public class TokenAcquirer : ITokenAcquirer
         _httpListener = httpListener;
     }
 
-    public async Task GenerateToken(
+    public async Task EnsureTokenExists(
+        string[] scopes,
+        bool forceGenerate,
+        CancellationToken cancellationToken)
+    {
+        var needToGenerate = await NeedToGenerate(forceGenerate, scopes, cancellationToken);
+
+        if (needToGenerate)
+        {
+            await GenerateToken(scopes, cancellationToken);
+        }
+    }
+
+    private async Task<bool> NeedToGenerate(
+        bool forceGenerate,
+        string[] scopes,
+        CancellationToken cancellationToken)
+    {
+        if (forceGenerate)
+        {
+            return true;
+        }
+
+        var exists = await _authorizationRepository.AccessTokenExists(cancellationToken);
+        if (!exists)
+        {
+            return true;
+        }
+
+        var accessToken = await _authorizationRepository.GetAccessToken(cancellationToken);
+        var missingScopes = scopes.Except(accessToken.AuthorizationScopes);
+        if (missingScopes.Any())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private async Task GenerateToken(
         string[] scopes,
         CancellationToken cancellationToken)
     {

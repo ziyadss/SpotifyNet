@@ -5,7 +5,8 @@ namespace SpotifyNet.Common;
 
 public interface ITokenAcquirer
 {
-    Task GenerateToken(
+    Task EnsureTokenExists(
         string[] scopes,
+        bool forceGenerate = false,
         CancellationToken cancellationToken = default);
 }
