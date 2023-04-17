@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.Common;
 
-internal class TokenAcquirer : ITokenAcquirer
+public class TokenAcquirer : ITokenAcquirer
 {
     private readonly IAuthorizationRepository _authorizationRepository;
     private readonly HttpListener _httpListener;
