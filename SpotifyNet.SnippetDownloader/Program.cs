@@ -70,6 +70,10 @@ sealed internal class Program
 
         var rootCommand = new RootCommand("Snippet Downloader using Spotify APIs.")
         {
+            appClientIdOption,
+            appRedirectUriOption,
+            outputDirectoryOption,
+            newTokenOption,
             trackCommand,
             playlistCommand
         };
