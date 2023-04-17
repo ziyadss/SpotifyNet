@@ -80,10 +80,15 @@ public interface IWebAPIRepository
     // Shows
 
     // Tracks
+    Task<Track> GetTrack(
+        string trackId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     Task<IEnumerable<Track>> GetTracks(
         string[] trackIds,
         string accessToken,
-    CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default);
 
     Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,

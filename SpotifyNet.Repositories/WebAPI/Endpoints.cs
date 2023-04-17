@@ -37,10 +37,11 @@ internal static class Endpoints
     // Shows
 
     // Tracks
+    public static string GetTrack(string trackId) => $"https://api.spotify.com/v1/tracks/{trackId}";
     public static string GetSeveralTracks(string[] trackIds) => $"https://api.spotify.com/v1/tracks?ids={string.Join(',', trackIds)}";
     public static string GetUserSavedTracks() => $"https://api.spotify.com/v1/me/tracks";
     public static string GetTracksAudioFeatures(string[] trackIds) => $"https://api.spotify.com/v1/audio-features?ids={string.Join(',', trackIds)}";
-    public static string GetTrackAudioFeatures(string trackId) => $"https://api.spotify.com/v1/audio-features?ids={trackId}";
+    public static string GetTrackAudioFeatures(string trackId) => $"https://api.spotify.com/v1/audio-features/{trackId}";
     public static string GetTrackAudioAnalysis(string trackId) => $"https://api.spotify.com/v1/audio-analysis/{trackId}";
 
     // Users

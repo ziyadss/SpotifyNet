@@ -10,6 +10,21 @@ namespace SpotifyNet.Repositories.WebAPI;
 
 public partial class WebAPIRepository
 {
+    public Task<Track> GetTrack(
+        string trackId,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(trackId, nameof(trackId));
+
+        var uri = Endpoints.GetTrack(trackId);
+
+        return _webAPIClient.GetAsync<Track>(
+            uri,
+            accessToken,
+            cancellationToken);
+    }
+
     public async Task<IEnumerable<Track>> GetTracks(
         string[] trackIds,
         string accessToken,

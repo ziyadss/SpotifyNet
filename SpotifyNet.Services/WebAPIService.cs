@@ -1,7 +1,9 @@
 ﻿using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +31,32 @@ public class WebAPIService : IWebAPIService
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
         var tracks = await _webAPIRepository.GetCurrentUserSavedTracks(accessToken, cancellationToken);
+
+        return tracks;
+    }
+
+    public async Task<IEnumerable<PlaylistTrack>> GetPlaylistTracks(
+        string playlistId,
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var tracks = await _webAPIRepository.GetPlaylistItems(playlistId, accessToken, cancellationToken);
+
+        return tracks;
+    }
+
+    public async Task<Track> GetTrack(
+        string trackId,
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = Array.Empty<string>();
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var tracks = await _webAPIRepository.GetTrack(trackId, accessToken, cancellationToken);
 
         return tracks;
     }
