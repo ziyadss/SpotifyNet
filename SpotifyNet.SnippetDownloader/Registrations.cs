@@ -17,38 +17,48 @@ namespace SpotifyNet.SnippetDownloader;
 internal static class Registrations
 {
     internal static IServiceCollection AddRegistrations(this IServiceCollection services) => services
-            .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
+        .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
+        {
+            var configuration = p.GetRequiredService<IConfiguration>();
+
+            var appClientId = configuration["appClientId"]!;
+            var appRedirectUri = configuration["appRedirectUri"]!;
+
+            return new AuthorizationClient(appClientId, appRedirectUri);
+        })
+        .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
+        .AddSingleton<IAuthorizationService, AuthorizationService>()
+        .AddSingleton<IWebAPIClient, WebAPIClient>()
+        .AddSingleton<IWebAPIRepository, WebAPIRepository>()
+        .AddSingleton<IWebAPIService, WebAPIService>()
+
+        .AddSingleton(p =>
+        {
+            var configuration = p.GetRequiredService<IConfiguration>();
+
+            var httpListener = new HttpListener();
+
+            var appRedirectUri = configuration["appRedirectUri"]!;
+            if (appRedirectUri.EndsWith('/'))
             {
-                var configuration = p.GetRequiredService<IConfiguration>();
-
-                var appClientId = configuration["appClientId"]!;
-                var appRedirectUri = configuration["appRedirectUri"]!;
-
-                return new AuthorizationClient(appClientId, appRedirectUri);
-            })
-            .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
-            .AddSingleton<IAuthorizationService, AuthorizationService>()
-            .AddSingleton<IWebAPIClient, WebAPIClient>()
-            .AddSingleton<IWebAPIRepository, WebAPIRepository>()
-            .AddSingleton<IWebAPIService, WebAPIService>()
-
-            .AddSingleton(p =>
+                httpListener.Prefixes.Add(appRedirectUri);
+            }
+            else
             {
-                var configuration = p.GetRequiredService<IConfiguration>();
+                httpListener.Prefixes.Add(appRedirectUri + '/');
+            }
 
-                var httpListener = new HttpListener();
+            return httpListener;
+        })
+        .AddSingleton<ITokenAcquirer, TokenAcquirer>()
 
-                var appRedirectUri = configuration["appRedirectUri"]!;
-                if (appRedirectUri.EndsWith('/'))
-                {
-                    httpListener.Prefixes.Add(appRedirectUri);
-                }
-                else
-                {
-                    httpListener.Prefixes.Add(appRedirectUri + '/');
-                }
+        .AddSingleton<ISnippetDownloader, SnippetDownloader>(p =>
+        {
+            var configuration = p.GetRequiredService<IConfiguration>();
 
-                return httpListener;
-            })
-            .AddSingleton<ITokenAcquirer, TokenAcquirer>();
+            var outputDirectory = configuration["outputDirectory"]!;
+            var webAPIService = p.GetRequiredService<IWebAPIService>();
+
+            return new SnippetDownloader(outputDirectory, webAPIService);
+        });
 }
