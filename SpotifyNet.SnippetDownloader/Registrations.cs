@@ -10,6 +10,7 @@ using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Repositories.WebAPI;
 using SpotifyNet.Services.Interfaces;
 using SpotifyNet.WebAPI;
+using System.IO;
 using System.Net;
 
 namespace SpotifyNet.SnippetDownloader;
@@ -59,6 +60,6 @@ internal static class Registrations
             var outputDirectory = configuration["output-directory"]!;
             var webAPIService = p.GetRequiredService<IWebAPIService>();
 
-            return new SnippetDownloader(outputDirectory, webAPIService);
+            return new SnippetDownloader(Path.Combine(outputDirectory, "files"), webAPIService);
         });
 }

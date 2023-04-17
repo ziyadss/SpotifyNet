@@ -16,6 +16,11 @@ internal sealed class Program
 {
     private static readonly string[] _requiredScopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new(JsonSerializerOptions.Default)
+    {
+        WriteIndented = true,
+    };
+
     public static async Task Main(
         string[] args)
     {
@@ -159,6 +164,6 @@ internal sealed class Program
 
         using var fs = File.OpenWrite(outputFilePath);
 
-        return JsonSerializer.SerializeAsync(fs, output);
+        return JsonSerializer.SerializeAsync(fs, output, _jsonSerializerOptions);
     }
 }
