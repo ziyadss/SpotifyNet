@@ -68,11 +68,10 @@ sealed internal class Program
 
     private static async Task Test(IServiceProvider serviceProvider)
     {
-        var newAccessToken = false;
         var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
-        await tokenAcquirer.EnsureTokenExists(scopes, newAccessToken);
+        await tokenAcquirer.EnsureTokenExists(scopes);
 
         var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();
 
