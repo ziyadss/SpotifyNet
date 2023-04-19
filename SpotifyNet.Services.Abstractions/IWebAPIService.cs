@@ -11,6 +11,9 @@ public interface IWebAPIService
     Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
         CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+        CancellationToken cancellationToken = default);
+
     Task<IEnumerable<PlaylistTrack>> GetPlaylistTracks(
         string playlistId,
         CancellationToken cancellationToken = default);

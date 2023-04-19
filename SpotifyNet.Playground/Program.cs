@@ -68,7 +68,7 @@ sealed internal class Program
 
     private static async Task Test(IServiceProvider serviceProvider)
     {
-        var newAccessToken = true;
+        var newAccessToken = false;
         var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
@@ -76,9 +76,24 @@ sealed internal class Program
 
         var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();
 
-        var savedTracks = await webAPIService.GetCurrentUserSavedTracks();
+        var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
+        var playlists = await webAPIService.GetCurrentUserPlaylists();
 
-        Console.WriteLine(savedTracks.Count());
+        foreach (var playlist in playlists)
+        {
+            if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
+            {
+                continue;
+            }
+
+            var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
+            var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
+
+            if (condition)
+            {
+                Console.WriteLine(playlist.Name);
+            }
+        }
     }
 
     private static async Task<T> Read<T>(string fileName)

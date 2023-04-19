@@ -35,6 +35,18 @@ public class WebAPIService : IWebAPIService
         return tracks;
     }
 
+    public async Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = new[] { AuthorizationScope.PlaylistReadPrivate };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var playlists = await _webAPIRepository.GetCurrentUserPlaylists(accessToken, cancellationToken);
+
+        return playlists;
+    }
+
     public async Task<IEnumerable<PlaylistTrack>> GetPlaylistTracks(
         string playlistId,
         CancellationToken cancellationToken)
