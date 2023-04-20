@@ -21,7 +21,7 @@ internal sealed class Program
         WriteIndented = true,
     };
 
-    public static async Task Main(
+    public static Task Main(
         string[] args)
     {
         var builder = Host.CreateDefaultBuilder(args);
@@ -32,7 +32,7 @@ internal sealed class Program
 
         var rootCommand = GetRootCommand(host.Services);
 
-        await rootCommand.InvokeAsync(args);
+        return rootCommand.InvokeAsync(args);
     }
 
     private static RootCommand GetRootCommand(
