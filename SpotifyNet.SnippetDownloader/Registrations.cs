@@ -12,12 +12,14 @@ using SpotifyNet.Services.Interfaces;
 using SpotifyNet.WebAPI;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 
 namespace SpotifyNet.SnippetDownloader;
 
 internal static class Registrations
 {
     internal static IServiceCollection AddRegistrations(this IServiceCollection services) => services
+        .AddSingleton<HttpClient>()
         .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
         {
             var configuration = p.GetRequiredService<IConfiguration>();
@@ -25,7 +27,9 @@ internal static class Registrations
             var appClientId = configuration["app-client-id"]!;
             var appRedirectUri = configuration["app-redirect-uri"]!;
 
-            return new AuthorizationClient(appClientId, appRedirectUri);
+            var httpClient = p.GetRequiredService<HttpClient>();
+
+            return new AuthorizationClient(appClientId, appRedirectUri, httpClient);
         })
         .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
         .AddSingleton<IAuthorizationService, AuthorizationService>()
@@ -58,8 +62,11 @@ internal static class Registrations
             var configuration = p.GetRequiredService<IConfiguration>();
 
             var outputDirectory = configuration["output-directory"]!;
-            var webAPIService = p.GetRequiredService<IWebAPIService>();
+            var snippetsDirectory = Path.Combine(outputDirectory, "files");
 
-            return new SnippetDownloader(Path.Combine(outputDirectory, "files"), webAPIService);
+            var webAPIService = p.GetRequiredService<IWebAPIService>();
+            var httpClient = p.GetRequiredService<HttpClient>();
+
+            return new SnippetDownloader(snippetsDirectory, webAPIService, httpClient);
         });
 }

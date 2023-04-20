@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -33,7 +34,13 @@ sealed internal class Program
         builder.ConfigureServices(services =>
         {
             services
-            .AddSingleton<IAuthorizationClient, AuthorizationClient>(p => new AuthorizationClient(AppClientId, AppRedirectUri))
+            .AddSingleton<HttpClient>()
+            .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
+            {
+                var httpClient = p.GetRequiredService<HttpClient>();
+
+                return new AuthorizationClient(AppClientId, AppRedirectUri, httpClient);
+            })
             .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
             .AddSingleton<IAuthorizationService, AuthorizationService>()
             .AddSingleton<IWebAPIClient, WebAPIClient>()

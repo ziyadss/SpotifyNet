@@ -14,9 +14,10 @@ public class WebAPIClient : IWebAPIClient
 {
     private readonly HttpClient _httpClient;
 
-    public WebAPIClient()
+    public WebAPIClient(
+        HttpClient httpClient)
     {
-        _httpClient = new();
+        _httpClient = httpClient;
     }
 
     public Task<TResponse> GetAsync<TResponse>(

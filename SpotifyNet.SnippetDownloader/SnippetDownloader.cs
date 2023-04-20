@@ -17,17 +17,17 @@ internal class SnippetDownloader : ISnippetDownloader
     private readonly string _outputDirectory;
 
     private readonly IWebAPIService _webAPIService;
-
     private readonly HttpClient _httpClient;
 
     public SnippetDownloader(
         string outputDirectory,
-        IWebAPIService webAPIService)
+        IWebAPIService webAPIService,
+        HttpClient httpClient)
     {
         _outputDirectory = outputDirectory;
-        _webAPIService = webAPIService;
 
-        _httpClient = new HttpClient();
+        _webAPIService = webAPIService;
+        _httpClient = httpClient;
 
         Directory.CreateDirectory(_outputDirectory);
     }

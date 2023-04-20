@@ -26,12 +26,13 @@ public class AuthorizationClient : IAuthorizationClient
 
     public AuthorizationClient(
         string appClientId,
-        string appRedirectUri)
+        string appRedirectUri,
+        HttpClient httpClient)
     {
         _appClientId = appClientId;
         _appRedirectUri = appRedirectUri;
 
-        _httpClient = new();
+        _httpClient = httpClient;
     }
 
     public async Task<UserAuthorization> GetUserAuthorizeUri(
