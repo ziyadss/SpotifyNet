@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpotifyNet.SnippetDownloader;
@@ -32,32 +33,38 @@ internal class SnippetDownloader : ISnippetDownloader
         Directory.CreateDirectory(_outputDirectory);
     }
 
-    public async Task<(string, SnippetDownloadStatus)> DownloadTrack(string trackId)
+    public async Task<(string, SnippetDownloadStatus)> DownloadTrack(
+        string trackId,
+        CancellationToken cancellationToken)
     {
-        var track = await _webAPIService.GetTrack(trackId);
+        var track = await _webAPIService.GetTrack(trackId, cancellationToken);
 
-        var result = await DownloadTrack(track);
+        var result = await DownloadTrack(track, cancellationToken);
 
         return result;
     }
 
-    public async Task<IEnumerable<(string, SnippetDownloadStatus)>> DownloadPlaylist(string playlistId)
+    public async Task<IEnumerable<(string, SnippetDownloadStatus)>> DownloadPlaylist(
+        string playlistId,
+        CancellationToken cancellationToken)
     {
-        var playlistTracks = await _webAPIService.GetPlaylistTracks(playlistId);
+        var playlistTracks = await _webAPIService.GetPlaylistTracks(playlistId, cancellationToken);
 
         var tracks = playlistTracks.Select(pt => pt.Track!);
 
         var result = new List<(string, SnippetDownloadStatus)>();
         foreach (var track in tracks)
         {
-            var trackResult = await DownloadTrack(track);
+            var trackResult = await DownloadTrack(track, cancellationToken);
             result.Add(trackResult);
         }
 
         return result;
     }
 
-    public async Task<(string, SnippetDownloadStatus)> DownloadTrack(Track track)
+    public async Task<(string, SnippetDownloadStatus)> DownloadTrack(
+        Track track,
+        CancellationToken cancellationToken)
     {
         var trackName = track.Name;
         var artistsNames = string.Join(", ", track.Artists!.Select(a => a.Name));
@@ -81,12 +88,12 @@ internal class SnippetDownloader : ISnippetDownloader
             }
             else
             {
-                var response = await _httpClient.GetAsync(track.PreviewUrl);
-                await Ensure.RequestSuccess(response);
+                var response = await _httpClient.GetAsync(track.PreviewUrl, cancellationToken);
+                await Ensure.RequestSuccess(response, cancellationToken);
 
-                using var responseStream = await response.Content.ReadAsStreamAsync();
+                using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
                 using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-                await responseStream.CopyToAsync(fileStream);
+                await responseStream.CopyToAsync(fileStream, cancellationToken);
 
                 return (fileName, SnippetDownloadStatus.Downloaded);
             }

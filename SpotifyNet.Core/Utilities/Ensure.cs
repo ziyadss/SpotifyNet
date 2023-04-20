@@ -39,7 +39,7 @@ public static class Ensure
 
     public static async Task RequestSuccess(
         HttpResponseMessage response,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(response, nameof(response));
 
