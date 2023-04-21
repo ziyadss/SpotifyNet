@@ -89,7 +89,7 @@ sealed internal class Program
         //{
         //    if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
         //    {
-        //        continue;
+        //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
         //    }
 
         //    var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
@@ -108,15 +108,15 @@ sealed internal class Program
         {
             if (playlist.Owner!.Id != userId || playlist.Tracks!.Total == 0)
             {
-                continue;
+                Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
             }
 
             var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
-            var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 15));
+            var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 19));
 
             if (condition)
             {
-                Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
+                Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}");
             }
         }
     }
