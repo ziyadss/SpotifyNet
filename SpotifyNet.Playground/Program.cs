@@ -82,24 +82,24 @@ sealed internal class Program
 
         var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();
 
-        //    var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
-        //    var playlists = await webAPIService.GetCurrentUserPlaylists();
+        //var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
+        //var playlists = await webAPIService.GetCurrentUserPlaylists();
 
-        //    foreach (var playlist in playlists)
+        //foreach (var playlist in playlists)
+        //{
+        //    if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
         //    {
-        //        if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
-        //        {
-        //            continue;
-        //        }
-
-        //        var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
-        //        var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
-
-        //        if (condition)
-        //        {
-        //            Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
-        //        }
+        //        continue;
         //    }
+
+        //    var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
+        //    var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
+
+        //    if (condition)
+        //    {
+        //        Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
+        //    }
+        //}
 
         var userId = "ziyad.ss";
         var playlists = await webAPIService.GetUserPlaylists(userId);
