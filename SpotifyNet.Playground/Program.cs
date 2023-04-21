@@ -27,7 +27,7 @@ sealed internal class Program
     private const string AppClientId = "";
     private const string AppRedirectUri = "http://localhost:3000";
 
-    public static async Task Main(string[] args)
+    public static Task Main(string[] args)
     {
         var builder = Host.CreateDefaultBuilder(args);
 
@@ -70,10 +70,10 @@ sealed internal class Program
 
         var host = builder.Build();
 
-        await Test(host.Services);
+        return Foo(host.Services);
     }
 
-    private static async Task Test(IServiceProvider serviceProvider)
+    private static async Task Foo(IServiceProvider serviceProvider)
     {
         var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
 
