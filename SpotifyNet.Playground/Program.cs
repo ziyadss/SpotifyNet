@@ -75,7 +75,13 @@ sealed internal class Program
 
     private static async Task Foo(IServiceProvider serviceProvider)
     {
-        var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate, AuthorizationScope.PlaylistReadCollaborative };
+        var scopes = new[]
+        {
+            AuthorizationScope.UserLibraryRead,
+            AuthorizationScope.PlaylistReadPrivate,
+            AuthorizationScope.PlaylistReadCollaborative,
+            AuthorizationScope.UserReadCurrentlyPlaying,
+        };
 
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
         await tokenAcquirer.EnsureTokenExists(scopes);
