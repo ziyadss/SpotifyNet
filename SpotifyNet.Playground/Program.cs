@@ -75,25 +75,44 @@ sealed internal class Program
 
     private static async Task Foo(IServiceProvider serviceProvider)
     {
-        var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
+        var scopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate, AuthorizationScope.PlaylistReadCollaborative };
 
         var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
         await tokenAcquirer.EnsureTokenExists(scopes);
 
         var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();
 
-        var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
-        var playlists = await webAPIService.GetCurrentUserPlaylists();
+        //    var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
+        //    var playlists = await webAPIService.GetCurrentUserPlaylists();
+
+        //    foreach (var playlist in playlists)
+        //    {
+        //        if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
+        //        {
+        //            continue;
+        //        }
+
+        //        var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
+        //        var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
+
+        //        if (condition)
+        //        {
+        //            Console.WriteLine(playlist.Name);
+        //        }
+        //    }
+
+        var userId = "ziyad.ss";
+        var playlists = await webAPIService.GetUserPlaylists(userId);
 
         foreach (var playlist in playlists)
         {
-            if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
+            if (playlist.Owner!.Id != userId || playlist.Tracks!.Total == 0)
             {
                 continue;
             }
 
             var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
-            var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
+            var condition = tracks.Any(t => t.AddedAt!.Value.Year == 2023);
 
             if (condition)
             {

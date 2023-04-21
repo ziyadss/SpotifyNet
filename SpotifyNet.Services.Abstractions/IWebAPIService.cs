@@ -18,6 +18,10 @@ public interface IWebAPIService
         string playlistId,
         CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+        string userId,
+        CancellationToken cancellationToken = default);
+
     Task<Track> GetTrack(
         string trackId,
         CancellationToken cancellationToken = default);

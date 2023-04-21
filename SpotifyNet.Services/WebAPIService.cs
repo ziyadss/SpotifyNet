@@ -60,6 +60,20 @@ public class WebAPIService : IWebAPIService
         return tracks;
     }
 
+    public async Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+        string userId,
+        CancellationToken cancellationToken)
+    {
+        // TODO: Are these scopes required? I think they're optional?
+        var requiredScopes = new[] { AuthorizationScope.PlaylistReadPrivate, AuthorizationScope.PlaylistReadCollaborative };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var playlists = await _webAPIRepository.GetUserPlaylists(userId, accessToken, cancellationToken);
+
+        return playlists;
+    }
+
     public async Task<Track> GetTrack(
         string trackId,
         CancellationToken cancellationToken)
