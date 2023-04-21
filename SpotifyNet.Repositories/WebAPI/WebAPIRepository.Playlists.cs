@@ -31,4 +31,17 @@ public partial class WebAPIRepository
             accessToken,
             cancellationToken);
     }
+
+    public Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+        string userId,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var uri = Endpoints.GetUserPlaylists(userId);
+
+        return GetPaginated<SimplifiedPlaylist>(
+            uri,
+            accessToken,
+            cancellationToken);
+    }
 }

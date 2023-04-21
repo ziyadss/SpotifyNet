@@ -75,6 +75,11 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+        string userId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     // Search
 
     // Shows
