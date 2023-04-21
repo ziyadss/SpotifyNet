@@ -97,7 +97,7 @@ sealed internal class Program
 
         //        if (condition)
         //        {
-        //            Console.WriteLine(playlist.Name);
+        //            Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
         //        }
         //    }
 
@@ -116,7 +116,7 @@ sealed internal class Program
 
             if (condition)
             {
-                Console.WriteLine(playlist.Name);
+                Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
             }
         }
     }
