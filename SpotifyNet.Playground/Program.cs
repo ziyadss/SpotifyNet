@@ -109,10 +109,10 @@ sealed internal class Program
         return item!;
     }
 
-    private static async Task Write<T>(string fileName, T item)
+    private static Task Write<T>(string fileName, T item)
     {
         File.Delete(fileName);
         using var fs = File.OpenWrite(fileName);
-        await JsonSerializer.SerializeAsync(fs, item);
+        return JsonSerializer.SerializeAsync(fs, item);
     }
 }
