@@ -50,12 +50,10 @@ internal class SnippetDownloader : ISnippetDownloader
     {
         var playlistTracks = await _webAPIService.GetPlaylistTracks(playlistId, cancellationToken);
 
-        var tracks = playlistTracks.Select(pt => pt.Track!);
-
         var result = new List<(string, SnippetDownloadStatus)>();
-        foreach (var track in tracks)
+        foreach (var playlistTrack in playlistTracks)
         {
-            var trackResult = await DownloadTrack(track, cancellationToken);
+            var trackResult = await DownloadTrack(playlistTrack.Track!, cancellationToken);
             result.Add(trackResult);
         }
 
