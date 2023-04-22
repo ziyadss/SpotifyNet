@@ -118,7 +118,7 @@ sealed internal class Program
             }
 
             var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
-            var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 20));
+            var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 21));
 
             if (condition)
             {
