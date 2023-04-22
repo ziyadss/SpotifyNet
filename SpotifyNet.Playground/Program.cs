@@ -70,10 +70,13 @@ sealed internal class Program
 
         var host = builder.Build();
 
-        return Foo(host.Services);
+        var tokenAcquirer = host.Services.GetRequiredService<ITokenAcquirer>();
+        var webAPIService = host.Services.GetRequiredService<IWebAPIService>();
+
+        return Foo(tokenAcquirer, webAPIService);
     }
 
-    private static async Task Foo(IServiceProvider serviceProvider)
+    private static async Task Foo(ITokenAcquirer tokenAcquirer, IWebAPIService webAPIService)
     {
         var scopes = new[]
         {
@@ -83,10 +86,7 @@ sealed internal class Program
             AuthorizationScope.UserReadCurrentlyPlaying,
         };
 
-        var tokenAcquirer = serviceProvider.GetRequiredService<ITokenAcquirer>();
         await tokenAcquirer.EnsureTokenExists(scopes);
-
-        var webAPIService = serviceProvider.GetRequiredService<IWebAPIService>();
 
         //var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
         //var playlists = await webAPIService.GetCurrentUserPlaylists();
@@ -107,24 +107,24 @@ sealed internal class Program
         //    }
         //}
 
-        var userId = "ziyad.ss";
-        var playlists = await webAPIService.GetUserPlaylists(userId);
+        //var userId = "ziyad.ss";
+        //var playlists = await webAPIService.GetUserPlaylists(userId);
 
-        foreach (var playlist in playlists)
-        {
-            if (playlist.Owner!.Id != userId || playlist.Tracks!.Total == 0)
-            {
-                Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
-            }
+        //foreach (var playlist in playlists)
+        //{
+        //    if (playlist.Owner!.Id != userId || playlist.Tracks!.Total == 0)
+        //    {
+        //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
+        //    }
 
-            var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
-            var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 21));
+        //    var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
+        //    var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 21));
 
-            if (condition)
-            {
-                Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}");
-            }
-        }
+        //    if (condition)
+        //    {
+        //        Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}");
+        //    }
+        //}
     }
 
     private static async Task<T> Read<T>(string fileName)
