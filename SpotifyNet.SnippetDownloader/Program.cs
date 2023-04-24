@@ -166,11 +166,8 @@ internal sealed class Program
 
     internal static SnippetDownloadStatus GetBetterStatus(SnippetDownloadStatus first, SnippetDownloadStatus second) => first switch
     {
-        SnippetDownloadStatus.Unknown => second,
-        SnippetDownloadStatus.Downloaded => first,
-        SnippetDownloadStatus.NoPreviewUrl => second,
-        SnippetDownloadStatus.Failed => second,
-        SnippetDownloadStatus.Exists => first,
+        SnippetDownloadStatus.Unknown or SnippetDownloadStatus.NoPreviewUrl or SnippetDownloadStatus.Failed => second,
+        SnippetDownloadStatus.Downloaded or SnippetDownloadStatus.Exists => first,
         _ => throw new NotImplementedException(),
     };
 
