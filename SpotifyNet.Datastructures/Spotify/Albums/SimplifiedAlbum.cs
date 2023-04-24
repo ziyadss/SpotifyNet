@@ -6,10 +6,10 @@ namespace SpotifyNet.Datastructures.Spotify.Albums;
 public class SimplifiedAlbum
 {
     [JsonPropertyName("album_type")]
-    public required AlbumType AlbumType { get; init; }
+    public required AlbumType? AlbumType { get; init; }
 
     [JsonPropertyName("total_tracks")]
-    public required int TotalTracks { get; init; }
+    public int TotalTracks { get; init; }
 
     [JsonPropertyName("available_markets")]
     public required string[] AvailableMarkets { get; init; }
@@ -18,10 +18,10 @@ public class SimplifiedAlbum
     public required ExternalUrls ExternalUrls { get; init; }
 
     [JsonPropertyName("href")]
-    public required string Href { get; init; }
+    public required string? Href { get; init; }
 
     [JsonPropertyName("id")]
-    public required string Id { get; init; }
+    public required string? Id { get; init; }
 
     [JsonPropertyName("images")]
     public required Image[] Images { get; init; }
@@ -30,10 +30,10 @@ public class SimplifiedAlbum
     public required string Name { get; init; }
 
     [JsonPropertyName("release_date")]
-    public required string ReleaseDate { get; init; }
+    public required string? ReleaseDate { get; init; }
 
     [JsonPropertyName("release_date_precision")]
-    public required ReleaseDatePrecision ReleaseDatePrecision { get; init; }
+    public required ReleaseDatePrecision? ReleaseDatePrecision { get; init; }
 
     [JsonPropertyName("restrictions")]
     public Restrictions? Restrictions { get; init; }
@@ -42,7 +42,7 @@ public class SimplifiedAlbum
     public required ItemType Type { get; init; }
 
     [JsonPropertyName("uri")]
-    public required string Uri { get; init; }
+    public required string? Uri { get; init; }
 
     [JsonPropertyName("copyrights")]
     public Copyright[]? Copyrights { get; init; }
