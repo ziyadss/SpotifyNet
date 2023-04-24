@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Hosting;
 using SpotifyNet.Common;
 using SpotifyNet.Datastructures.Spotify.Authorization;
+using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -123,7 +123,15 @@ internal sealed class Program
         foreach (var trackId in trackIds)
         {
             var (fileName, status) = await snippetDownloader.DownloadTrack(trackId);
-            output[fileName] = status;
+
+            if (output.TryGetValue(fileName, out var result))
+            {
+                output[fileName] = GetBetterStatus(result, status);
+            }
+            else
+            {
+                output[fileName] = status;
+            }
         }
 
         await WriteOutput(outputDirectory, output);
@@ -138,19 +146,42 @@ internal sealed class Program
     {
         await tokenAcquirer.EnsureTokenExists(_requiredScopes, newAccessToken);
 
-        var result = await snippetDownloader.DownloadPlaylist(playlistId);
+        var tracks = await snippetDownloader.DownloadPlaylist(playlistId);
 
-        var output = result.ToDictionary(pair => pair.FileName, pair => pair.Status);
+        var output = new Dictionary<string, SnippetDownloadStatus>();
+        foreach (var (fileName, status) in tracks)
+        {
+            if (output.TryGetValue(fileName, out var result))
+            {
+                output[fileName] = GetBetterStatus(result, status);
+            }
+            else
+            {
+                output[fileName] = status;
+            }
+        }
 
         await WriteOutput(outputDirectory, output);
     }
 
-    private static Task WriteOutput(
+    internal static SnippetDownloadStatus GetBetterStatus(SnippetDownloadStatus first, SnippetDownloadStatus second) => first switch
+    {
+        SnippetDownloadStatus.Unknown => second,
+        SnippetDownloadStatus.Downloaded => first,
+        SnippetDownloadStatus.NoPreviewUrl => second,
+        SnippetDownloadStatus.Failed => second,
+        SnippetDownloadStatus.Exists => first,
+        _ => throw new NotImplementedException(),
+    };
+
+    private static async Task WriteOutput(
         string outputDirectory,
         IReadOnlyDictionary<string, SnippetDownloadStatus> output)
     {
         Directory.CreateDirectory(outputDirectory);
-        var outputFilePath = Path.Combine(outputDirectory, "output.json");
+
+        var timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+        var outputFilePath = Path.Combine(outputDirectory, $"output-{timestamp}.json");
 
         if (File.Exists(outputFilePath))
         {
@@ -159,6 +190,8 @@ internal sealed class Program
 
         using var fs = File.OpenWrite(outputFilePath);
 
-        return JsonSerializer.SerializeAsync(fs, output, _jsonSerializerOptions);
+        await JsonSerializer.SerializeAsync(fs, output, _jsonSerializerOptions);
+
+        Console.WriteLine(outputFilePath);
     }
 }
