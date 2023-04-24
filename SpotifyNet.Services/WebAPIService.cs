@@ -1,4 +1,5 @@
-﻿using SpotifyNet.Datastructures.Spotify.Artists;
+﻿using SpotifyNet.Datastructures.Spotify.Albums;
+using SpotifyNet.Datastructures.Spotify.Artists;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
@@ -110,5 +111,18 @@ public class WebAPIService : IWebAPIService
         var artists = await _webAPIRepository.GetCurrentUserTopArtists(accessToken, cancellationToken);
 
         return artists;
+    }
+
+    public async Task<Album> GetAlbum(
+        string albumId,
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = Array.Empty<string>();
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var album = await _webAPIRepository.GetAlbum(albumId, accessToken, cancellationToken);
+
+        return album;
     }
 }
