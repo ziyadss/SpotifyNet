@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SpotifyNet.Auth;
 using SpotifyNet.Clients.Authorization;
 using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Clients.WebAPI;
@@ -8,8 +7,9 @@ using SpotifyNet.Common;
 using SpotifyNet.Repositories.Authorization;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Repositories.WebAPI;
+using SpotifyNet.Services.Authorization;
 using SpotifyNet.Services.Interfaces;
-using SpotifyNet.WebAPI;
+using SpotifyNet.Services.WebAPI;
 using System.IO;
 using System.Net;
 using System.Net.Http;
