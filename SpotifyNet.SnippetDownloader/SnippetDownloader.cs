@@ -37,7 +37,7 @@ internal class SnippetDownloader : ISnippetDownloader
         string trackId,
         CancellationToken cancellationToken)
     {
-        var track = await _webAPIService.GetTrack(trackId, cancellationToken);
+        var track = await _webAPIService.Tracks.GetTrack(trackId, cancellationToken);
 
         var result = await DownloadTrack(track, cancellationToken);
 
@@ -48,7 +48,7 @@ internal class SnippetDownloader : ISnippetDownloader
         string playlistId,
         CancellationToken cancellationToken)
     {
-        var playlistTracks = await _webAPIService.GetPlaylistTracks(playlistId, cancellationToken);
+        var playlistTracks = await _webAPIService.Playlists.GetPlaylistTracks(playlistId, cancellationToken);
 
         var result = new List<(string, SnippetDownloadStatus)>();
         foreach (var playlistTrack in playlistTracks)

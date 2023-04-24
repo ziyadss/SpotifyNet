@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpotifyNet.Auth;
 using SpotifyNet.Clients.Authorization;
 using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Clients.WebAPI;
@@ -10,11 +9,10 @@ using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Repositories.Authorization;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Repositories.WebAPI;
+using SpotifyNet.Services.Authorization;
 using SpotifyNet.Services.Interfaces;
-using SpotifyNet.WebAPI;
-using System;
+using SpotifyNet.Services.WebAPI;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -90,7 +88,7 @@ sealed internal class Program
         await tokenAcquirer.EnsureTokenExists(scopes);
 
         //var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
-        //var playlists = await webAPIService.GetCurrentUserPlaylists();
+        //var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
 
         //foreach (var playlist in playlists)
         //{
@@ -99,7 +97,7 @@ sealed internal class Program
         //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
         //    }
 
-        //    var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
+        //    var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
         //    var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
 
         //    if (condition)
@@ -109,7 +107,7 @@ sealed internal class Program
         //}
 
         //var userId = "ziyad.ss";
-        //var playlists = await webAPIService.GetUserPlaylists(userId);
+        //var playlists = await webAPIService.Playlists.GetUserPlaylists(userId);
 
         //foreach (var playlist in playlists)
         //{
@@ -118,7 +116,7 @@ sealed internal class Program
         //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
         //    }
 
-        //    var tracks = await webAPIService.GetPlaylistTracks(playlist.Id!);
+        //    var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
         //    var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 21));
 
         //    if (condition)
