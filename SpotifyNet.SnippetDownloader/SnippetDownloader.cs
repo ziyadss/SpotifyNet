@@ -98,7 +98,7 @@ internal class SnippetDownloader : ISnippetDownloader
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.ToString());
+            Console.Error.WriteLine(ex.ToString());
             return (fileName, SnippetDownloadStatus.Failed);
         }
     }
