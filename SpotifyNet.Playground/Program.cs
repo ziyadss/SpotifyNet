@@ -84,6 +84,7 @@ sealed internal class Program
             AuthorizationScope.PlaylistReadPrivate,
             AuthorizationScope.PlaylistReadCollaborative,
             AuthorizationScope.UserReadCurrentlyPlaying,
+            AuthorizationScope.UserTopRead,
         };
 
         await tokenAcquirer.EnsureTokenExists(scopes);

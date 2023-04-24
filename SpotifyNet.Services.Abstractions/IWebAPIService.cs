@@ -1,4 +1,5 @@
-﻿using SpotifyNet.Datastructures.Spotify.Playlists;
+﻿using SpotifyNet.Datastructures.Spotify.Artists;
+using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using System.Collections.Generic;
 using System.Threading;
@@ -24,5 +25,11 @@ public interface IWebAPIService
 
     Task<Track> GetTrack(
         string trackId,
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
         CancellationToken cancellationToken = default);
 }
