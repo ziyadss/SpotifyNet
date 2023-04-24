@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using SpotifyNet.Clients.Authorization;
 using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Clients.WebAPI;
-using SpotifyNet.Common;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Repositories.Authorization;
 using SpotifyNet.Repositories.Interfaces;
@@ -12,7 +11,9 @@ using SpotifyNet.Repositories.WebAPI;
 using SpotifyNet.Services.Authorization;
 using SpotifyNet.Services.Interfaces;
 using SpotifyNet.Services.WebAPI;
+using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -63,18 +64,18 @@ sealed internal class Program
 
                 return httpListener;
             })
-            .AddSingleton<ITokenAcquirer, TokenAcquirer>();
+            .AddSingleton<ITokenAcquirerService, TokenAcquirerService>();
         });
 
         var host = builder.Build();
 
-        var tokenAcquirer = host.Services.GetRequiredService<ITokenAcquirer>();
+        var tokenAcquirerService = host.Services.GetRequiredService<ITokenAcquirerService>();
         var webAPIService = host.Services.GetRequiredService<IWebAPIService>();
 
-        return Foo(tokenAcquirer, webAPIService);
+        return Foo(tokenAcquirerService, webAPIService);
     }
 
-    private static async Task Foo(ITokenAcquirer tokenAcquirer, IWebAPIService webAPIService)
+    private static async Task Foo(ITokenAcquirerService tokenAcquirerService, IWebAPIService webAPIService)
     {
         var scopes = new[]
         {
@@ -85,7 +86,7 @@ sealed internal class Program
             AuthorizationScope.UserTopRead,
         };
 
-        await tokenAcquirer.EnsureTokenExists(scopes);
+        await tokenAcquirerService.EnsureTokenExists(scopes);
 
         //var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
         //var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();

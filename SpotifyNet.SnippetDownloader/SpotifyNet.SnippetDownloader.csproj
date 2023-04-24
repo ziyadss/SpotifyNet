@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpotifyNet.Clients\SpotifyNet.Clients.csproj" />
-    <ProjectReference Include="..\SpotifyNet.Common\SpotifyNet.Common.csproj" />
     <ProjectReference Include="..\SpotifyNet.Repositories\SpotifyNet.Repositories.csproj" />
     <ProjectReference Include="..\SpotifyNet.Services\SpotifyNet.Services.csproj" />
   </ItemGroup>

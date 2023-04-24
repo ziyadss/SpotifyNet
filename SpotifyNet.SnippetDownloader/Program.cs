@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpotifyNet.Common;
 using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -29,16 +29,16 @@ internal sealed class Program
 
         var host = builder.Build();
 
-        var tokenAcquirer = host.Services.GetRequiredService<ITokenAcquirer>();
+        var tokenAcquirerService = host.Services.GetRequiredService<ITokenAcquirerService>();
         var snippetDownloader = host.Services.GetRequiredService<ISnippetDownloader>();
 
-        var rootCommand = GetRootCommand(tokenAcquirer, snippetDownloader);
+        var rootCommand = GetRootCommand(tokenAcquirerService, snippetDownloader);
 
         return rootCommand.InvokeAsync(args);
     }
 
     private static RootCommand GetRootCommand(
-        ITokenAcquirer tokenAcquirer,
+        ITokenAcquirerService tokenAcquirerService,
         ISnippetDownloader snippetDownloader)
     {
         // Global options.
@@ -77,7 +77,7 @@ internal sealed class Program
         };
 
         trackCommand.SetHandler(
-            async (trackIds, outputDirectory, newToken) => await DownloadTracks(newToken, trackIds, outputDirectory.FullName, tokenAcquirer, snippetDownloader),
+            async (trackIds, outputDirectory, newToken) => await DownloadTracks(newToken, trackIds, outputDirectory.FullName, tokenAcquirerService, snippetDownloader),
             trackIdsOption, outputDirectoryOption, newTokenOption);
 
         // Playlist command options.
@@ -92,7 +92,7 @@ internal sealed class Program
         };
 
         playlistCommand.SetHandler(
-            async (playlistId, outputDirectory, newToken) => await DownloadPlaylist(newToken, playlistId, outputDirectory.FullName, tokenAcquirer, snippetDownloader),
+            async (playlistId, outputDirectory, newToken) => await DownloadPlaylist(newToken, playlistId, outputDirectory.FullName, tokenAcquirerService, snippetDownloader),
             playlistIdOption, outputDirectoryOption, newTokenOption);
 
         // Root command.
@@ -114,10 +114,10 @@ internal sealed class Program
         bool newAccessToken,
         string[] trackIds,
         string outputDirectory,
-        ITokenAcquirer tokenAcquirer,
+        ITokenAcquirerService tokenAcquirerService,
         ISnippetDownloader snippetDownloader)
     {
-        await tokenAcquirer.EnsureTokenExists(_requiredScopes, newAccessToken);
+        await tokenAcquirerService.EnsureTokenExists(_requiredScopes, newAccessToken);
 
         var output = new Dictionary<string, SnippetDownloadStatus>(trackIds.Length);
         foreach (var trackId in trackIds)
@@ -141,10 +141,10 @@ internal sealed class Program
         bool newAccessToken,
         string playlistId,
         string outputDirectory,
-        ITokenAcquirer tokenAcquirer,
+        ITokenAcquirerService tokenAcquirerService,
         ISnippetDownloader snippetDownloader)
     {
-        await tokenAcquirer.EnsureTokenExists(_requiredScopes, newAccessToken);
+        await tokenAcquirerService.EnsureTokenExists(_requiredScopes, newAccessToken);
 
         var tracks = await snippetDownloader.DownloadPlaylist(playlistId);
 

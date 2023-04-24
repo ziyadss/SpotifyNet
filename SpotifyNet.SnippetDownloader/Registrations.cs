@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SpotifyNet.Clients.Authorization;
 using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Clients.WebAPI;
-using SpotifyNet.Common;
 using SpotifyNet.Repositories.Authorization;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Repositories.WebAPI;
@@ -55,7 +54,7 @@ internal static class Registrations
 
             return httpListener;
         })
-        .AddSingleton<ITokenAcquirer, TokenAcquirer>()
+        .AddSingleton<ITokenAcquirerService, TokenAcquirerService>()
 
         .AddSingleton<ISnippetDownloader, SnippetDownloader>(p =>
         {

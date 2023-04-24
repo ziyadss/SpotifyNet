@@ -1,18 +1,19 @@
 ﻿using SpotifyNet.Repositories.Interfaces;
+using SpotifyNet.Services.Interfaces;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Common;
+namespace SpotifyNet.Services.Authorization;
 
-public class TokenAcquirer : ITokenAcquirer
+public class TokenAcquirerService : ITokenAcquirerService
 {
     private readonly IAuthorizationRepository _authorizationRepository;
     private readonly HttpListener _httpListener;
 
-    public TokenAcquirer(
+    public TokenAcquirerService(
         IAuthorizationRepository authorizationRepository,
         HttpListener httpListener)
     {

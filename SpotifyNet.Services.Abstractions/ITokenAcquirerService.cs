@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Common;
+namespace SpotifyNet.Services.Interfaces;
 
-public interface ITokenAcquirer
+public interface ITokenAcquirerService
 {
     Task EnsureTokenExists(
         string[] scopes,
