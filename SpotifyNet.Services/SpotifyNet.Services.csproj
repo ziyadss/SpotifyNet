@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpotifyNet.Clients.Abstractions\SpotifyNet.Clients.Abstractions.csproj" />
     <ProjectReference Include="..\SpotifyNet.Core\SpotifyNet.Core.csproj" />
     <ProjectReference Include="..\SpotifyNet.Repositories.Abstractions\SpotifyNet.Repositories.Abstractions.csproj" />
     <ProjectReference Include="..\SpotifyNet.Services.Abstractions\SpotifyNet.Services.Abstractions.csproj" />
