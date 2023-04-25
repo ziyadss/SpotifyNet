@@ -4,11 +4,15 @@ namespace SpotifyNet.Services.Interfaces;
 
 public interface IWebAPIService
 {
-    IAlbumsService Albums { get; init; }
+    IAlbumsService Albums { get; }
 
-    IUsersService Users { get; init; }
+    IArtistsService Artists { get; }
 
-    ITracksService Tracks { get; init; }
+    IPlayerService Player { get; }
 
-    IPlaylistsService Playlists { get; init; }
+    IPlaylistsService Playlists { get; }
+
+    ITracksService Tracks { get; }
+
+    IUsersService Users { get; }
 }

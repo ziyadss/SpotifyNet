@@ -6,21 +6,27 @@ namespace SpotifyNet.Services.WebAPI;
 
 public class WebAPIService : IWebAPIService
 {
-    public IAlbumsService Albums { get; init; }
+    public IAlbumsService Albums { get; }
 
-    public IUsersService Users { get; init; }
+    public IArtistsService Artists { get; }
 
-    public ITracksService Tracks { get; init; }
+    public IPlayerService Player { get; }
 
-    public IPlaylistsService Playlists { get; init; }
+    public IPlaylistsService Playlists { get; }
+
+    public ITracksService Tracks { get; }
+
+    public IUsersService Users { get; }
 
     public WebAPIService(
         IAuthorizationService authorizationService,
         IWebAPIRepository webAPIRepository)
     {
         Albums = new AlbumsService(authorizationService, webAPIRepository);
-        Users = new UsersService(authorizationService, webAPIRepository);
-        Tracks = new TracksService(authorizationService, webAPIRepository);
+        Artists = new ArtistsService(authorizationService, webAPIRepository);
+        Player = new PlayerService(authorizationService, webAPIRepository);
         Playlists = new PlaylistsService(authorizationService, webAPIRepository);
+        Tracks = new TracksService(authorizationService, webAPIRepository);
+        Users = new UsersService(authorizationService, webAPIRepository);
     }
 }
