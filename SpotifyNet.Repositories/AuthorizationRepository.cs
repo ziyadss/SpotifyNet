@@ -120,28 +120,30 @@ public class AuthorizationRepository : IAuthorizationRepository
     }
 
     private static async Task<T> Read<T>(
-        string filePath,
+        string path,
         CancellationToken cancellationToken)
     {
-        using var fs = File.OpenRead(filePath);
-
+        using var fs = File.OpenRead(path);
         var item = await JsonSerializer.DeserializeAsync<T>(fs, cancellationToken: cancellationToken);
-
         return item!;
     }
 
-    private static Task Write<T>(
-        string filePath,
+    private static async Task Write<T>(
+        string path,
         T item,
         CancellationToken cancellationToken)
     {
-        if (File.Exists(filePath))
+        if (File.Exists(path))
         {
-            File.Delete(filePath);
+            File.Delete(path);
+        }
+        else
+        {
+            var directory = Path.GetDirectoryName(path)!;
+            Directory.CreateDirectory(directory);
         }
 
-        using var fs = File.OpenWrite(filePath);
-
-        return JsonSerializer.SerializeAsync(fs, item, cancellationToken: cancellationToken);
+        using var fs = File.OpenWrite(path);
+        await JsonSerializer.SerializeAsync(fs, item, cancellationToken: cancellationToken);
     }
 }

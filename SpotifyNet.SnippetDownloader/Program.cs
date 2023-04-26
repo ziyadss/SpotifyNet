@@ -165,7 +165,6 @@ internal sealed class Program
         }
 
         using var fs = File.OpenWrite(outputFilePath);
-
         await JsonSerializer.SerializeAsync(fs, output, _jsonSerializerOptions);
 
         Console.WriteLine(outputFilePath);

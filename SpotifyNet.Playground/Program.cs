@@ -127,17 +127,26 @@ sealed internal class Program
         //}
     }
 
-    private static async Task<T> Read<T>(string fileName)
+    private static async Task<T> Read<T>(string path)
     {
-        using var fs = File.OpenRead(fileName);
+        using var fs = File.OpenRead(path);
         var item = await JsonSerializer.DeserializeAsync<T>(fs);
         return item!;
     }
 
-    private static Task Write<T>(string fileName, T item)
+    private static Task Write<T>(string path, T item)
     {
-        File.Delete(fileName);
-        using var fs = File.OpenWrite(fileName);
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        else
+        {
+            var directory = Path.GetDirectoryName(path)!;
+            Directory.CreateDirectory(directory);
+        }
+
+        using var fs = File.OpenWrite(path);
         return JsonSerializer.SerializeAsync(fs, item);
     }
 }
