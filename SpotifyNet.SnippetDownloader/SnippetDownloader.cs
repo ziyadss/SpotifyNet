@@ -74,27 +74,26 @@ internal class SnippetDownloader : ISnippetDownloader
 
         var filePath = Path.Combine(_outputDirectory, fileName);
 
+        if (string.IsNullOrWhiteSpace(track.PreviewUrl))
+        {
+            return (fileName, SnippetDownloadStatus.NoPreviewUrl);
+        }
+
+        if (File.Exists(filePath))
+        {
+            return (fileName, SnippetDownloadStatus.Exists);
+        }
+
         try
         {
-            if (File.Exists(filePath))
-            {
-                return (fileName, SnippetDownloadStatus.Exists);
-            }
-            else if (string.IsNullOrWhiteSpace(track.PreviewUrl))
-            {
-                return (fileName, SnippetDownloadStatus.NoPreviewUrl);
-            }
-            else
-            {
-                var response = await _httpClient.GetAsync(track.PreviewUrl, cancellationToken);
-                await Ensure.RequestSuccess(response, cancellationToken);
+            using var response = await _httpClient.GetAsync(track.PreviewUrl, cancellationToken);
+            await Ensure.RequestSuccess(response, cancellationToken);
 
-                using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-                using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-                await responseStream.CopyToAsync(fileStream, cancellationToken);
+            using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
+            using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            await responseStream.CopyToAsync(fileStream, cancellationToken);
 
-                return (fileName, SnippetDownloadStatus.Downloaded);
-            }
+            return (fileName, SnippetDownloadStatus.Downloaded);
         }
         catch (Exception ex)
         {
