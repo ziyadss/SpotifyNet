@@ -51,6 +51,15 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     // Artists
+    Task<Artist> GetArtist(
+        string artistId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Artist>> GetArtists(
+        string[] artistIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
 
     // Audiobooks
 

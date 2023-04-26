@@ -13,6 +13,8 @@ internal static class Endpoints
     public static string GetNewReleases() => $"https://api.spotify.com/v1/browse/new-releases";
 
     // Artists
+    public static string GetArtist(string artistId) => $"https://api.spotify.com/v1/artists/{artistId}";
+    public static string GetSeveralArtists(string[] artistIds) => $"https://api.spotify.com/v1/artists?ids={string.Join(',', artistIds)}";
 
     // Audiobooks
 
