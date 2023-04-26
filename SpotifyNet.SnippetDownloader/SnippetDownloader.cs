@@ -33,29 +33,86 @@ internal class SnippetDownloader : ISnippetDownloader
         Directory.CreateDirectory(_outputDirectory);
     }
 
-    public async Task<(string, SnippetDownloadStatus)> DownloadTrack(
+    public async Task<SnippetDownloadMetadata> DownloadTrack(
         string trackId,
         CancellationToken cancellationToken)
     {
         var track = await _webAPIService.Tracks.GetTrack(trackId, cancellationToken);
 
-        var result = await DownloadTrack(track, cancellationToken);
+        var (fileName, status) = await DownloadTrack(track, cancellationToken);
+
+        var result = new SnippetDownloadMetadata
+        {
+            TrackId = trackId,
+            FileName = fileName,
+            Status = status,
+        };
+
+        if (status is SnippetDownloadStatus.Downloaded or SnippetDownloadStatus.Exists)
+        {
+            var artistId = track.Artists!.First().Id!;
+            var artist = await _webAPIService.Artists.GetArtist(artistId, cancellationToken);
+
+            result.Genres = artist.Genres;
+        }
 
         return result;
     }
 
-    public async Task<IEnumerable<(string, SnippetDownloadStatus)>> DownloadPlaylist(
+    public async Task<IEnumerable<SnippetDownloadMetadata>> DownloadPlaylist(
         string playlistId,
         CancellationToken cancellationToken)
     {
         var playlistTracks = await _webAPIService.Playlists.GetPlaylistTracks(playlistId, cancellationToken);
 
-        var result = new List<(string, SnippetDownloadStatus)>();
+        var artistToTracks = new Dictionary<string, List<SnippetDownloadMetadata>>();
+        var failedTracks = new List<SnippetDownloadMetadata>();
         foreach (var playlistTrack in playlistTracks)
         {
-            var trackResult = await DownloadTrack(playlistTrack.Track!, cancellationToken);
-            result.Add(trackResult);
+            var (fileName, status) = await DownloadTrack(playlistTrack.Track!, cancellationToken);
+
+            var trackResult = new SnippetDownloadMetadata
+            {
+                TrackId = playlistTrack.Track!.Id!,
+                FileName = fileName,
+                Status = status,
+            };
+
+            if (status is SnippetDownloadStatus.Downloaded or SnippetDownloadStatus.Exists)
+            {
+                var artistId = playlistTrack.Track!.Artists!.First().Id!;
+
+                if (artistToTracks.TryGetValue(artistId, out var tracks))
+                {
+                    tracks.Add(trackResult);
+                }
+                else
+                {
+                    artistToTracks[artistId] = new List<SnippetDownloadMetadata> { trackResult };
+                }
+            }
+            else
+            {
+                failedTracks.Add(trackResult);
+            }
         }
+
+        var artistIds = artistToTracks.Keys.ToArray();
+        var artists = await _webAPIService.Artists.GetArtists(artistIds, cancellationToken);
+        var idToGenres = artists.ToDictionary(a => a.Id!, a => a.Genres);
+
+        foreach (var (artistId, tracks) in artistToTracks)
+        {
+            var genres = idToGenres[artistId];
+            foreach (var track in tracks)
+            {
+                track.Genres = genres;
+            }
+        }
+
+        var result = artistToTracks
+            .Values.SelectMany(l => l)
+            .Concat(failedTracks);
 
         return result;
     }

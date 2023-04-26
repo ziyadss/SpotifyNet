@@ -119,22 +119,14 @@ internal sealed class Program
     {
         await tokenAcquirerService.EnsureTokenExists(_requiredScopes, newAccessToken);
 
-        var output = new Dictionary<string, SnippetDownloadStatus>(trackIds.Length);
+        var tracks = new List<SnippetDownloadMetadata>(trackIds.Length);
         foreach (var trackId in trackIds)
         {
-            var (fileName, status) = await snippetDownloader.DownloadTrack(trackId);
-
-            if (output.TryGetValue(fileName, out var result))
-            {
-                output[fileName] = GetBetterStatus(result, status);
-            }
-            else
-            {
-                output[fileName] = status;
-            }
+            var track = await snippetDownloader.DownloadTrack(trackId);
+            tracks.Add(track);
         }
 
-        await WriteOutput(outputDirectory, output);
+        await WriteOutput(outputDirectory, tracks);
     }
 
     private static async Task DownloadPlaylist(
@@ -148,20 +140,7 @@ internal sealed class Program
 
         var tracks = await snippetDownloader.DownloadPlaylist(playlistId);
 
-        var output = new Dictionary<string, SnippetDownloadStatus>();
-        foreach (var (fileName, status) in tracks)
-        {
-            if (output.TryGetValue(fileName, out var result))
-            {
-                output[fileName] = GetBetterStatus(result, status);
-            }
-            else
-            {
-                output[fileName] = status;
-            }
-        }
-
-        await WriteOutput(outputDirectory, output);
+        await WriteOutput(outputDirectory, tracks);
     }
 
     internal static SnippetDownloadStatus GetBetterStatus(SnippetDownloadStatus first, SnippetDownloadStatus second) => first switch
@@ -173,7 +152,7 @@ internal sealed class Program
 
     private static async Task WriteOutput(
         string outputDirectory,
-        IReadOnlyDictionary<string, SnippetDownloadStatus> output)
+        IEnumerable<SnippetDownloadMetadata> output)
     {
         Directory.CreateDirectory(outputDirectory);
 

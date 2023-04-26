@@ -6,11 +6,11 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal interface ISnippetDownloader
 {
-    Task<(string FileName, SnippetDownloadStatus Status)> DownloadTrack(
+    Task<SnippetDownloadMetadata> DownloadTrack(
         string trackId,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<(string FileName, SnippetDownloadStatus Status)>> DownloadPlaylist(
+    Task<IEnumerable<SnippetDownloadMetadata>> DownloadPlaylist(
         string playlistId,
         CancellationToken cancellationToken = default);
 }
