@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks.Recommendations;
 
-public class RecommendationsResult
+public record RecommendationsResult
 {
     [JsonPropertyName("seeds")]
     public required RecommendationSeed[] Seeds { get; init; }

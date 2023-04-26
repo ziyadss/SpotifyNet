@@ -1,5 +1,5 @@
 ﻿namespace SpotifyNet.Datastructures.Spotify.Episodes;
 
-public class SimplifiedEpisode
+public record SimplifiedEpisode
 {
 }

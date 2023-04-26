@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks;
 
-public class SimplifiedTrack
+public record SimplifiedTrack
 {
     [JsonPropertyName("artists")]
     public SimplifiedArtist[]? Artists { get; init; }

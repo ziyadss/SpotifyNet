@@ -1,5 +1,5 @@
 ﻿namespace SpotifyNet.Datastructures.Spotify.Audiobooks;
 
-public class Author
+public record Author
 {
 }

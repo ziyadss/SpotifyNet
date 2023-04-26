@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks;
 
-public class Track
+public record Track
 {
     [JsonPropertyName("album")]
     public SimplifiedAlbum? Album { get; init; }

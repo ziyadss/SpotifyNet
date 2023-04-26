@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class Followers
+public record Followers
 {
     [JsonPropertyName("href")]
     public string? Href { get; init; }

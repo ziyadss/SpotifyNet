@@ -1,6 +1,6 @@
 ﻿namespace SpotifyNet.Datastructures.Spotify.Authorization;
 
-public class UserAuthorization
+public record UserAuthorization
 {
     public required string AuthorizationUri { get; init; }
 

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Albums;
 
-public class SimplifiedAlbum
+public record SimplifiedAlbum
 {
     [JsonPropertyName("album_type")]
     public required AlbumType? AlbumType { get; init; }

@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class LinkedFrom
+public record LinkedFrom
 {
     [JsonPropertyName("external_urls")]
     public ExternalUrls? ExternalUrls { get; init; }

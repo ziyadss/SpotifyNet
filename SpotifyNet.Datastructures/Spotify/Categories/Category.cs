@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Categories;
 
-public class Category
+public record Category
 {
     [JsonPropertyName("href")]
     public required string Href { get; init; }

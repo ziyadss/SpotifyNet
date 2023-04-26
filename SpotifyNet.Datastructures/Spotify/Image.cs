@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class Image
+public record Image
 {
     [JsonPropertyName("url")]
     public required string Url { get; init; }

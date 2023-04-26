@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks;
 
-public class AudioFeatures
+public record AudioFeatures
 {
     [JsonPropertyName("acousticness")]
     public double? Acousticness { get; init; }

@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 
-public class AudioAnalysis
+public record AudioAnalysis
 {
     [JsonPropertyName("meta")]
     public AnalysisMeta? Meta { get; init; }

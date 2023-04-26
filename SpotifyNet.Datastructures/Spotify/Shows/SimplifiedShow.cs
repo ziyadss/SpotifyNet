@@ -1,5 +1,5 @@
 ﻿namespace SpotifyNet.Datastructures.Spotify.Shows;
 
-public class SimplifiedShow
+public record SimplifiedShow
 {
 }

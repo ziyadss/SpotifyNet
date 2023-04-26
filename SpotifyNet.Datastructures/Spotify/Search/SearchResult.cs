@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Search;
 
-public class SearchResult
+public record SearchResult
 {
     [JsonPropertyName("tracks")]
     public PaginationWrapper<Track>? Tracks { get; init; }

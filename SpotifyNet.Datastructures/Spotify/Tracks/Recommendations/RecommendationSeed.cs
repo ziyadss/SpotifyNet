@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks.Recommendations;
 
-public class RecommendationSeed
+public record RecommendationSeed
 {
     [JsonPropertyName("afterFilteringSize")]
     public int? AfterFilteringSize { get; init; }

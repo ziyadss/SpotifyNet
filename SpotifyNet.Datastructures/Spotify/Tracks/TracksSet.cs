@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks;
 
-public class TracksSet
+public record TracksSet
 {
     [JsonPropertyName("tracks")]
     public required Track[] Tracks { get; init; }

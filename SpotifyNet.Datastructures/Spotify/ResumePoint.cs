@@ -1,5 +1,5 @@
 ﻿namespace SpotifyNet.Datastructures.Spotify;
 
-public class ResumePoint
+public record ResumePoint
 {
 }

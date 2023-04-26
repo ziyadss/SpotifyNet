@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Playlists;
 
-public class Playlist
+public record Playlist
 {
     [JsonPropertyName("collaborative")]
     public bool? Collaborative { get; init; }

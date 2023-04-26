@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Authorization;
 
-public class AccessToken
+public record AccessToken
 {
     [JsonPropertyName("access_token")]
     public required string Token { get; init; }

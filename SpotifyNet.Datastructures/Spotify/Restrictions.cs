@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class Restrictions
+public record Restrictions
 {
     [JsonPropertyName("reason")]
     public RestrictionReason Reason { get; init; }

@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class ExternalIds
+public record ExternalIds
 {
     [JsonPropertyName("isrc")]
     public string? ISRC { get; init; }

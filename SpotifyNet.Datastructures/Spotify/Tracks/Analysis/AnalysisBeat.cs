@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 
-public class AnalysisBeat
+public record AnalysisBeat
 {
     [JsonPropertyName("start")]
     public double? Start { get; init; }

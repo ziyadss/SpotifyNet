@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 
-public class AnalysisMeta
+public record AnalysisMeta
 {
     [JsonPropertyName("analyzer_version")]
     public string? AnalyzerVersion { get; init; }

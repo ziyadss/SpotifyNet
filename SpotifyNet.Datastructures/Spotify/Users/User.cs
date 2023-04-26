@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Users;
 
-public class User
+public record User
 {
     [JsonPropertyName("country")]
     public string? Country { get; init; }

@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class PaginationWrapper<T>
+public record PaginationWrapper<T>
 {
     [JsonPropertyName("href")]
     public required string Href { get; init; }

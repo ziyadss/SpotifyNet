@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Artists;
 
-public class SimplifiedArtist
+public record SimplifiedArtist
 {
     [JsonPropertyName("external_urls")]
     public ExternalUrls? ExternalUrls { get; init; }

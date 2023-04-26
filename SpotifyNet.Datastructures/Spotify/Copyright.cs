@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public class Copyright
+public record Copyright
 {
     [JsonPropertyName("text")]
     public string? Text { get; init; }

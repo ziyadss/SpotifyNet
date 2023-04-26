@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Albums;
 
-public class Album
+public record Album
 {
     [JsonPropertyName("album_type")]
     public required AlbumType AlbumType { get; init; }

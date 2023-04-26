@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Episodes;
 
-public class SavedEpisode
+public record SavedEpisode
 {
     [JsonPropertyName("added_at")]
     public DateTime? AddedAt { get; init; }

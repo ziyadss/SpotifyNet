@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Playlists;
 
-public class PlaylistTrack
+public record PlaylistTrack
 {
     [JsonPropertyName("added_at")]
     public DateTime? AddedAt { get; init; }

@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify.Albums;
 
-public class AlbumsSet
+public record AlbumsSet
 {
     [JsonPropertyName("albums")]
     public required Album[] Albums { get; init; }

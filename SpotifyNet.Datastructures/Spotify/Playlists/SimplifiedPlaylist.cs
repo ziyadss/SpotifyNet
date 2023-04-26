@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Playlists;
 
-public class SimplifiedPlaylist
+public record SimplifiedPlaylist
 {
     [JsonPropertyName("collaborative")]
     public bool? Collaborative { get; init; }
@@ -45,7 +45,7 @@ public class SimplifiedPlaylist
     public string? Uri { get; init; }
 }
 
-public class SimplifiedPlaylistTracks
+public record SimplifiedPlaylistTracks
 {
     [JsonPropertyName("href")]
     public string? Href { get; init; }

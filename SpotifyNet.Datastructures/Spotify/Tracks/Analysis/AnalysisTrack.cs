@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 
-public class AnalysisTrack
+public record AnalysisTrack
 {
     [JsonPropertyName("num_samples")]
     public int? NumSamples { get; init; }
