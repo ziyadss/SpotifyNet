@@ -23,9 +23,9 @@ public class AuthorizationService : IAuthorizationService
     {
         var token = await _authorizationRepository.GetAccessToken(cancellationToken);
 
-        var missingScopes = scopes.Except(token.AuthorizationScopes).ToList();
+        var missingScopes = scopes.Except(token.AuthorizationScopes);
 
-        if (missingScopes.Count != 0)
+        if (missingScopes.Any())
         {
             throw new AuthorizationException(
                 $"The current access token does not have the required authorization scopes `{string.Join(", ", missingScopes)}`.");

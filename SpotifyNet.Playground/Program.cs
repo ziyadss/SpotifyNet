@@ -58,10 +58,9 @@ sealed internal class Program
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
             var result = tracks
                 .Where(condition)
-                .Select(pt => FullTrackName(pt.Track!))
-                .ToList();
+                .Select(pt => FullTrackName(pt.Track!));
 
-            if (result.Count > 0)
+            if (result.Any())
             {
                 Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}, has: ");
                 foreach (var track in result)

@@ -41,9 +41,9 @@ public class AuthorizationClient : IAuthorizationClient
     {
         ArgumentNullException.ThrowIfNull(scopes, nameof(scopes));
 
-        var invalidScopes = scopes.Except(AuthorizationScope.ValidScopes).ToList();
+        var invalidScopes = scopes.Except(AuthorizationScope.ValidScopes);
 
-        if (invalidScopes.Count != 0)
+        if (invalidScopes.Any())
         {
             throw new AuthorizationException($"Invalid authorzation scopes `{string.Join(", ", invalidScopes)}`");
         }
