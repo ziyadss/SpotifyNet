@@ -24,25 +24,27 @@ public class UsersService : IUsersService
     }
 
     public async Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+        string timeRange,
         CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserTopRead };
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
-        var tracks = await _webAPIRepository.GetCurrentUserTopTracks(accessToken, cancellationToken);
+        var tracks = await _webAPIRepository.GetCurrentUserTopTracks(timeRange, accessToken, cancellationToken);
 
         return tracks;
     }
 
     public async Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
+        string timeRange,
         CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserTopRead };
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
-        var artists = await _webAPIRepository.GetCurrentUserTopArtists(accessToken, cancellationToken);
+        var artists = await _webAPIRepository.GetCurrentUserTopArtists(timeRange, accessToken, cancellationToken);
 
         return artists;
     }

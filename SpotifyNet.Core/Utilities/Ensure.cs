@@ -1,6 +1,7 @@
 ﻿using SpotifyNet.Core.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +35,14 @@ public static class Ensure
             {
                 throw new EnsureException($"Expected: `{actual}` to be between `{minimum}` and `{maximum}`.");
             }
+        }
+    }
+
+    public static void OneOf<T>(T actual, IEnumerable<T> expected)
+    {
+        if (!expected.Contains(actual))
+        {
+            throw new EnsureException($"Expected `{actual}` to be one of: `{string.Join(", ", expected)}`");
         }
     }
 

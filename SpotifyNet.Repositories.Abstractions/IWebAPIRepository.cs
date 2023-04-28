@@ -130,10 +130,12 @@ public interface IWebAPIRepository
 
     // Users
     Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+        string timeRange,
         string accessToken,
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
+        string timeRange,
         string accessToken,
         CancellationToken cancellationToken = default);
 }
