@@ -17,7 +17,7 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal static class Registrations
 {
-    internal static IServiceCollection AddRegistrations(this IServiceCollection services) => services
+    internal static IServiceCollection AddSpotifyNetServices(this IServiceCollection services) => services
         .AddSingleton<HttpClient>()
         .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
         {

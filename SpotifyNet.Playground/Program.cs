@@ -20,7 +20,7 @@ sealed internal class Program
     {
         var builder = Host.CreateDefaultBuilder(args);
 
-        builder.ConfigureServices(services => services.AddRegistrations(AppClientId, AppRedirectUri));
+        builder.ConfigureServices(services => services.AddSpotifyNetServices(AppClientId, AppRedirectUri));
 
         var host = builder.Build();
 

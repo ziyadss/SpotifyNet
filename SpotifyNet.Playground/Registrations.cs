@@ -15,7 +15,7 @@ namespace SpotifyNet.Playground;
 
 internal static class Registrations
 {
-    internal static IServiceCollection AddRegistrations(
+    internal static IServiceCollection AddSpotifyNetServices(
         this IServiceCollection services,
         string appClientId,
         string appRedirectUri) => services
