@@ -93,7 +93,7 @@ sealed internal class Program
 
         //foreach (var playlist in playlists)
         //{
-        //    if (playlist.Owner!.Id != "ziyad.ss" || playlist.Tracks!.Total == 0)
+        //    if (playlist.Owner!.Id != "ziyad.ss")
         //    {
         //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
         //    }
@@ -112,7 +112,7 @@ sealed internal class Program
 
         //foreach (var playlist in playlists)
         //{
-        //    if (playlist.Owner!.Id != userId || playlist.Tracks!.Total == 0)
+        //    if (playlist.Owner!.Id != userId)
         //    {
         //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
         //    }
