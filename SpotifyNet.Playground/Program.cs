@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SpotifyNet.Playground;
 
-sealed internal class Program
+internal sealed class Program
 {
     private const string AppClientId = "";
     private const string AppRedirectUri = "http://localhost:3000";
