@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Playlists;
+using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Services.Interfaces;
 using System;
 using System.IO;
@@ -55,13 +56,27 @@ sealed internal class Program
             }
 
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
-            var fulfilled = tracks.Any(condition);
+            var result = tracks
+                .Where(condition)
+                .Select(pt => FullTrackName(pt.Track!))
+                .ToList();
 
-            if (fulfilled)
+            if (result.Count > 0)
             {
-                Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
+                Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}, has: ");
+                foreach (var track in result)
+                {
+                    Console.WriteLine($"  {track}");
+                }
             }
         }
+    }
+
+    private static string FullTrackName(Track track)
+    {
+        var trackName = track.Name;
+        var artistsNames = string.Join(", ", track.Artists?.Select(a => a.Name) ?? Array.Empty<string>());
+        return $"{trackName} - {artistsNames}";
     }
 
     private static async Task<T> Read<T>(string path)
