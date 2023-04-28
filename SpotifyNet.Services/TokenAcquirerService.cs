@@ -69,7 +69,7 @@ public class TokenAcquirerService : ITokenAcquirerService
         var processInfo = new ProcessStartInfo
         {
             FileName = uri,
-            UseShellExecute = true
+            UseShellExecute = true,
         };
 
         Process.Start(processInfo);
