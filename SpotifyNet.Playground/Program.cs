@@ -65,7 +65,7 @@ sealed internal class Program
                 Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}, has: ");
                 foreach (var track in result)
                 {
-                    Console.WriteLine($"  {track}");
+                    Console.WriteLine($"    {track}");
                 }
             }
         }
