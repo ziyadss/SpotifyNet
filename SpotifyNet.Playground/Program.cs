@@ -134,7 +134,7 @@ sealed internal class Program
         return item!;
     }
 
-    private static Task Write<T>(string path, T item)
+    private static async Task Write<T>(string path, T item)
     {
         if (File.Exists(path))
         {
@@ -147,6 +147,6 @@ sealed internal class Program
         }
 
         using var fs = File.OpenWrite(path);
-        return JsonSerializer.SerializeAsync(fs, item);
+        await JsonSerializer.SerializeAsync(fs, item);
     }
 }
