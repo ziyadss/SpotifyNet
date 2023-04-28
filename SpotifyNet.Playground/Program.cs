@@ -5,6 +5,7 @@ using SpotifyNet.Clients.Authorization;
 using SpotifyNet.Clients.Interfaces;
 using SpotifyNet.Clients.WebAPI;
 using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Repositories.Authorization;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Repositories.WebAPI;
@@ -88,43 +89,25 @@ sealed internal class Program
 
         await tokenAcquirerService.EnsureTokenExists(scopes);
 
-        //var artistId = "2RIrl9cApI8HwM6aF4Jt5m";
-        //var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
+        var userId = "ziyad.ss";
+        var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
+        var condition = (PlaylistTrack t) => t.Track!.Artists!.Any(a => a.Id == "2RIrl9cApI8HwM6aF4Jt5m");
 
-        //foreach (var playlist in playlists)
-        //{
-        //    if (playlist.Owner!.Id != "ziyad.ss")
-        //    {
-        //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
-        //    }
+        foreach (var playlist in playlists)
+        {
+            if (playlist.Owner!.Id != userId)
+            {
+                Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
+            }
 
-        //    var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
-        //    var condition = tracks.Any(t => t.Track!.Artists!.Any(a => a.Id == artistId));
+            var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
+            var fulfilled = tracks.Any(condition);
 
-        //    if (condition)
-        //    {
-        //        Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
-        //    }
-        //}
-
-        //var userId = "ziyad.ss";
-        //var playlists = await webAPIService.Playlists.GetUserPlaylists(userId);
-
-        //foreach (var playlist in playlists)
-        //{
-        //    if (playlist.Owner!.Id != userId)
-        //    {
-        //        Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
-        //    }
-
-        //    var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
-        //    var condition = tracks.Any(t => t.AddedAt!.Value >= new DateTime(year: 2023, month: 4, day: 21));
-
-        //    if (condition)
-        //    {
-        //        Console.WriteLine($"Found {playlist.Name} - {playlist.Uri}");
-        //    }
-        //}
+            if (fulfilled)
+            {
+                Console.WriteLine($"{playlist.Name} - {playlist.Uri}");
+            }
+        }
     }
 
     private static async Task<T> Read<T>(string path)
