@@ -15,11 +15,13 @@ namespace SpotifyNet.Playground;
 
 internal static class Registrations
 {
-    internal static IServiceCollection AddSpotifyNetServices(
+    private static IServiceCollection AddHttpClient(
+        this IServiceCollection services) => services.AddSingleton<HttpClient>();
+
+    private static IServiceCollection AddAuthorization(
         this IServiceCollection services,
         string appClientId,
         string appRedirectUri) => services
-        .AddSingleton<HttpClient>()
         .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
         {
             var httpClient = p.GetRequiredService<HttpClient>();
@@ -27,11 +29,11 @@ internal static class Registrations
             return new AuthorizationClient(appClientId, appRedirectUri, httpClient);
         })
         .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
-        .AddSingleton<IAuthorizationService, AuthorizationService>()
-        .AddSingleton<IWebAPIClient, WebAPIClient>()
-        .AddSingleton<IWebAPIRepository, WebAPIRepository>()
-        .AddSingleton<IWebAPIService, WebAPIService>()
+        .AddSingleton<IAuthorizationService, AuthorizationService>();
 
+    private static IServiceCollection AddTokenAcquirer(
+        this IServiceCollection services,
+        string appRedirectUri) => services
         .AddSingleton(p =>
         {
             var httpListener = new HttpListener();
@@ -48,4 +50,20 @@ internal static class Registrations
             return httpListener;
         })
         .AddSingleton<ITokenAcquirerService, TokenAcquirerService>();
+
+    private static IServiceCollection AddWebAPI(
+        this IServiceCollection services) => services
+        .AddSingleton<IWebAPIClient, WebAPIClient>()
+        .AddSingleton<IWebAPIRepository, WebAPIRepository>()
+        .AddSingleton<IWebAPIService, WebAPIService>();
+
+
+    internal static IServiceCollection AddSpotifyNetServices(
+        this IServiceCollection services,
+        string appClientId,
+        string appRedirectUri) => services
+        .AddHttpClient()
+        .AddAuthorization(appClientId, appRedirectUri)
+        .AddTokenAcquirer(appRedirectUri)
+        .AddWebAPI();
 }

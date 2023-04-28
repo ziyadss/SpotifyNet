@@ -25,7 +25,9 @@ internal sealed class Program
     {
         var builder = Host.CreateDefaultBuilder(args);
 
-        builder.ConfigureServices(services => services.AddSpotifyNetServices());
+        builder.ConfigureServices(services => services
+        .AddSpotifyNetServices()
+        .AddSnippetDownloader());
 
         var host = builder.Build();
 

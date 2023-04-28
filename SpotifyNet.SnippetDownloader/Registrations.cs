@@ -17,8 +17,11 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal static class Registrations
 {
-    internal static IServiceCollection AddSpotifyNetServices(this IServiceCollection services) => services
-        .AddSingleton<HttpClient>()
+    private static IServiceCollection AddHttpClient(
+        this IServiceCollection services) => services.AddSingleton<HttpClient>();
+
+    private static IServiceCollection AddAuthorization(
+        this IServiceCollection services) => services
         .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
         {
             var configuration = p.GetRequiredService<IConfiguration>();
@@ -31,11 +34,10 @@ internal static class Registrations
             return new AuthorizationClient(appClientId, appRedirectUri, httpClient);
         })
         .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
-        .AddSingleton<IAuthorizationService, AuthorizationService>()
-        .AddSingleton<IWebAPIClient, WebAPIClient>()
-        .AddSingleton<IWebAPIRepository, WebAPIRepository>()
-        .AddSingleton<IWebAPIService, WebAPIService>()
+        .AddSingleton<IAuthorizationService, AuthorizationService>();
 
+    private static IServiceCollection AddTokenAcquirer(
+        this IServiceCollection services) => services
         .AddSingleton(p =>
         {
             var configuration = p.GetRequiredService<IConfiguration>();
@@ -54,8 +56,24 @@ internal static class Registrations
 
             return httpListener;
         })
-        .AddSingleton<ITokenAcquirerService, TokenAcquirerService>()
+        .AddSingleton<ITokenAcquirerService, TokenAcquirerService>();
 
+    private static IServiceCollection AddWebAPI(
+        this IServiceCollection services) => services
+        .AddSingleton<IWebAPIClient, WebAPIClient>()
+        .AddSingleton<IWebAPIRepository, WebAPIRepository>()
+        .AddSingleton<IWebAPIService, WebAPIService>();
+
+
+    internal static IServiceCollection AddSpotifyNetServices(
+        this IServiceCollection services) => services
+        .AddHttpClient()
+        .AddAuthorization()
+        .AddTokenAcquirer()
+        .AddWebAPI();
+
+    internal static IServiceCollection AddSnippetDownloader(
+        this IServiceCollection services) => services
         .AddSingleton<ISnippetDownloader, SnippetDownloader>(p =>
         {
             var configuration = p.GetRequiredService<IConfiguration>();
