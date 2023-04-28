@@ -1,5 +1,6 @@
 ﻿using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Artists;
+using SpotifyNet.Datastructures.Spotify.Player;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
@@ -74,6 +75,9 @@ public interface IWebAPIRepository
     // Markets
 
     // Player
+    Task<IEnumerable<PlayHistory>> GetRecentlyPlayedTracks(
+        string accessToken,
+        CancellationToken cancellationToken = default);
 
     // Playlists
     Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(

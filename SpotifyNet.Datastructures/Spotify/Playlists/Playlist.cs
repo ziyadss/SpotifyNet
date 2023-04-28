@@ -39,7 +39,7 @@ public record Playlist
     public string? SnapshotId { get; init; }
 
     [JsonPropertyName("tracks")]
-    public PaginationWrapper<PlaylistTrack>? Tracks { get; init; }
+    public OffsetPaginationWrapper<PlaylistTrack>? Tracks { get; init; }
 
     [JsonPropertyName("type")]
     public ItemType? Type { get; init; }

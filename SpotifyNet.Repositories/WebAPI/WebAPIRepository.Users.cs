@@ -14,7 +14,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetCurrentUserTopItems("tracks");
 
-        return GetPaginated<Track>(
+        return GetOffsetPaginated<Track>(
             uri,
             accessToken,
             cancellationToken);
@@ -26,7 +26,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetCurrentUserTopItems("artists");
 
-        return GetPaginated<Artist>(
+        return GetOffsetPaginated<Artist>(
             uri,
             accessToken,
             cancellationToken);

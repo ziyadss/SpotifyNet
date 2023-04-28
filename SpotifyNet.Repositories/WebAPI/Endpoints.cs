@@ -29,6 +29,7 @@ internal static class Endpoints
     // Markets
 
     // Player
+    public static string GetRecentlyPlayedTracks() => $"https://api.spotify.com/v1/me/player/recently-played";
 
     // Playlists
     public static string GetCurrentUserPlaylists() => $"https://api.spotify.com/v1/me/playlists";

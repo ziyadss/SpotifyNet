@@ -50,7 +50,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetUserSavedTracks();
 
-        return GetPaginated<SavedTrack>(
+        return GetOffsetPaginated<SavedTrack>(
             uri,
             accessToken,
             cancellationToken);

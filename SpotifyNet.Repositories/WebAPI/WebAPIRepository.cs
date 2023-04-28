@@ -17,12 +17,38 @@ public partial class WebAPIRepository : IWebAPIRepository
         _webAPIClient = webAPIClient;
     }
 
-    private async Task<IEnumerable<T>> GetPaginated<T>(
+    private async Task<IEnumerable<T>> GetCursorPaginated<T>(
         string initialUri,
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
+        var batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(
+            initialUri,
+            accessToken,
+            cancellationToken);
+
+        var items = new List<T>(batch.Total ?? batch.Items.Length);
+        items.AddRange(batch.Items);
+
+        while (batch.Next is not null)
+        {
+            batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(
+                batch.Next,
+                accessToken,
+                cancellationToken);
+
+            items.AddRange(batch.Items);
+        }
+
+        return items;
+    }
+
+    private async Task<IEnumerable<T>> GetOffsetPaginated<T>(
+        string initialUri,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(
             initialUri,
             accessToken,
             cancellationToken);
@@ -32,7 +58,7 @@ public partial class WebAPIRepository : IWebAPIRepository
 
         while (batch.Next is not null)
         {
-            batch = await _webAPIClient.GetAsync<PaginationWrapper<T>>(
+            batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(
                 batch.Next,
                 accessToken,
                 cancellationToken);

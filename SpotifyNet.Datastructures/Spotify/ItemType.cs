@@ -11,4 +11,5 @@ public enum ItemType
     playlist,
     user,
     audio_features,
+    show,
 }

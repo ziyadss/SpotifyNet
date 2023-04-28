@@ -64,5 +64,5 @@ public record Album
     public required Artist[] Artists { get; init; }
 
     [JsonPropertyName("tracks")]
-    public required PaginationWrapper<SimplifiedTrack> Tracks { get; init; }
+    public required OffsetPaginationWrapper<SimplifiedTrack> Tracks { get; init; }
 }

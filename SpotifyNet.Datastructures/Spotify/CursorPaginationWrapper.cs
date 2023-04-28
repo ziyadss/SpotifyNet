@@ -2,7 +2,7 @@
 
 namespace SpotifyNet.Datastructures.Spotify;
 
-public record PaginationWrapper<T>
+public record CursorPaginationWrapper<T>
 {
     [JsonPropertyName("href")]
     public required string Href { get; init; }
@@ -13,15 +13,21 @@ public record PaginationWrapper<T>
     [JsonPropertyName("next")]
     public required string? Next { get; init; }
 
-    [JsonPropertyName("offset")]
-    public required int Offset { get; init; }
-
-    [JsonPropertyName("previous")]
-    public required string? Previous { get; init; }
+    [JsonPropertyName("cursors")]
+    public required Cursors Cursors { get; init; }
 
     [JsonPropertyName("total")]
-    public required int Total { get; init; }
+    public int? Total { get; init; }
 
     [JsonPropertyName("items")]
     public required T[] Items { get; init; }
+}
+
+public record Cursors
+{
+    [JsonPropertyName("after")]
+    public required string? After { get; init; }
+
+    [JsonPropertyName("before")]
+    public required string? Before { get; init; }
 }

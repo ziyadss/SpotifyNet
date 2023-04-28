@@ -12,23 +12,23 @@ namespace SpotifyNet.Datastructures.Spotify.Search;
 public record SearchResult
 {
     [JsonPropertyName("tracks")]
-    public PaginationWrapper<Track>? Tracks { get; init; }
+    public OffsetPaginationWrapper<Track>? Tracks { get; init; }
 
     [JsonPropertyName("artists")]
-    public PaginationWrapper<Artist>? Artists { get; init; }
+    public OffsetPaginationWrapper<Artist>? Artists { get; init; }
 
     [JsonPropertyName("albums")]
-    public PaginationWrapper<SimplifiedAlbum>? Albums { get; init; }
+    public OffsetPaginationWrapper<SimplifiedAlbum>? Albums { get; init; }
 
     [JsonPropertyName("playlists")]
-    public PaginationWrapper<SimplifiedPlaylist>? Playlists { get; init; }
+    public OffsetPaginationWrapper<SimplifiedPlaylist>? Playlists { get; init; }
 
     [JsonPropertyName("shows")]
-    public PaginationWrapper<SimplifiedShow>? Shows { get; init; }
+    public OffsetPaginationWrapper<SimplifiedShow>? Shows { get; init; }
 
     [JsonPropertyName("episodes")]
-    public PaginationWrapper<SimplifiedEpisode>? Episodes { get; init; }
+    public OffsetPaginationWrapper<SimplifiedEpisode>? Episodes { get; init; }
 
     [JsonPropertyName("audiobooks")]
-    public PaginationWrapper<SimplifiedAudiobook>? Audiobooks { get; init; }
+    public OffsetPaginationWrapper<SimplifiedAudiobook>? Audiobooks { get; init; }
 }

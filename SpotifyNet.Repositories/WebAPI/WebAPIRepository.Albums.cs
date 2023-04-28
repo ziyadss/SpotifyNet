@@ -45,7 +45,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetAlbumTracks(albumId);
 
-        return GetPaginated<SimplifiedTrack>(
+        return GetOffsetPaginated<SimplifiedTrack>(
             uri,
             accessToken,
             cancellationToken);
@@ -57,7 +57,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetUserSavedAlbums();
 
-        return GetPaginated<SavedAlbum>(
+        return GetOffsetPaginated<SavedAlbum>(
             uri,
             accessToken,
             cancellationToken);
@@ -132,7 +132,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetNewReleases();
 
-        return GetPaginated<SimplifiedAlbum>(
+        return GetOffsetPaginated<SimplifiedAlbum>(
             uri,
             accessToken,
             cancellationToken);

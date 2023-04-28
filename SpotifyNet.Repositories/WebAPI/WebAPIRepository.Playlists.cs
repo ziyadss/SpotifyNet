@@ -13,7 +13,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetCurrentUserPlaylists();
 
-        return GetPaginated<SimplifiedPlaylist>(
+        return GetOffsetPaginated<SimplifiedPlaylist>(
             uri,
             accessToken,
             cancellationToken);
@@ -26,7 +26,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetPlaylistItems(playlistId);
 
-        return GetPaginated<PlaylistTrack>(
+        return GetOffsetPaginated<PlaylistTrack>(
             uri,
             accessToken,
             cancellationToken);
@@ -39,7 +39,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetUserPlaylists(userId);
 
-        return GetPaginated<SimplifiedPlaylist>(
+        return GetOffsetPaginated<SimplifiedPlaylist>(
             uri,
             accessToken,
             cancellationToken);
