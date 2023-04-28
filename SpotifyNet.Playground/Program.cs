@@ -1,22 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpotifyNet.Clients.Authorization;
-using SpotifyNet.Clients.Interfaces;
-using SpotifyNet.Clients.WebAPI;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Playlists;
-using SpotifyNet.Repositories.Authorization;
-using SpotifyNet.Repositories.Interfaces;
-using SpotifyNet.Repositories.WebAPI;
-using SpotifyNet.Services.Authorization;
 using SpotifyNet.Services.Interfaces;
-using SpotifyNet.Services.WebAPI;
 using System;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -31,42 +20,7 @@ sealed internal class Program
     {
         var builder = Host.CreateDefaultBuilder(args);
 
-        builder.ConfigureServices(services =>
-        {
-            services
-            .AddSingleton<HttpClient>()
-            .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
-            {
-                var httpClient = p.GetRequiredService<HttpClient>();
-
-                return new AuthorizationClient(AppClientId, AppRedirectUri, httpClient);
-            })
-            .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
-            .AddSingleton<IAuthorizationService, AuthorizationService>()
-            .AddSingleton<IWebAPIClient, WebAPIClient>()
-            .AddSingleton<IWebAPIRepository, WebAPIRepository>()
-            .AddSingleton<IWebAPIService, WebAPIService>()
-
-            .AddSingleton(p =>
-            {
-                var configuration = p.GetRequiredService<IConfiguration>();
-
-                var httpListener = new HttpListener();
-
-                var appRedirectUri = AppRedirectUri;
-                if (appRedirectUri.EndsWith('/'))
-                {
-                    httpListener.Prefixes.Add(appRedirectUri);
-                }
-                else
-                {
-                    httpListener.Prefixes.Add(appRedirectUri + '/');
-                }
-
-                return httpListener;
-            })
-            .AddSingleton<ITokenAcquirerService, TokenAcquirerService>();
-        });
+        builder.ConfigureServices(services => services.AddRegistrations(AppClientId, AppRedirectUri));
 
         var host = builder.Build();
 
