@@ -145,13 +145,6 @@ internal sealed class Program
         await WriteOutput(outputDirectory, tracks);
     }
 
-    internal static SnippetDownloadStatus GetBetterStatus(SnippetDownloadStatus first, SnippetDownloadStatus second) => first switch
-    {
-        SnippetDownloadStatus.Unknown or SnippetDownloadStatus.NoPreviewUrl or SnippetDownloadStatus.Failed => second,
-        SnippetDownloadStatus.Downloaded or SnippetDownloadStatus.Exists => first,
-        _ => throw new NotImplementedException(),
-    };
-
     private static async Task WriteOutput(
         string outputDirectory,
         IEnumerable<SnippetDownloadMetadata> output)
