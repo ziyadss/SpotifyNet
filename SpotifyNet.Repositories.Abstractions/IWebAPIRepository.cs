@@ -4,6 +4,7 @@ using SpotifyNet.Datastructures.Spotify.Player;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
+using SpotifyNet.Datastructures.Spotify.Users;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -129,6 +130,10 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     // Users
+    Task<User> GetCurrentUserProfile(
+        string accessToken,
+        CancellationToken cancellationToken= default);
+
     Task<IEnumerable<Track>> GetCurrentUserTopTracks(
         string timeRange,
         string accessToken,
@@ -136,6 +141,11 @@ public interface IWebAPIRepository
 
     Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
         string timeRange,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<User> GetUserProfile(
+        string userId,
         string accessToken,
         CancellationToken cancellationToken = default);
 }

@@ -51,5 +51,7 @@ internal static class Endpoints
     public static string GetTrackAudioAnalysis(string trackId) => $"https://api.spotify.com/v1/audio-analysis/{trackId}";
 
     // Users
+    public static string GetCurrentUserProfile() => $"https://api.spotify.com/v1/me";
     public static string GetCurrentUserTopItems(string type, string timeRange) => $"https://api.spotify.com/v1/me/top/{type}?time_range={timeRange}";
+    public static string GetUserProfile(string userId) => $"https://api.spotify.com/v1/users/{userId}";
 }

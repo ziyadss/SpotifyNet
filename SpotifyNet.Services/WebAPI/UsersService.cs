@@ -1,9 +1,11 @@
 ﻿using SpotifyNet.Datastructures.Spotify.Artists;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Datastructures.Spotify.Users;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services.Interfaces;
 using SpotifyNet.Services.Interfaces.WebAPI;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +23,18 @@ public class UsersService : IUsersService
     {
         _authorizationService = authorizationService;
         _webAPIRepository = webAPIRepository;
+    }
+
+    public async Task<User> GetCurrentUserProfile(
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = new[] { AuthorizationScope.UserReadPrivate, AuthorizationScope.UserReadEmail };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var user = await _webAPIRepository.GetCurrentUserProfile(accessToken, cancellationToken);
+
+        return user;
     }
 
     public async Task<IEnumerable<Track>> GetCurrentUserTopTracks(
@@ -47,5 +61,18 @@ public class UsersService : IUsersService
         var artists = await _webAPIRepository.GetCurrentUserTopArtists(timeRange, accessToken, cancellationToken);
 
         return artists;
+    }
+
+    public async Task<User> GetUserProfile(
+        string userId,
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = Array.Empty<string>();
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var user = await _webAPIRepository.GetUserProfile(userId, accessToken, cancellationToken);
+
+        return user;
     }
 }
