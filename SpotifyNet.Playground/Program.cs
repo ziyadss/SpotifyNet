@@ -53,6 +53,7 @@ internal sealed class Program
             if (playlist.Owner!.Id != userId)
             {
                 Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
+                continue;
             }
 
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
