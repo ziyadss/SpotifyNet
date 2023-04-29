@@ -1,6 +1,7 @@
 ﻿using SpotifyNet.Core.Exceptions;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ public class AuthorizationService : IAuthorizationService
     }
 
     public async Task<string> GetAccessToken(
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
         var token = await _authorizationRepository.GetAccessToken(cancellationToken);

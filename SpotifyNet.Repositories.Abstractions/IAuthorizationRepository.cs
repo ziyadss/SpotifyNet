@@ -1,4 +1,5 @@
 ﻿using SpotifyNet.Datastructures.Internal;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace SpotifyNet.Repositories.Interfaces;
 public interface IAuthorizationRepository
 {
     Task<string> GetUserAuthorizeUri(
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken = default);
 
     Task<AccessTokenMetadata> GetNewAccessToken(

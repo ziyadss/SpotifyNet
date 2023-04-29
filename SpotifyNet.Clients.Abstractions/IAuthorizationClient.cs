@@ -1,4 +1,5 @@
 ﻿using SpotifyNet.Datastructures.Spotify.Authorization;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace SpotifyNet.Clients.Interfaces;
 public interface IAuthorizationClient
 {
     Task<UserAuthorization> GetUserAuthorizeUri(
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken = default);
 
     Task<AccessToken> GetUserAccessToken(

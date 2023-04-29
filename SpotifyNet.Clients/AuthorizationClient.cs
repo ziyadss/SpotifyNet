@@ -36,7 +36,7 @@ public class AuthorizationClient : IAuthorizationClient
     }
 
     public async Task<UserAuthorization> GetUserAuthorizeUri(
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(scopes, nameof(scopes));

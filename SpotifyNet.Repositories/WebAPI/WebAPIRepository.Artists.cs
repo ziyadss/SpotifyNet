@@ -21,7 +21,7 @@ public partial class WebAPIRepository
     }
 
     public async Task<IEnumerable<Artist>> GetArtists(
-        string[] artistIds,
+        IEnumerable<string> artistIds,
         string accessToken,
         CancellationToken cancellationToken)
     {

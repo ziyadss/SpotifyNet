@@ -4,7 +4,9 @@ using SpotifyNet.Datastructures.Internal;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Repositories.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +27,7 @@ public class AuthorizationRepository : IAuthorizationRepository
     }
 
     public async Task<string> GetUserAuthorizeUri(
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
         var authorization = await _authorizationClient.GetUserAuthorizeUri(scopes, cancellationToken);
@@ -85,12 +87,12 @@ public class AuthorizationRepository : IAuthorizationRepository
 
     private static async Task<string> WriteAndReturnAuthorizationUri(
         UserAuthorization authorization,
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
         var authorizationMetadata = new UserAuthorizationMetadata
         {
-            AuthorizationScopes = scopes,
+            AuthorizationScopes = scopes.ToArray(),
             AuthorizationUri = authorization.AuthorizationUri,
             CodeVerifier = authorization.CodeVerifier,
             State = authorization.State,

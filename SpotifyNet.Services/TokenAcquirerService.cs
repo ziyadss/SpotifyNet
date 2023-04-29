@@ -1,5 +1,6 @@
 ﻿using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services.Interfaces;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -22,7 +23,7 @@ public class TokenAcquirerService : ITokenAcquirerService
     }
 
     public async Task EnsureTokenExists(
-        string[] scopes,
+        IEnumerable<string> scopes,
         bool forceGenerate,
         CancellationToken cancellationToken)
     {
@@ -36,7 +37,7 @@ public class TokenAcquirerService : ITokenAcquirerService
 
     private async Task<bool> NeedToGenerate(
         bool forceGenerate,
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
         if (forceGenerate)
@@ -61,7 +62,7 @@ public class TokenAcquirerService : ITokenAcquirerService
     }
 
     private async Task GenerateToken(
-        string[] scopes,
+        IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
         var uri = await _authorizationRepository.GetUserAuthorizeUri(scopes, cancellationToken);

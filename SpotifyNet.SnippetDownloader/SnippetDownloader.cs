@@ -97,8 +97,7 @@ internal class SnippetDownloader : ISnippetDownloader
             }
         }
 
-        var artistIds = artistToTracks.Keys.ToArray();
-        var artists = await _webAPIService.Artists.GetArtists(artistIds, cancellationToken);
+        var artists = await _webAPIService.Artists.GetArtists(artistToTracks.Keys, cancellationToken);
         var idToGenres = artists.ToDictionary(a => a.Id!, a => a.Genres);
 
         foreach (var (artistId, tracks) in artistToTracks)
@@ -111,7 +110,7 @@ internal class SnippetDownloader : ISnippetDownloader
         }
 
         var result = artistToTracks
-            .Values.SelectMany(l => l)
+            .SelectMany(kvp => kvp.Value)
             .Concat(failedTracks);
 
         return result;

@@ -37,14 +37,14 @@ public class ArtistsService : IArtistsService
     }
 
     public async Task<IEnumerable<Artist>> GetArtists(
-        string[] artistIds,
+        IEnumerable<string> artistIds,
         CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
-        var artists = new List<Artist>(artistIds.Length);
+        var artists = new List<Artist>(artistIds.Count());
 
         foreach (var chunk in artistIds.Chunk(50))
         {

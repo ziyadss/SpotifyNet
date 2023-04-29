@@ -1,20 +1,22 @@
-﻿namespace SpotifyNet.Repositories.WebAPI;
+﻿using System.Collections.Generic;
+
+namespace SpotifyNet.Repositories.WebAPI;
 
 internal static class Endpoints
 {
     // Albums
     public static string GetAlbum(string albumId) => $"https://api.spotify.com/v1/albums/{albumId}";
-    public static string GetSeveralAlbums(string[] albumIds) => $"https://api.spotify.com/v1/albums?ids={string.Join(',', albumIds)}";
+    public static string GetSeveralAlbums(IEnumerable<string> albumIds) => $"https://api.spotify.com/v1/albums?ids={string.Join(',', albumIds)}";
     public static string GetAlbumTracks(string albumId) => $"https://api.spotify.com/v1/albums/{albumId}/tracks";
     public static string GetUserSavedAlbums() => $"https://api.spotify.com/v1/me/albums";
     public static string SaveAlbumsForUser() => $"https://api.spotify.com/v1/me/albums";
     public static string RemoveUserSavedAlbums() => $"https://api.spotify.com/v1/me/albums";
-    public static string CheckUserSavedAlbums(string[] albumIds) => $"https://api.spotify.com/v1/me/albums/contains?ids={string.Join(',', albumIds)}";
+    public static string CheckUserSavedAlbums(IEnumerable<string> albumIds) => $"https://api.spotify.com/v1/me/albums/contains?ids={string.Join(',', albumIds)}";
     public static string GetNewReleases() => $"https://api.spotify.com/v1/browse/new-releases";
 
     // Artists
     public static string GetArtist(string artistId) => $"https://api.spotify.com/v1/artists/{artistId}";
-    public static string GetSeveralArtists(string[] artistIds) => $"https://api.spotify.com/v1/artists?ids={string.Join(',', artistIds)}";
+    public static string GetSeveralArtists(IEnumerable<string> artistIds) => $"https://api.spotify.com/v1/artists?ids={string.Join(',', artistIds)}";
 
     // Audiobooks
 
@@ -42,9 +44,9 @@ internal static class Endpoints
 
     // Tracks
     public static string GetTrack(string trackId) => $"https://api.spotify.com/v1/tracks/{trackId}";
-    public static string GetSeveralTracks(string[] trackIds) => $"https://api.spotify.com/v1/tracks?ids={string.Join(',', trackIds)}";
+    public static string GetSeveralTracks(IEnumerable<string> trackIds) => $"https://api.spotify.com/v1/tracks?ids={string.Join(',', trackIds)}";
     public static string GetUserSavedTracks() => $"https://api.spotify.com/v1/me/tracks";
-    public static string GetTracksAudioFeatures(string[] trackIds) => $"https://api.spotify.com/v1/audio-features?ids={string.Join(',', trackIds)}";
+    public static string GetTracksAudioFeatures(IEnumerable<string> trackIds) => $"https://api.spotify.com/v1/audio-features?ids={string.Join(',', trackIds)}";
     public static string GetTrackAudioFeatures(string trackId) => $"https://api.spotify.com/v1/audio-features/{trackId}";
     public static string GetTrackAudioAnalysis(string trackId) => $"https://api.spotify.com/v1/audio-analysis/{trackId}";
 

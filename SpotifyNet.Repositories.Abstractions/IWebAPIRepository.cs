@@ -19,7 +19,7 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Album>> GetAlbums(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
@@ -33,17 +33,17 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     Task SaveAlbums(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
     Task RemoveAlbums(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<bool>> AreAlbumsSaved(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
@@ -58,7 +58,7 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Artist>> GetArtists(
-        string[] artistIds,
+        IEnumerable<string> artistIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
@@ -105,7 +105,7 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Track>> GetTracks(
-        string[] trackIds,
+        IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
@@ -114,7 +114,7 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<AudioFeatures>> GetTracksAudioFeatures(
-        string[] trackIds,
+        IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 

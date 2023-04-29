@@ -3,6 +3,7 @@ using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ public partial class WebAPIRepository
     }
 
     public async Task<IEnumerable<Album>> GetAlbums(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken)
     {
@@ -64,13 +65,13 @@ public partial class WebAPIRepository
     }
 
     public Task SaveAlbums(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
-        Ensure.Between(albumIds.Length, 0, 50, inclusive: true);
+        Ensure.Between(albumIds.Count(), 0, 50, inclusive: true);
 
         var uri = Endpoints.SaveAlbumsForUser();
 
@@ -87,13 +88,13 @@ public partial class WebAPIRepository
     }
 
     public Task RemoveAlbums(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
-        Ensure.Between(albumIds.Length, 0, 50, inclusive: true);
+        Ensure.Between(albumIds.Count(), 0, 50, inclusive: true);
 
         var uri = Endpoints.RemoveUserSavedAlbums();
 
@@ -110,13 +111,13 @@ public partial class WebAPIRepository
     }
 
     public Task<IEnumerable<bool>> AreAlbumsSaved(
-        string[] albumIds,
+        IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
-        Ensure.Between(albumIds.Length, 0, 20, inclusive: true);
+        Ensure.Between(albumIds.Count(), 0, 20, inclusive: true);
 
         var uri = Endpoints.CheckUserSavedAlbums(albumIds);
 

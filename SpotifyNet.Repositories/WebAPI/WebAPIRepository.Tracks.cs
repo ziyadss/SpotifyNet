@@ -3,6 +3,7 @@ using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,13 +27,13 @@ public partial class WebAPIRepository
     }
 
     public async Task<IEnumerable<Track>> GetTracks(
-        string[] trackIds,
+        IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(trackIds, nameof(trackIds));
 
-        Ensure.Between(trackIds.Length, 0, 50, inclusive: true);
+        Ensure.Between(trackIds.Count(), 0, 50, inclusive: true);
 
         var uri = Endpoints.GetSeveralTracks(trackIds);
 
@@ -57,13 +58,13 @@ public partial class WebAPIRepository
     }
 
     public async Task<IEnumerable<AudioFeatures>> GetTracksAudioFeatures(
-        string[] trackIds,
+        IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(trackIds, nameof(trackIds));
 
-        Ensure.Between(trackIds.Length, 0, 100, inclusive: true);
+        Ensure.Between(trackIds.Count(), 0, 100, inclusive: true);
 
         var uri = Endpoints.GetTracksAudioFeatures(trackIds);
 
