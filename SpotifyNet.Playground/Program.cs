@@ -58,7 +58,7 @@ internal sealed class Program
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
             var result = tracks
                 .Where(condition)
-                .Select(pt => FullTrackName(pt.Track!));
+                .Select(FullTrackName);
 
             if (result.Any())
             {
@@ -70,6 +70,8 @@ internal sealed class Program
             }
         }
     }
+
+    private static string FullTrackName(PlaylistTrack playlistTrack) => FullTrackName(playlistTrack.Track!);
 
     private static string FullTrackName(Track track)
     {
