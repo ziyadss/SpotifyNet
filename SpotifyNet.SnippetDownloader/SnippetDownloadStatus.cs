@@ -10,4 +10,5 @@ enum SnippetDownloadStatus
     NoPreviewUrl,
     Failed,
     Exists,
+    LocalFile,
 };

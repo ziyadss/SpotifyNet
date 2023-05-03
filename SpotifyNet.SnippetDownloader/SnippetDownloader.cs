@@ -126,6 +126,11 @@ internal class SnippetDownloader : ISnippetDownloader
 
         var filePath = Path.Combine(_outputDirectory, fileName);
 
+        if (track.IsLocal == true)
+        {
+            return (fileName, SnippetDownloadStatus.LocalFile);
+        }
+
         if (string.IsNullOrWhiteSpace(track.PreviewUrl))
         {
             return (fileName, SnippetDownloadStatus.NoPreviewUrl);
