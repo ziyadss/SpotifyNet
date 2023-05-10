@@ -7,14 +7,14 @@ namespace SpotifyNet.Services.Interfaces.WebAPI;
 
 public interface IPlaylistsService
 {
-    Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+    Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<PlaylistTrack>> GetPlaylistTracks(
+    Task<IReadOnlyList<PlaylistTrack>> GetPlaylistTracks(
         string playlistId,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+    Task<IReadOnlyList<SimplifiedPlaylist>> GetUserPlaylists(
         string userId,
         CancellationToken cancellationToken = default);
 }

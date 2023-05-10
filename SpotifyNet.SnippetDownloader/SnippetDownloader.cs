@@ -62,7 +62,7 @@ internal class SnippetDownloader : ISnippetDownloader
         return result;
     }
 
-    public async Task<IEnumerable<SnippetDownloadMetadata>> DownloadPlaylist(
+    public async Task<IReadOnlyList<SnippetDownloadMetadata>> DownloadPlaylist(
         string playlistId,
         CancellationToken cancellationToken)
     {
@@ -114,7 +114,8 @@ internal class SnippetDownloader : ISnippetDownloader
 
         var result = artistToTracks
             .SelectMany(kvp => kvp.Value)
-            .Concat(failedTracks);
+            .Concat(failedTracks)
+            .ToList();
 
         return result;
     }

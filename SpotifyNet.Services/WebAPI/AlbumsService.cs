@@ -37,7 +37,7 @@ public class AlbumsService : IAlbumsService
         return album;
     }
 
-    public async Task<IEnumerable<Album>> GetAlbums(
+    public async Task<IReadOnlyList<Album>> GetAlbums(
         IEnumerable<string> albumIds,
         CancellationToken cancellationToken)
     {
@@ -51,7 +51,7 @@ public class AlbumsService : IAlbumsService
     }
 
 
-    public async Task<IEnumerable<SimplifiedTrack>> GetTracks(
+    public async Task<IReadOnlyList<SimplifiedTrack>> GetTracks(
         string albumId,
         CancellationToken cancellationToken)
     {
@@ -64,7 +64,7 @@ public class AlbumsService : IAlbumsService
         return tracks;
     }
 
-    public async Task<IEnumerable<SavedAlbum>> GetUserSavedAlbums(
+    public async Task<IReadOnlyList<SavedAlbum>> GetUserSavedAlbums(
         CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
@@ -98,7 +98,7 @@ public class AlbumsService : IAlbumsService
         await _webAPIRepository.SaveAlbums(albumIds, accessToken, cancellationToken);
     }
 
-    public async Task<IEnumerable<bool>> AreAlbumsSaved(
+    public async Task<IReadOnlyList<bool>> AreAlbumsSaved(
         IEnumerable<string> albumIds,
         CancellationToken cancellationToken)
     {
@@ -111,7 +111,7 @@ public class AlbumsService : IAlbumsService
         return result;
     }
 
-    public async Task<IEnumerable<SimplifiedAlbum>> GetNewReleases(
+    public async Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(
         CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();

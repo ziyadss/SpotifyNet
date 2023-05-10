@@ -11,7 +11,7 @@ public interface IArtistsService
         string artistId,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Artist>> GetArtists(
+    Task<IReadOnlyList<Artist>> GetArtists(
         IEnumerable<string> artistIds,
         CancellationToken cancellationToken = default);
 }

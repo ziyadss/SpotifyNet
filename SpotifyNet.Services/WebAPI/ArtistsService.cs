@@ -36,7 +36,7 @@ public class ArtistsService : IArtistsService
         return artist;
     }
 
-    public async Task<IEnumerable<Artist>> GetArtists(
+    public async Task<IReadOnlyList<Artist>> GetArtists(
         IEnumerable<string> artistIds,
         CancellationToken cancellationToken)
     {

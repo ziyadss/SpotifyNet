@@ -12,15 +12,15 @@ public interface IAlbumsService
         string albumId,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Album>> GetAlbums(
+    Task<IReadOnlyList<Album>> GetAlbums(
         IEnumerable<string> albumIds,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SimplifiedTrack>> GetTracks(
+    Task<IReadOnlyList<SimplifiedTrack>> GetTracks(
         string albumId,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SavedAlbum>> GetUserSavedAlbums(
+    Task<IReadOnlyList<SavedAlbum>> GetUserSavedAlbums(
         CancellationToken cancellationToken = default);
 
     Task SaveAlbums(
@@ -31,10 +31,10 @@ public interface IAlbumsService
         IEnumerable<string> albumIds,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<bool>> AreAlbumsSaved(
+    Task<IReadOnlyList<bool>> AreAlbumsSaved(
         IEnumerable<string> albumIds,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SimplifiedAlbum>> GetNewReleases(
+    Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(
         CancellationToken cancellationToken = default);
 }

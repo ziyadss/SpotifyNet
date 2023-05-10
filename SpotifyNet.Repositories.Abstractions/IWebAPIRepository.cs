@@ -19,17 +19,17 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Album>> GetAlbums(
+    Task<IReadOnlyList<Album>> GetAlbums(
         IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SimplifiedTrack>> GetAlbumTracks(
+    Task<IReadOnlyList<SimplifiedTrack>> GetAlbumTracks(
         string albumId,
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SavedAlbum>> GetSavedAlbums(
+    Task<IReadOnlyList<SavedAlbum>> GetSavedAlbums(
         string accessToken,
         CancellationToken cancellationToken = default);
 
@@ -43,12 +43,12 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<bool>> AreAlbumsSaved(
+    Task<IReadOnlyList<bool>> AreAlbumsSaved(
         IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SimplifiedAlbum>> GetNewReleases(
+    Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(
         string accessToken,
         CancellationToken cancellationToken = default);
 
@@ -58,7 +58,7 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Artist>> GetArtists(
+    Task<IReadOnlyList<Artist>> GetArtists(
         IEnumerable<string> artistIds,
         string accessToken,
         CancellationToken cancellationToken = default);
@@ -76,21 +76,21 @@ public interface IWebAPIRepository
     // Markets
 
     // Player
-    Task<IEnumerable<PlayHistory>> GetRecentlyPlayedTracks(
+    Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
         string accessToken,
         CancellationToken cancellationToken = default);
 
     // Playlists
-    Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+    Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<PlaylistTrack>> GetPlaylistItems(
+    Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
         string playlistId,
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+    Task<IReadOnlyList<SimplifiedPlaylist>> GetUserPlaylists(
         string userId,
         string accessToken,
         CancellationToken cancellationToken = default);
@@ -105,16 +105,16 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Track>> GetTracks(
+    Task<IReadOnlyList<Track>> GetTracks(
         IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
+    Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<AudioFeatures>> GetTracksAudioFeatures(
+    Task<IReadOnlyList<AudioFeatures>> GetTracksAudioFeatures(
         IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken = default);
@@ -134,12 +134,12 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken= default);
 
-    Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+    Task<IReadOnlyList<Track>> GetCurrentUserTopTracks(
         string timeRange,
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
+    Task<IReadOnlyList<Artist>> GetCurrentUserTopArtists(
         string timeRange,
         string accessToken,
         CancellationToken cancellationToken = default);

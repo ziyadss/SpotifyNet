@@ -26,7 +26,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public async Task<IEnumerable<Track>> GetTracks(
+    public async Task<IReadOnlyList<Track>> GetTracks(
         IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken)
@@ -45,7 +45,7 @@ public partial class WebAPIRepository
         return tracks.Tracks;
     }
 
-    public Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
+    public Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
         string accessToken,
         CancellationToken cancellationToken)
     {
@@ -57,7 +57,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public async Task<IEnumerable<AudioFeatures>> GetTracksAudioFeatures(
+    public async Task<IReadOnlyList<AudioFeatures>> GetTracksAudioFeatures(
         IEnumerable<string> trackIds,
         string accessToken,
         CancellationToken cancellationToken)

@@ -17,7 +17,7 @@ public partial class WebAPIRepository : IWebAPIRepository
         _webAPIClient = webAPIClient;
     }
 
-    private async Task<IEnumerable<T>> GetCursorPaginated<T>(
+    private async Task<IReadOnlyList<T>> GetCursorPaginated<T>(
         string initialUri,
         string accessToken,
         CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ public partial class WebAPIRepository : IWebAPIRepository
         return items;
     }
 
-    private async Task<IEnumerable<T>> GetOffsetPaginated<T>(
+    private async Task<IReadOnlyList<T>> GetOffsetPaginated<T>(
         string initialUri,
         string accessToken,
         CancellationToken cancellationToken)

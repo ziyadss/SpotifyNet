@@ -23,7 +23,7 @@ public class TracksService : ITracksService
         _webAPIRepository = webAPIRepository;
     }
 
-    public async Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
+    public async Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
         CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };

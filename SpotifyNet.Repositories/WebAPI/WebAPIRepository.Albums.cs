@@ -24,7 +24,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public async Task<IEnumerable<Album>> GetAlbums(
+    public async Task<IReadOnlyList<Album>> GetAlbums(
         IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ public partial class WebAPIRepository
         return albums.Albums;
     }
 
-    public Task<IEnumerable<SimplifiedTrack>> GetAlbumTracks(
+    public Task<IReadOnlyList<SimplifiedTrack>> GetAlbumTracks(
         string albumId,
         string accessToken,
         CancellationToken cancellationToken)
@@ -52,7 +52,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public Task<IEnumerable<SavedAlbum>> GetSavedAlbums(
+    public Task<IReadOnlyList<SavedAlbum>> GetSavedAlbums(
         string accessToken,
         CancellationToken cancellationToken)
     {
@@ -110,7 +110,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public Task<IEnumerable<bool>> AreAlbumsSaved(
+    public Task<IReadOnlyList<bool>> AreAlbumsSaved(
         IEnumerable<string> albumIds,
         string accessToken,
         CancellationToken cancellationToken)
@@ -121,13 +121,13 @@ public partial class WebAPIRepository
 
         var uri = Endpoints.CheckUserSavedAlbums(albumIds);
 
-        return _webAPIClient.GetAsync<IEnumerable<bool>>(
+        return _webAPIClient.GetAsync<IReadOnlyList<bool>>(
             uri,
             accessToken,
             cancellationToken);
     }
 
-    public Task<IEnumerable<SimplifiedAlbum>> GetNewReleases(
+    public Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(
         string accessToken,
         CancellationToken cancellationToken)
     {

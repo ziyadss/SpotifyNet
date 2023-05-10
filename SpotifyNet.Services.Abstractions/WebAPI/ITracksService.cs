@@ -7,7 +7,7 @@ namespace SpotifyNet.Services.Interfaces.WebAPI;
 
 public interface ITracksService
 {
-    Task<IEnumerable<SavedTrack>> GetCurrentUserSavedTracks(
+    Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
         CancellationToken cancellationToken = default);
 
     Task<Track> GetTrack(

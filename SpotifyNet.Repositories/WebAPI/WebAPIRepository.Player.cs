@@ -7,7 +7,7 @@ namespace SpotifyNet.Repositories.WebAPI;
 
 public partial class WebAPIRepository
 {
-    public Task<IEnumerable<PlayHistory>> GetRecentlyPlayedTracks(
+    public Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
         string accessToken,
         CancellationToken cancellationToken)
     {

@@ -29,7 +29,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+    public Task<IReadOnlyList<Track>> GetCurrentUserTopTracks(
         string timeRange,
         string accessToken,
         CancellationToken cancellationToken)
@@ -44,7 +44,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
+    public Task<IReadOnlyList<Artist>> GetCurrentUserTopArtists(
         string timeRange,
         string accessToken,
         CancellationToken cancellationToken)

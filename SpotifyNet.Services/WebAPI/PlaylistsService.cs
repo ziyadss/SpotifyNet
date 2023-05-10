@@ -22,7 +22,7 @@ public class PlaylistsService : IPlaylistsService
         _webAPIRepository = webAPIRepository;
     }
 
-    public async Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+    public async Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.PlaylistReadPrivate };
@@ -34,7 +34,7 @@ public class PlaylistsService : IPlaylistsService
         return playlists;
     }
 
-    public async Task<IEnumerable<PlaylistTrack>> GetPlaylistTracks(
+    public async Task<IReadOnlyList<PlaylistTrack>> GetPlaylistTracks(
         string playlistId,
         CancellationToken cancellationToken)
     {
@@ -47,7 +47,7 @@ public class PlaylistsService : IPlaylistsService
         return tracks;
     }
 
-    public async Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+    public async Task<IReadOnlyList<SimplifiedPlaylist>> GetUserPlaylists(
         string userId,
         CancellationToken cancellationToken)
     {

@@ -7,6 +7,6 @@ namespace SpotifyNet.Services.Interfaces.WebAPI;
 
 public interface IPlayerService
 {
-    Task<IEnumerable<PlayHistory>> GetRecentlyPlayedTracks(
+    Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
         CancellationToken cancellationToken = default);
 }

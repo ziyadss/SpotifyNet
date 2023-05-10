@@ -37,7 +37,7 @@ public class UsersService : IUsersService
         return user;
     }
 
-    public async Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+    public async Task<IReadOnlyList<Track>> GetCurrentUserTopTracks(
         string timeRange,
         CancellationToken cancellationToken)
     {
@@ -50,7 +50,7 @@ public class UsersService : IUsersService
         return tracks;
     }
 
-    public async Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
+    public async Task<IReadOnlyList<Artist>> GetCurrentUserTopArtists(
         string timeRange,
         CancellationToken cancellationToken)
     {

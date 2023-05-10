@@ -20,7 +20,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public async Task<IEnumerable<Artist>> GetArtists(
+    public async Task<IReadOnlyList<Artist>> GetArtists(
         IEnumerable<string> artistIds,
         string accessToken,
         CancellationToken cancellationToken)

@@ -12,11 +12,11 @@ public interface IUsersService
     Task<User> GetCurrentUserProfile(
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Track>> GetCurrentUserTopTracks(
+    Task<IReadOnlyList<Track>> GetCurrentUserTopTracks(
         string timeRange = "medium_term",
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Artist>> GetCurrentUserTopArtists(
+    Task<IReadOnlyList<Artist>> GetCurrentUserTopArtists(
         string timeRange = "medium_term",
         CancellationToken cancellationToken = default);
 

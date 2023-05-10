@@ -10,7 +10,7 @@ internal interface ISnippetDownloader
         string trackId,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<SnippetDownloadMetadata>> DownloadPlaylist(
+    Task<IReadOnlyList<SnippetDownloadMetadata>> DownloadPlaylist(
         string playlistId,
         CancellationToken cancellationToken = default);
 }

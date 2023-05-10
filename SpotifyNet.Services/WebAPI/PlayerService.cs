@@ -22,7 +22,7 @@ public class PlayerService : IPlayerService
         _webAPIRepository = webAPIRepository;
     }
 
-    public async Task<IEnumerable<PlayHistory>> GetRecentlyPlayedTracks(
+    public async Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
         CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserReadRecentlyPlayed };

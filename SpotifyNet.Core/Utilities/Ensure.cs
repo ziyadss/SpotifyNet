@@ -19,7 +19,7 @@ public static class Ensure
         }
     }
 
-    public static void Between<T>(T actual, T minimum, T maximum, bool inclusive = false)
+    public static void Between<T>(T actual, T minimum, T maximum, bool inclusive)
         where T : IComparable
     {
         if (inclusive)

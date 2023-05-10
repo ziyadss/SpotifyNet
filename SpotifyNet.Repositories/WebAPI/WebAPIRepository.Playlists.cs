@@ -7,7 +7,7 @@ namespace SpotifyNet.Repositories.WebAPI;
 
 public partial class WebAPIRepository
 {
-    public Task<IEnumerable<SimplifiedPlaylist>> GetCurrentUserPlaylists(
+    public Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
         CancellationToken cancellationToken)
     {
@@ -19,7 +19,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public Task<IEnumerable<PlaylistTrack>> GetPlaylistItems(
+    public Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
         string playlistId,
         string accessToken,
         CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ public partial class WebAPIRepository
             cancellationToken);
     }
 
-    public Task<IEnumerable<SimplifiedPlaylist>> GetUserPlaylists(
+    public Task<IReadOnlyList<SimplifiedPlaylist>> GetUserPlaylists(
         string userId,
         string accessToken,
         CancellationToken cancellationToken)
