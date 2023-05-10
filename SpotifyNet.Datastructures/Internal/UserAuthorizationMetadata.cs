@@ -1,8 +1,10 @@
-﻿namespace SpotifyNet.Datastructures.Internal;
+﻿using System.Collections.Generic;
+
+namespace SpotifyNet.Datastructures.Internal;
 
 public class UserAuthorizationMetadata
 {
-    public required string[] AuthorizationScopes { get; init; }
+    public required ICollection<string> AuthorizationScopes { get; init; }
 
     public required string AuthorizationUri { get; init; }
 

@@ -71,13 +71,14 @@ public partial class WebAPIRepository
     {
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
-        Ensure.Between(albumIds.Count(), 0, 50, inclusive: true);
+        var albumIdsCollection = albumIds as ICollection<string> ?? albumIds.ToList();
+        Ensure.Between(albumIdsCollection.Count, 0, 50, inclusive: true);
 
         var uri = Endpoints.SaveAlbumsForUser();
 
         var payload = new
         {
-            ids = albumIds,
+            ids = albumIdsCollection,
         };
 
         return _webAPIClient.PutAsync(
@@ -94,13 +95,14 @@ public partial class WebAPIRepository
     {
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
-        Ensure.Between(albumIds.Count(), 0, 50, inclusive: true);
+        var albumIdsCollection = albumIds as ICollection<string> ?? albumIds.ToList();
+        Ensure.Between(albumIdsCollection.Count, 0, 50, inclusive: true);
 
         var uri = Endpoints.RemoveUserSavedAlbums();
 
         var payload = new
         {
-            ids = albumIds,
+            ids = albumIdsCollection,
         };
 
         return _webAPIClient.DeleteAsync(
@@ -117,9 +119,10 @@ public partial class WebAPIRepository
     {
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
-        Ensure.Between(albumIds.Count(), 0, 20, inclusive: true);
+        var albumIdsCollection = albumIds as ICollection<string> ?? albumIds.ToList();
+        Ensure.Between(albumIdsCollection.Count, 0, 20, inclusive: true);
 
-        var uri = Endpoints.CheckUserSavedAlbums(albumIds);
+        var uri = Endpoints.CheckUserSavedAlbums(albumIdsCollection);
 
         return _webAPIClient.GetAsync<IReadOnlyList<bool>>(
             uri,

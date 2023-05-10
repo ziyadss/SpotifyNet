@@ -147,7 +147,7 @@ internal sealed class Program
 
     private static async Task WriteOutput(
         string outputDirectory,
-        IEnumerable<SnippetDownloadMetadata> output)
+        IReadOnlyList<SnippetDownloadMetadata> output)
     {
         if (!string.IsNullOrEmpty(outputDirectory))
         {

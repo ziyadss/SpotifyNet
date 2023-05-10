@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpotifyNet.Datastructures.Internal;
 
 public class AccessTokenMetadata
 {
-    public required string[] AuthorizationScopes { get; init; }
+    public required ICollection<string> AuthorizationScopes { get; init; }
 
     public required string Token { get; init; }
 

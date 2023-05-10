@@ -45,6 +45,7 @@ public class AlbumsService : IAlbumsService
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
+        // TODO: Chunk.
         var albums = await _webAPIRepository.GetAlbums(albumIds, accessToken, cancellationToken);
 
         return albums;

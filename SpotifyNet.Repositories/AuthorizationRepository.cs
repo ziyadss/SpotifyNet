@@ -30,9 +30,11 @@ public class AuthorizationRepository : IAuthorizationRepository
         IEnumerable<string> scopes,
         CancellationToken cancellationToken)
     {
-        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopes, cancellationToken);
+        var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
 
-        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopes, cancellationToken);
+        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopesCollection, cancellationToken);
+
+        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopesCollection, cancellationToken);
 
         return authorizationUri;
     }
@@ -87,12 +89,12 @@ public class AuthorizationRepository : IAuthorizationRepository
 
     private static async Task<string> WriteAndReturnAuthorizationUri(
         UserAuthorization authorization,
-        IEnumerable<string> scopes,
+        ICollection<string> scopes,
         CancellationToken cancellationToken)
     {
         var authorizationMetadata = new UserAuthorizationMetadata
         {
-            AuthorizationScopes = scopes.ToArray(),
+            AuthorizationScopes = scopes,
             AuthorizationUri = authorization.AuthorizationUri,
             CodeVerifier = authorization.CodeVerifier,
             State = authorization.State,
@@ -105,7 +107,7 @@ public class AuthorizationRepository : IAuthorizationRepository
 
     private static async Task<AccessTokenMetadata> WriteAndReturnToken(
         AccessToken token,
-        string[] scopes,
+        ICollection<string> scopes,
         CancellationToken cancellationToken)
     {
         var tokenMetadata = new AccessTokenMetadata

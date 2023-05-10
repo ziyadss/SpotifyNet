@@ -1,4 +1,6 @@
-﻿namespace SpotifyNet.SnippetDownloader;
+﻿using System.Collections.Generic;
+
+namespace SpotifyNet.SnippetDownloader;
 
 internal class SnippetDownloadMetadata
 {
@@ -8,5 +10,5 @@ internal class SnippetDownloadMetadata
 
     public required SnippetDownloadStatus Status { get; init; }
 
-    public string[]? Genres { get; set; }
+    public ICollection<string>? Genres { get; set; }
 }

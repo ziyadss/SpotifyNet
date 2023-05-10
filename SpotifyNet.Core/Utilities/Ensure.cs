@@ -1,7 +1,6 @@
 ﻿using SpotifyNet.Core.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +37,7 @@ public static class Ensure
         }
     }
 
-    public static void OneOf<T>(T actual, IEnumerable<T> expected)
+    public static void OneOf<T>(T actual, ICollection<T> expected)
     {
         if (!expected.Contains(actual))
         {

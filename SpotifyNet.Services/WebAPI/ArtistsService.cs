@@ -44,9 +44,10 @@ public class ArtistsService : IArtistsService
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
-        var artists = new List<Artist>(artistIds.Count());
+        var artistIdsCollection = artistIds as ICollection<string> ?? artistIds.ToList();
+        var artists = new List<Artist>(artistIdsCollection.Count);
 
-        foreach (var chunk in artistIds.Chunk(50))
+        foreach (var chunk in artistIdsCollection.Chunk(50))
         {
             var batch = await _webAPIRepository.GetArtists(chunk, accessToken, cancellationToken);
             artists.AddRange(batch);

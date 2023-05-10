@@ -27,17 +27,18 @@ public class TokenAcquirerService : ITokenAcquirerService
         bool forceGenerate,
         CancellationToken cancellationToken)
     {
-        var needToGenerate = await NeedToGenerate(forceGenerate, scopes, cancellationToken);
+        var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
+        var needToGenerate = await NeedToGenerate(forceGenerate, scopesCollection, cancellationToken);
 
         if (needToGenerate)
         {
-            await GenerateToken(scopes, cancellationToken);
+            await GenerateToken(scopesCollection, cancellationToken);
         }
     }
 
     private async Task<bool> NeedToGenerate(
         bool forceGenerate,
-        IEnumerable<string> scopes,
+        ICollection<string> scopes,
         CancellationToken cancellationToken)
     {
         if (forceGenerate)
@@ -62,7 +63,7 @@ public class TokenAcquirerService : ITokenAcquirerService
     }
 
     private async Task GenerateToken(
-        IEnumerable<string> scopes,
+        ICollection<string> scopes,
         CancellationToken cancellationToken)
     {
         var uri = await _authorizationRepository.GetUserAuthorizeUri(scopes, cancellationToken);

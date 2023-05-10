@@ -41,7 +41,8 @@ public class AuthorizationClient : IAuthorizationClient
     {
         ArgumentNullException.ThrowIfNull(scopes, nameof(scopes));
 
-        var invalidScopes = scopes.Except(AuthorizationScope.ValidScopes);
+        var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
+        var invalidScopes = scopesCollection.Except(AuthorizationScope.ValidScopes);
 
         if (invalidScopes.Any())
         {
@@ -57,7 +58,7 @@ public class AuthorizationClient : IAuthorizationClient
             ["response_type"] = "code",
             ["redirect_uri"] = _appRedirectUri,
             ["state"] = state,
-            ["scope"] = string.Join(',', scopes),
+            ["scope"] = string.Join(',', scopesCollection),
             ["show_dialog"] = "false",
             ["code_challenge_method"] = "S256",
             ["code_challenge"] = challenge,
