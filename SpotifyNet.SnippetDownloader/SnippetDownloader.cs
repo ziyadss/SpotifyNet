@@ -30,7 +30,10 @@ internal class SnippetDownloader : ISnippetDownloader
         _webAPIService = webAPIService;
         _httpClient = httpClient;
 
-        Directory.CreateDirectory(_outputDirectory);
+        if (!string.IsNullOrEmpty(_outputDirectory))
+        {
+            Directory.CreateDirectory(_outputDirectory);
+        }
     }
 
     public async Task<SnippetDownloadMetadata> DownloadTrack(

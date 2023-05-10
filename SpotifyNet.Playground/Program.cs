@@ -97,7 +97,10 @@ internal sealed class Program
         else
         {
             var directory = Path.GetDirectoryName(path)!;
-            Directory.CreateDirectory(directory);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
         }
 
         using var fs = File.OpenWrite(path);

@@ -149,7 +149,10 @@ internal sealed class Program
         string outputDirectory,
         IEnumerable<SnippetDownloadMetadata> output)
     {
-        Directory.CreateDirectory(outputDirectory);
+        if (!string.IsNullOrEmpty(outputDirectory))
+        {
+            Directory.CreateDirectory(outputDirectory);
+        }
 
         var timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         var outputFilePath = Path.Combine(outputDirectory, $"output-{timestamp}.json");
