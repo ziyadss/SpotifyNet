@@ -46,7 +46,7 @@ internal sealed class Program
 
         var userId = "ziyad.ss";
         var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
-        var condition = (PlaylistTrack t) => t.Track!.Artists!.Any(a => a.Id == "2RIrl9cApI8HwM6aF4Jt5m");
+        var condition = (PlaylistTrack t) => t.Track!.Artists!.Any(a => a.Id == "07D1Bjaof0NFlU32KXiqUP");
 
         foreach (var playlist in playlists)
         {
