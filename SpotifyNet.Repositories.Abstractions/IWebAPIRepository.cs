@@ -129,6 +129,11 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<bool>> AreTracksSaved(
+        IEnumerable<string> trackIds,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     // Users
     Task<User> GetCurrentUserProfile(
         string accessToken,

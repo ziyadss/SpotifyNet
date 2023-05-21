@@ -5,6 +5,7 @@ using SpotifyNet.Services.Interfaces;
 using SpotifyNet.Services.Interfaces.WebAPI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,5 +48,26 @@ public class TracksService : ITracksService
         var tracks = await _webAPIRepository.GetTrack(trackId, accessToken, cancellationToken);
 
         return tracks;
+    }
+
+    public async Task<IReadOnlyList<bool>> AreTracksSaved(
+        IEnumerable<string> trackIds,
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
+        var result = new List<bool>(trackIdsCollection.Count);
+
+        foreach (var chunk in trackIdsCollection.Chunk(50))
+        {
+            var batch = await _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken);
+            result.AddRange(batch);
+
+        }
+
+        return result;
     }
 }

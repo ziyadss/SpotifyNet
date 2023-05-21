@@ -25,6 +25,8 @@ public partial class WebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
+        // TODO: Ensure lengths.
+
         var uri = Endpoints.GetSeveralArtists(artistIds);
 
         var artists = await _webAPIClient.GetAsync<ArtistsSet>(

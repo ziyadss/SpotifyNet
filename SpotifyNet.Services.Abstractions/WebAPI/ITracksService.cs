@@ -13,4 +13,8 @@ public interface ITracksService
     Task<Track> GetTrack(
         string trackId,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<bool>> AreTracksSaved(
+        IEnumerable<string> trackids,
+        CancellationToken cancellationToken = default);
 }
