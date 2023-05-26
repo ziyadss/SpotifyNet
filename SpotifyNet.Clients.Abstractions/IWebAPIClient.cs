@@ -10,6 +10,11 @@ public interface IWebAPIClient
         string accessToken,
         CancellationToken cancellationToken = default);
 
+    Task PutAsync(
+        string uri,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     Task PutAsync<TPayload>(
         string uri,
         TPayload payload,

@@ -35,18 +35,20 @@ internal sealed class Program
     {
         var scopes = new[]
         {
+            AuthorizationScope.UserTopRead,
             AuthorizationScope.UserLibraryRead,
             AuthorizationScope.PlaylistReadPrivate,
-            AuthorizationScope.PlaylistReadCollaborative,
+            AuthorizationScope.UserModifyPlaybackState,
             AuthorizationScope.UserReadCurrentlyPlaying,
-            AuthorizationScope.UserTopRead,
         };
 
         await tokenAcquirerService.EnsureTokenExists(scopes);
 
+        await webAPIService.Player.SetPlaybackVolume(50);
+
         var userId = "ziyad.ss";
         var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
-        var condition = (PlaylistTrack t) => t.Track!.Artists!.Any(a => a.Id == "07D1Bjaof0NFlU32KXiqUP");
+        var condition = (PlaylistTrack t) => t.Track!.Album!.Name.Contains("Midnights");
 
         foreach (var playlist in playlists)
         {

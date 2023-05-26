@@ -31,6 +31,8 @@ internal static class Endpoints
     // Markets
 
     // Player
+    public static string SetPlaybackVolume(int volume) => $"https://api.spotify.com/v1/me/player/volume?volume_percent={volume}";
+    public static string SetPlaybackVolume(int volume, string deviceId) => $"https://api.spotify.com/v1/me/player/volume?volume_percent={volume}&device_id={deviceId}";
     public static string GetRecentlyPlayedTracks() => $"https://api.spotify.com/v1/me/player/recently-played";
 
     // Playlists

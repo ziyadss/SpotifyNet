@@ -34,6 +34,20 @@ public class WebAPIClient : IWebAPIClient
             cancellationToken);
     }
 
+    public Task PutAsync(
+        string uri,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var method = HttpMethod.Put;
+
+        return SendAsync(
+            method,
+            uri,
+            accessToken,
+            cancellationToken);
+    }
+
     public Task PutAsync<TPayload>(
         string uri,
         TPayload payload,
@@ -107,6 +121,20 @@ public class WebAPIClient : IWebAPIClient
         {
             Content = content
         };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        using var response = await _httpClient.SendAsync(request, cancellationToken);
+        await Ensure.RequestSuccess(response, cancellationToken);
+    }
+
+    private async Task SendAsync(
+        HttpMethod httpMethod,
+        string uri,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        using var request = new HttpRequestMessage(httpMethod, uri);
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 

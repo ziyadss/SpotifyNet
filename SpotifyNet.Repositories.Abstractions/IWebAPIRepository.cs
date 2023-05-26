@@ -76,6 +76,11 @@ public interface IWebAPIRepository
     // Markets
 
     // Player
+    Task SetPlaybackVolume(
+        int volume,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
         string accessToken,
         CancellationToken cancellationToken = default);
@@ -137,7 +142,7 @@ public interface IWebAPIRepository
     // Users
     Task<User> GetCurrentUserProfile(
         string accessToken,
-        CancellationToken cancellationToken= default);
+        CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Track>> GetCurrentUserTopTracks(
         string timeRange,

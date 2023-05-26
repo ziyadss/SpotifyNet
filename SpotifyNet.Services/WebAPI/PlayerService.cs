@@ -1,4 +1,5 @@
-﻿using SpotifyNet.Datastructures.Spotify.Authorization;
+﻿using SpotifyNet.Core.Utilities;
+using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Player;
 using SpotifyNet.Repositories.Interfaces;
 using SpotifyNet.Services.Interfaces;
@@ -20,6 +21,20 @@ public class PlayerService : IPlayerService
     {
         _authorizationService = authorizationService;
         _webAPIRepository = webAPIRepository;
+    }
+
+    public async Task SetPlaybackVolume(
+        int volume,
+        CancellationToken cancellationToken)
+    {
+        // TODO: Allow for setting volume for specific device.
+        Ensure.Between(volume, 0, 100, inclusive: true);
+
+        var requiredScopes = new[] { AuthorizationScope.UserModifyPlaybackState };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        await _webAPIRepository.SetPlaybackVolume(volume, accessToken, cancellationToken);
     }
 
     public async Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
