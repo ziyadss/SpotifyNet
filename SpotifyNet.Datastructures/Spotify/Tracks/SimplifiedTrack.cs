@@ -13,7 +13,7 @@ public record SimplifiedTrack
 
     [JsonPropertyName("disc_number")]
     public int? DiscNumber { get; init; }
-    
+
     [JsonPropertyName("duration_ms")]
     public int? DurationMs { get; init; }
 

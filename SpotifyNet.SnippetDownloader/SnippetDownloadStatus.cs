@@ -3,7 +3,7 @@
 namespace SpotifyNet.SnippetDownloader;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-enum SnippetDownloadStatus
+internal enum SnippetDownloadStatus
 {
     Unknown = 0,
     Downloaded,

@@ -13,7 +13,7 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal class SnippetDownloader : ISnippetDownloader
 {
-    private readonly static char[] _invalidFileNameChars = Path.GetInvalidFileNameChars();
+    private static readonly char[] _invalidFileNameChars = Path.GetInvalidFileNameChars();
 
     private readonly string _outputDirectory;
 
