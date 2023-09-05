@@ -40,15 +40,17 @@ internal sealed class Program
             AuthorizationScope.PlaylistReadPrivate,
             AuthorizationScope.UserModifyPlaybackState,
             AuthorizationScope.UserReadCurrentlyPlaying,
+            AuthorizationScope.PlaylistModifyPrivate,
+            AuthorizationScope.PlaylistModifyPublic,
         };
 
         await tokenAcquirerService.EnsureTokenExists(scopes);
 
-        await webAPIService.Player.SetPlaybackVolume(50);
+        //await webAPIService.Player.SetPlaybackVolume(55);
 
         var userId = "ziyad.ss";
         var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
-        var condition = (PlaylistTrack t) => t.Track!.Album!.Name.Contains("Midnights");
+        var condition = (PlaylistTrack t) => t.Track!.Name!.Contains("Waiting Room");
 
         foreach (var playlist in playlists)
         {
