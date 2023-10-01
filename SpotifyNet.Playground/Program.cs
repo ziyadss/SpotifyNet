@@ -81,7 +81,10 @@ internal sealed class Program
     private static string FullTrackName(Track track)
     {
         var trackName = track.Name;
-        var artistsNames = string.Join(", ", track.Artists?.Select(a => a.Name) ?? Array.Empty<string>());
+
+        var artists = track.Artists?.Select(a => a.Name) ?? Array.Empty<string>();
+        var artistsNames = string.Join(", ", artists);
+
         return $"{trackName} - {artistsNames}";
     }
 

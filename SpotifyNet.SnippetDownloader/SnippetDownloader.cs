@@ -81,8 +81,6 @@ internal class SnippetDownloader : ISnippetDownloader
         CancellationToken cancellationToken)
     {
         var fileName = GetFileName(track);
-        var validSections = fileName.Split(_invalidFileNameChars, StringSplitOptions.RemoveEmptyEntries);
-        fileName = string.Join('_', validSections);
 
         var filePath = Path.Combine(_outputDirectory, fileName);
 
@@ -122,7 +120,15 @@ internal class SnippetDownloader : ISnippetDownloader
     private static string GetFileName(Track track)
     {
         var trackName = track.Name;
-        var artistsNames = string.Join(", ", track.Artists?.Select(a => a.Name) ?? Array.Empty<string>());
-        return $"{trackName} - {artistsNames}.mp3";
+
+        var artists = track.Artists?.Select(a => a.Name) ?? Array.Empty<string>();
+        var artistsNames = string.Join(", ", artists);
+
+        var originalFileName = $"{trackName} - {artistsNames}.mp3";
+
+        var validSections = originalFileName.Split(_invalidFileNameChars, StringSplitOptions.RemoveEmptyEntries);
+        var fileName = string.Join('_', validSections);
+
+        return fileName;
     }
 }

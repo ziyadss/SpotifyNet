@@ -27,7 +27,8 @@ public partial class WebAPIRepository : IWebAPIRepository
             accessToken,
             cancellationToken);
 
-        var items = new List<T>(batch.Total ?? batch.Items.Length);
+        var capacity = batch.Total ?? batch.Items.Length;
+        var items = new List<T>(capacity);
         items.AddRange(batch.Items);
 
         while (batch.Next is not null)
