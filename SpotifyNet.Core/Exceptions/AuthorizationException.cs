@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace SpotifyNet.Core.Exceptions;
 
-[Serializable]
 public class AuthorizationException : Exception
 {
     public AuthorizationException()
@@ -17,11 +15,6 @@ public class AuthorizationException : Exception
 
     public AuthorizationException(string message, Exception innerException)
         : base(message, innerException)
-    {
-    }
-
-    protected AuthorizationException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
     {
     }
 }

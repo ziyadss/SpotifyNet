@@ -50,22 +50,23 @@ internal sealed class Program
 
         var userId = "ziyad.ss";
         var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
-        var condition = (PlaylistTrack t) => t.Track!.Name!.Contains("Waiting Room");
+        static bool condition(PlaylistTrack t) => t.Track!.Name!.Contains("Waiting Room");
 
         foreach (var playlist in playlists)
         {
             if (playlist.Owner!.Id != userId)
             {
-                Console.WriteLine($"Skipped {playlist.Name} - {playlist.Uri}");
+                Console.WriteLine($"Skipped {playlist.Name} ({playlist.Uri})");
                 continue;
             }
 
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
             var result = tracks
                 .Where(condition)
-                .Select(FullTrackName);
+                .Select(FullTrackName)
+                .ToList();
 
-            if (result.Any())
+            if (result.Count != 0)
             {
                 Console.WriteLine($"Found {playlist.Name} ({playlist.Uri}), has: ");
                 foreach (var track in result)

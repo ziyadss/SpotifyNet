@@ -13,7 +13,7 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal sealed class Program
 {
-    private static readonly string[] _requiredScopes = new[] { AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate };
+    private static readonly string[] _requiredScopes = [AuthorizationScope.UserLibraryRead, AuthorizationScope.PlaylistReadPrivate];
 
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new(JsonSerializerOptions.Default)
     {

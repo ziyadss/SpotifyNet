@@ -10,12 +10,12 @@ namespace SpotifyNet.Repositories.WebAPI;
 
 public partial class WebAPIRepository
 {
-    private readonly string[] _validTimeRanges = new[]
-    {
+    private readonly string[] _validTimeRanges =
+    [
         "long_term",
         "medium_term",
         "short_term"
-    };
+    ];
 
     public Task<User> GetCurrentUserProfile(
         string accessToken,
