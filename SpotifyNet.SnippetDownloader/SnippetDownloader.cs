@@ -34,9 +34,9 @@ internal class SnippetDownloader : ISnippetDownloader
 
     public async Task<SnippetDownloadMetadata> DownloadTrack(string trackId, CancellationToken cancellationToken)
     {
-        var track = await _webAPIService.Tracks.GetTrack(trackId, cancellationToken);
+        var track = await _webAPIService.Tracks.GetTrack(trackId, cancellationToken).ConfigureAwait(false);
 
-        var (fileName, status) = await DownloadTrack(track, cancellationToken);
+        var (fileName, status) = await DownloadTrack(track, cancellationToken).ConfigureAwait(false);
 
         return new()
         {
@@ -50,12 +50,12 @@ internal class SnippetDownloader : ISnippetDownloader
         string playlistId,
         CancellationToken cancellationToken)
     {
-        var playlistTracks = await _webAPIService.Playlists.GetPlaylistTracks(playlistId, cancellationToken);
+        var playlistTracks = await _webAPIService.Playlists.GetPlaylistTracks(playlistId, cancellationToken).ConfigureAwait(false);
 
         var result = new List<SnippetDownloadMetadata>(playlistTracks.Count);
         foreach (var playlistTrack in playlistTracks)
         {
-            var (fileName, status) = await DownloadTrack(playlistTrack.Track!, cancellationToken);
+            var (fileName, status) = await DownloadTrack(playlistTrack.Track!, cancellationToken).ConfigureAwait(false);
 
             var trackResult = new SnippetDownloadMetadata
             {
@@ -93,18 +93,20 @@ internal class SnippetDownloader : ISnippetDownloader
 
         try
         {
-            using var response = await _httpClient.GetAsync(track.PreviewUrl, cancellationToken);
-            await Ensure.RequestSuccess(response, cancellationToken);
+            using var response = await _httpClient.GetAsync(track.PreviewUrl, cancellationToken).ConfigureAwait(false);
+            await Ensure.RequestSuccess(response, cancellationToken).ConfigureAwait(false);
 
-            await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            await using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-            await responseStream.CopyToAsync(fileStream, cancellationToken);
+            var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            await using var _ = responseStream.ConfigureAwait(false);
+            var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            await using var __ = fileStream.ConfigureAwait(false);
+            await responseStream.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
 
             return (fileName, SnippetDownloadStatus.Downloaded);
         }
         catch (Exception e)
         {
-            await Console.Error.WriteLineAsync(e.ToString());
+            await Console.Error.WriteLineAsync(e.ToString()).ConfigureAwait(false);
             return (fileName, SnippetDownloadStatus.Failed);
         }
     }

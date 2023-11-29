@@ -29,9 +29,9 @@ public class AuthorizationRepository : IAuthorizationRepository
     {
         var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
 
-        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopesCollection, cancellationToken);
+        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopesCollection, cancellationToken).ConfigureAwait(false);
 
-        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopesCollection, cancellationToken);
+        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopesCollection, cancellationToken).ConfigureAwait(false);
 
         return authorizationUri;
     }
@@ -42,26 +42,26 @@ public class AuthorizationRepository : IAuthorizationRepository
         CancellationToken cancellationToken)
     {
         var authorizationMetadata =
-            await Read<UserAuthorizationMetadata>(AuthorizationMetadataFilePath, cancellationToken);
+            await Read<UserAuthorizationMetadata>(AuthorizationMetadataFilePath, cancellationToken).ConfigureAwait(false);
 
         Ensure.Equal(state, authorizationMetadata.State);
 
         var token = await _authorizationClient.GetUserAccessToken(code, authorizationMetadata.CodeVerifier,
-                                                                  cancellationToken);
+                                                                  cancellationToken).ConfigureAwait(false);
 
         var tokenMetadata =
-            await WriteAndReturnToken(token, authorizationMetadata.AuthorizationScopes, cancellationToken);
+            await WriteAndReturnToken(token, authorizationMetadata.AuthorizationScopes, cancellationToken).ConfigureAwait(false);
 
         return tokenMetadata;
     }
 
     public async Task<AccessTokenMetadata> GetAccessToken(CancellationToken cancellationToken)
     {
-        var token = await Read<AccessTokenMetadata>(AccessTokenFilePath, cancellationToken);
+        var token = await Read<AccessTokenMetadata>(AccessTokenFilePath, cancellationToken).ConfigureAwait(false);
 
         if (token.IsExpiring)
         {
-            token = await RefreshUserAccessToken(token, cancellationToken);
+            token = await RefreshUserAccessToken(token, cancellationToken).ConfigureAwait(false);
         }
 
         return token;
@@ -79,10 +79,10 @@ public class AuthorizationRepository : IAuthorizationRepository
         CancellationToken cancellationToken)
     {
         var token = await _authorizationClient.RefreshUserAccessToken(existingTokenMetadata.RefreshToken,
-                                                                      cancellationToken);
+                                                                      cancellationToken).ConfigureAwait(false);
 
         var tokenMetadata =
-            await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken);
+            await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken).ConfigureAwait(false);
 
         return tokenMetadata;
     }
@@ -99,7 +99,7 @@ public class AuthorizationRepository : IAuthorizationRepository
             State = authorization.State,
         };
 
-        await Write(AuthorizationMetadataFilePath, authorizationMetadata, cancellationToken);
+        await Write(AuthorizationMetadataFilePath, authorizationMetadata, cancellationToken).ConfigureAwait(false);
 
         return authorization.AuthorizationUri;
     }
@@ -117,15 +117,16 @@ public class AuthorizationRepository : IAuthorizationRepository
             RefreshToken = token.RefreshToken,
         };
 
-        await Write(AccessTokenFilePath, tokenMetadata, cancellationToken);
+        await Write(AccessTokenFilePath, tokenMetadata, cancellationToken).ConfigureAwait(false);
 
         return tokenMetadata;
     }
 
     private static async Task<T> Read<T>(string path, CancellationToken cancellationToken)
     {
-        await using var fs = File.OpenRead(path);
-        var item = await JsonSerializer.DeserializeAsync<T>(fs, cancellationToken: cancellationToken);
+        var fs = File.OpenRead(path);
+        await using var _ = fs.ConfigureAwait(false);
+        var item = await JsonSerializer.DeserializeAsync<T>(fs, cancellationToken: cancellationToken).ConfigureAwait(false);
         return item!;
     }
 
@@ -144,7 +145,8 @@ public class AuthorizationRepository : IAuthorizationRepository
             }
         }
 
-        await using var fs = File.OpenWrite(path);
-        await JsonSerializer.SerializeAsync(fs, item, cancellationToken: cancellationToken);
+        var fs = File.OpenWrite(path);
+        await using var _ = fs.ConfigureAwait(false);
+        await JsonSerializer.SerializeAsync(fs, item, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

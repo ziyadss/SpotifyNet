@@ -63,18 +63,18 @@ public class WebAPIClient : IWebAPIClient
         using var request = new HttpRequestMessage(httpMethod, uri);
         request.Headers.Authorization = new("Bearer", accessToken);
 
-        using var response = await _httpClient.SendAsync(request, cancellationToken);
-        await Ensure.RequestSuccess(response, cancellationToken);
+        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        await Ensure.RequestSuccess(response, cancellationToken).ConfigureAwait(false);
 
         try
         {
-            var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
+            var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken).ConfigureAwait(false);
 
             return result!;
         }
         catch (Exception e)
         {
-            var content = await response.Content.ReadAsStringAsync(cancellationToken);
+            var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             throw new WebAPIException($"Failed to deserialize response from `{uri}`. Response: `{content}`", e);
         }
@@ -94,8 +94,8 @@ public class WebAPIClient : IWebAPIClient
 
         request.Headers.Authorization = new("Bearer", accessToken);
 
-        using var response = await _httpClient.SendAsync(request, cancellationToken);
-        await Ensure.RequestSuccess(response, cancellationToken);
+        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        await Ensure.RequestSuccess(response, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task SendAsync(
@@ -108,7 +108,7 @@ public class WebAPIClient : IWebAPIClient
 
         request.Headers.Authorization = new("Bearer", accessToken);
 
-        using var response = await _httpClient.SendAsync(request, cancellationToken);
-        await Ensure.RequestSuccess(response, cancellationToken);
+        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        await Ensure.RequestSuccess(response, cancellationToken).ConfigureAwait(false);
     }
 }

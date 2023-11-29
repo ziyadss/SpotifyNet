@@ -32,7 +32,7 @@ public partial class WebAPIRepository
         Ensure.Between(trackIdsCollection.Count, 1, 50, inclusive: true);
         var uri = Endpoints.GetSeveralTracks(trackIdsCollection);
 
-        var tracks = await _webAPIClient.GetAsync<TracksSet>(uri, accessToken, cancellationToken);
+        var tracks = await _webAPIClient.GetAsync<TracksSet>(uri, accessToken, cancellationToken).ConfigureAwait(false);
 
         return tracks.Tracks;
     }
@@ -58,7 +58,7 @@ public partial class WebAPIRepository
 
         var uri = Endpoints.GetTracksAudioFeatures(trackIdsCollection);
 
-        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(uri, accessToken, cancellationToken);
+        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(uri, accessToken, cancellationToken).ConfigureAwait(false);
 
         return features.AudioFeatures;
     }
@@ -70,7 +70,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetTrackAudioFeatures(trackId);
 
-        var features = await _webAPIClient.GetAsync<AudioFeatures>(uri, accessToken, cancellationToken);
+        var features = await _webAPIClient.GetAsync<AudioFeatures>(uri, accessToken, cancellationToken).ConfigureAwait(false);
 
         return features;
     }
@@ -82,7 +82,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetTrackAudioAnalysis(trackId);
 
-        return await _webAPIClient.GetAsync<AudioAnalysis>(uri, accessToken, cancellationToken);
+        return await _webAPIClient.GetAsync<AudioAnalysis>(uri, accessToken, cancellationToken).ConfigureAwait(false);
     }
 
     public Task<IReadOnlyList<bool>> AreTracksSaved(

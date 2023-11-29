@@ -57,7 +57,7 @@ public static class Ensure
         }
         catch (HttpRequestException e)
         {
-            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             throw new WebAPIException(
                 $"Request failed with status code `{response.StatusCode}`. Content: `{responseContent}`", e);

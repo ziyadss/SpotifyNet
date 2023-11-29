@@ -24,9 +24,9 @@ public class PlaylistsService : IPlaylistsService
     {
         var requiredScopes = new[] { AuthorizationScope.PlaylistReadPrivate };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var playlists = await _webAPIRepository.GetCurrentUserPlaylists(accessToken, cancellationToken);
+        var playlists = await _webAPIRepository.GetCurrentUserPlaylists(accessToken, cancellationToken).ConfigureAwait(false);
 
         return playlists;
     }
@@ -37,9 +37,9 @@ public class PlaylistsService : IPlaylistsService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var tracks = await _webAPIRepository.GetPlaylistItems(playlistId, accessToken, cancellationToken);
+        var tracks = await _webAPIRepository.GetPlaylistItems(playlistId, accessToken, cancellationToken).ConfigureAwait(false);
 
         return tracks;
     }
@@ -52,9 +52,9 @@ public class PlaylistsService : IPlaylistsService
         var requiredScopes = new[]
             { AuthorizationScope.PlaylistReadPrivate, AuthorizationScope.PlaylistReadCollaborative };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var playlists = await _webAPIRepository.GetUserPlaylists(userId, accessToken, cancellationToken);
+        var playlists = await _webAPIRepository.GetUserPlaylists(userId, accessToken, cancellationToken).ConfigureAwait(false);
 
         return playlists;
     }

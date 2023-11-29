@@ -28,18 +28,18 @@ public class PlayerService : IPlayerService
 
         var requiredScopes = new[] { AuthorizationScope.UserModifyPlaybackState };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        await _webAPIRepository.SetPlaybackVolume(volume, accessToken, cancellationToken);
+        await _webAPIRepository.SetPlaybackVolume(volume, accessToken, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserReadRecentlyPlayed };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var history = await _webAPIRepository.GetRecentlyPlayedTracks(accessToken, cancellationToken);
+        var history = await _webAPIRepository.GetRecentlyPlayedTracks(accessToken, cancellationToken).ConfigureAwait(false);
 
         return history;
     }

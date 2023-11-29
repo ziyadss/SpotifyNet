@@ -26,11 +26,11 @@ public class TokenAcquirerService : ITokenAcquirerService
         CancellationToken cancellationToken)
     {
         var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
-        var needToGenerate = await NeedToGenerate(forceGenerate, scopesCollection, cancellationToken);
+        var needToGenerate = await NeedToGenerate(forceGenerate, scopesCollection, cancellationToken).ConfigureAwait(false);
 
         if (needToGenerate)
         {
-            await GenerateToken(scopesCollection, cancellationToken);
+            await GenerateToken(scopesCollection, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -44,13 +44,13 @@ public class TokenAcquirerService : ITokenAcquirerService
             return true;
         }
 
-        var exists = await _authorizationRepository.AccessTokenExists(cancellationToken);
+        var exists = await _authorizationRepository.AccessTokenExists(cancellationToken).ConfigureAwait(false);
         if (!exists)
         {
             return true;
         }
 
-        var accessToken = await _authorizationRepository.GetAccessToken(cancellationToken);
+        var accessToken = await _authorizationRepository.GetAccessToken(cancellationToken).ConfigureAwait(false);
         var missingScopes = scopes.Except(accessToken.AuthorizationScopes);
 
         return missingScopes.Any();
@@ -58,7 +58,7 @@ public class TokenAcquirerService : ITokenAcquirerService
 
     private async Task GenerateToken(ICollection<string> scopes, CancellationToken cancellationToken)
     {
-        var uri = await _authorizationRepository.GetUserAuthorizeUri(scopes, cancellationToken);
+        var uri = await _authorizationRepository.GetUserAuthorizeUri(scopes, cancellationToken).ConfigureAwait(false);
 
         var processInfo = new ProcessStartInfo
         {
@@ -69,12 +69,12 @@ public class TokenAcquirerService : ITokenAcquirerService
         Process.Start(processInfo);
 
         _httpListener.Start();
-        var context = await _httpListener.GetContextAsync();
+        var context = await _httpListener.GetContextAsync().ConfigureAwait(false);
         var query = context.Request.QueryString;
 
         var code = query["code"]!;
         var state = query["state"]!;
-        await _authorizationRepository.GetNewAccessToken(code, state, cancellationToken);
+        await _authorizationRepository.GetNewAccessToken(code, state, cancellationToken).ConfigureAwait(false);
 
         _httpListener.Stop();
     }

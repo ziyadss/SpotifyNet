@@ -25,7 +25,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetSeveralAlbums(albumIds);
 
-        var albums = await _webAPIClient.GetAsync<AlbumsSet>(uri, accessToken, cancellationToken);
+        var albums = await _webAPIClient.GetAsync<AlbumsSet>(uri, accessToken, cancellationToken).ConfigureAwait(false);
 
         return albums.Albums;
     }

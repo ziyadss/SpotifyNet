@@ -19,7 +19,7 @@ public class AuthorizationService : IAuthorizationService
 
     public async Task<string> GetAccessToken(IEnumerable<string> scopes, CancellationToken cancellationToken)
     {
-        var token = await _authorizationRepository.GetAccessToken(cancellationToken);
+        var token = await _authorizationRepository.GetAccessToken(cancellationToken).ConfigureAwait(false);
 
         var missingScopes = scopes.Except(token.AuthorizationScopes).ToList();
 

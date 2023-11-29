@@ -66,8 +66,8 @@ public class AuthorizationClient : IAuthorizationClient
         queryParameters.Add(parameters);
         builder.Query = queryParameters.ToString();
 
-        using var response = await _httpClient.GetAsync(builder.Uri, cancellationToken);
-        await Ensure.RequestSuccess(response, cancellationToken);
+        using var response = await _httpClient.GetAsync(builder.Uri, cancellationToken).ConfigureAwait(false);
+        await Ensure.RequestSuccess(response, cancellationToken).ConfigureAwait(false);
 
         return new()
         {
@@ -109,10 +109,10 @@ public class AuthorizationClient : IAuthorizationClient
     {
         using var content = new FormUrlEncodedContent(payload);
 
-        using var response = await _httpClient.PostAsync(TokenEndpoint, content, cancellationToken);
-        await Ensure.RequestSuccess(response, cancellationToken);
+        using var response = await _httpClient.PostAsync(TokenEndpoint, content, cancellationToken).ConfigureAwait(false);
+        await Ensure.RequestSuccess(response, cancellationToken).ConfigureAwait(false);
 
-        var token = await response.Content.ReadFromJsonAsync<AccessToken>(cancellationToken: cancellationToken);
+        var token = await response.Content.ReadFromJsonAsync<AccessToken>(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return token!;
     }

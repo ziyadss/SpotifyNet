@@ -27,9 +27,9 @@ public class UsersService : IUsersService
     {
         var requiredScopes = new[] { AuthorizationScope.UserReadPrivate, AuthorizationScope.UserReadEmail };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var user = await _webAPIRepository.GetCurrentUserProfile(accessToken, cancellationToken);
+        var user = await _webAPIRepository.GetCurrentUserProfile(accessToken, cancellationToken).ConfigureAwait(false);
 
         return user;
     }
@@ -40,9 +40,9 @@ public class UsersService : IUsersService
     {
         var requiredScopes = new[] { AuthorizationScope.UserTopRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var tracks = await _webAPIRepository.GetCurrentUserTopTracks(timeRange, accessToken, cancellationToken);
+        var tracks = await _webAPIRepository.GetCurrentUserTopTracks(timeRange, accessToken, cancellationToken).ConfigureAwait(false);
 
         return tracks;
     }
@@ -53,9 +53,9 @@ public class UsersService : IUsersService
     {
         var requiredScopes = new[] { AuthorizationScope.UserTopRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var artists = await _webAPIRepository.GetCurrentUserTopArtists(timeRange, accessToken, cancellationToken);
+        var artists = await _webAPIRepository.GetCurrentUserTopArtists(timeRange, accessToken, cancellationToken).ConfigureAwait(false);
 
         return artists;
     }
@@ -64,9 +64,9 @@ public class UsersService : IUsersService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
 
-        var user = await _webAPIRepository.GetUserProfile(userId, accessToken, cancellationToken);
+        var user = await _webAPIRepository.GetUserProfile(userId, accessToken, cancellationToken).ConfigureAwait(false);
 
         return user;
     }
