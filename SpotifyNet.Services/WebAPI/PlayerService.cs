@@ -24,7 +24,7 @@ public class PlayerService : IPlayerService
     public async Task SetPlaybackVolume(int volume, CancellationToken cancellationToken)
     {
         // TODO: Allow for setting volume for specific device.
-        Ensure.Between(volume, 0, 100, true);
+        Ensure.Between(volume, 0, 100, inclusive: true);
 
         var requiredScopes = new[] { AuthorizationScope.UserModifyPlaybackState };
 

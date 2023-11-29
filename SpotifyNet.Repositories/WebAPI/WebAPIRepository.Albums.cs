@@ -52,7 +52,7 @@ public partial class WebAPIRepository
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
         var albumIdsCollection = albumIds as ICollection<string> ?? albumIds.ToList();
-        Ensure.Between(albumIdsCollection.Count, 1, 50, true);
+        Ensure.Between(albumIdsCollection.Count, 1, 50, inclusive: true);
 
         var uri = Endpoints.SaveAlbumsForUser();
 
@@ -69,7 +69,7 @@ public partial class WebAPIRepository
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
         var albumIdsCollection = albumIds as ICollection<string> ?? albumIds.ToList();
-        Ensure.Between(albumIdsCollection.Count, 1, 50, true);
+        Ensure.Between(albumIdsCollection.Count, 1, 50, inclusive: true);
 
         var uri = Endpoints.RemoveUserSavedAlbums();
 
@@ -89,7 +89,7 @@ public partial class WebAPIRepository
         ArgumentNullException.ThrowIfNull(albumIds, nameof(albumIds));
 
         var albumIdsCollection = albumIds as ICollection<string> ?? albumIds.ToList();
-        Ensure.Between(albumIdsCollection.Count, 1, 20, true);
+        Ensure.Between(albumIdsCollection.Count, 1, 20, inclusive: true);
 
         var uri = Endpoints.CheckUserSavedAlbums(albumIdsCollection);
 

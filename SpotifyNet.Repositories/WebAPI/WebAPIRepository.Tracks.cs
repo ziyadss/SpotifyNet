@@ -29,7 +29,7 @@ public partial class WebAPIRepository
 
         var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
 
-        Ensure.Between(trackIdsCollection.Count, 1, 50, true);
+        Ensure.Between(trackIdsCollection.Count, 1, 50, inclusive: true);
         var uri = Endpoints.GetSeveralTracks(trackIdsCollection);
 
         var tracks = await _webAPIClient.GetAsync<TracksSet>(uri, accessToken, cancellationToken);
@@ -54,7 +54,7 @@ public partial class WebAPIRepository
         ArgumentNullException.ThrowIfNull(trackIds, nameof(trackIds));
 
         var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
-        Ensure.Between(trackIdsCollection.Count, 1, 100, true);
+        Ensure.Between(trackIdsCollection.Count, 1, 100, inclusive: true);
 
         var uri = Endpoints.GetTracksAudioFeatures(trackIdsCollection);
 
@@ -93,7 +93,7 @@ public partial class WebAPIRepository
         ArgumentNullException.ThrowIfNull(trackIds, nameof(trackIds));
 
         var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
-        Ensure.Between(trackIdsCollection.Count, 1, 50, true);
+        Ensure.Between(trackIdsCollection.Count, 1, 50, inclusive: true);
 
         var uri = Endpoints.CheckUserSavedTracks(trackIdsCollection);
 
