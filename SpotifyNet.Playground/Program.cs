@@ -1,14 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SpotifyNet.Datastructures.Spotify.Authorization;
-using SpotifyNet.Datastructures.Spotify.Playlists;
-using SpotifyNet.Datastructures.Spotify.Tracks;
-using SpotifyNet.Services.Interfaces;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Datastructures.Spotify.Playlists;
+using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Services.Abstractions;
+using SpotifyNet.Services.Abstractions.WebAPI;
 
 namespace SpotifyNet.Playground;
 
@@ -48,9 +49,9 @@ internal sealed class Program
 
         //await webAPIService.Player.SetPlaybackVolume(55);
 
-        var userId = "ziyad.ss";
         var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
         static bool condition(PlaylistTrack t) => t.Track!.Name!.Contains("Waiting Room");
+        const string userId = "ziyad.ss";
 
         foreach (var playlist in playlists)
         {
@@ -61,10 +62,7 @@ internal sealed class Program
             }
 
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
-            var result = tracks
-                .Where(condition)
-                .Select(FullTrackName)
-                .ToList();
+            var result = tracks.Where(condition).Select(FullTrackName).ToList();
 
             if (result.Count != 0)
             {

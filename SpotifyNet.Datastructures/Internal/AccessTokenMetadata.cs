@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SpotifyNet.Datastructures.Internal;
 
-public class AccessTokenMetadata
+public record AccessTokenMetadata
 {
     public required ICollection<string> AuthorizationScopes { get; init; }
 

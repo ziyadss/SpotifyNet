@@ -1,11 +1,11 @@
-﻿using SpotifyNet.Datastructures.Spotify.Albums;
+﻿using System.Text.Json.Serialization;
+using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Artists;
 using SpotifyNet.Datastructures.Spotify.Audiobooks;
 using SpotifyNet.Datastructures.Spotify.Episodes;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Shows;
 using SpotifyNet.Datastructures.Spotify.Tracks;
-using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Search;
 

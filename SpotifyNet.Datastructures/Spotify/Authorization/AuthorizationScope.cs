@@ -59,6 +59,6 @@ public static class AuthorizationScope
         UserLibraryModify,
         UserLibraryRead,
         UserReadEmail,
-        UserReadPrivate
+        UserReadPrivate,
     };
 }

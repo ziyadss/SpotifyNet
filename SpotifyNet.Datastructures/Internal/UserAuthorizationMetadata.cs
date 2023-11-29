@@ -2,11 +2,9 @@
 
 namespace SpotifyNet.Datastructures.Internal;
 
-public class UserAuthorizationMetadata
+public record UserAuthorizationMetadata
 {
     public required ICollection<string> AuthorizationScopes { get; init; }
-
-    public required string AuthorizationUri { get; init; }
 
     public required string CodeVerifier { get; init; }
 

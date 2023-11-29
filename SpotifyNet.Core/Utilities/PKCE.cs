@@ -11,7 +11,7 @@ public static class PKCE
 
     public static (string Verifier, string Challenge) GetCodeVerifierAndChallenge(int verifierLength)
     {
-        Ensure.Between(verifierLength, MinimumCodeVerifierLength, MaximumCodeVerifierLength, inclusive: true);
+        Ensure.Between(verifierLength, MinimumCodeVerifierLength, MaximumCodeVerifierLength, true);
 
         var verifier = CodeVerifier(verifierLength);
         var challenge = CodeChallenge(verifier);
@@ -21,7 +21,7 @@ public static class PKCE
 
     private static string CodeVerifier(int length)
     {
-        Ensure.Between(length, MinimumCodeVerifierLength, MaximumCodeVerifierLength, inclusive: true);
+        Ensure.Between(length, MinimumCodeVerifierLength, MaximumCodeVerifierLength, true);
 
         var verifierBytes = RandomNumberGenerator.GetBytes(length);
         var verifier = Base64UrlEncode(verifierBytes);
@@ -37,8 +37,6 @@ public static class PKCE
         return challenge;
     }
 
-    private static string Base64UrlEncode(byte[] bytes)
-    {
-        return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
-    }
+    private static string Base64UrlEncode(byte[] bytes) =>
+        Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
 }
