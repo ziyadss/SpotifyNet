@@ -1,69 +1,60 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SpotifyNet.Clients.Authorization;
-using SpotifyNet.Clients.Interfaces;
-using SpotifyNet.Clients.WebAPI;
-using SpotifyNet.Repositories.Authorization;
-using SpotifyNet.Repositories.Interfaces;
-using SpotifyNet.Repositories.WebAPI;
-using SpotifyNet.Services.Authorization;
-using SpotifyNet.Services.Interfaces;
-using SpotifyNet.Services.WebAPI;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
+using SpotifyNet.Clients;
+using SpotifyNet.Clients.Abstractions;
+using SpotifyNet.Repositories;
+using SpotifyNet.Repositories.Abstractions;
+using SpotifyNet.Repositories.WebAPI;
+using SpotifyNet.Services;
+using SpotifyNet.Services.Abstractions;
+using SpotifyNet.Services.Abstractions.WebAPI;
+using SpotifyNet.Services.WebAPI;
 
 namespace SpotifyNet.Playground;
 
 internal static class Registrations
 {
-    private static IServiceCollection AddHttpClient(
-        this IServiceCollection services) => services.AddSingleton<HttpClient>();
-
     private static IServiceCollection AddAuthorization(
         this IServiceCollection services,
         string appClientId,
-        string appRedirectUri) => services
-        .AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
-        {
-            var httpClient = p.GetRequiredService<HttpClient>();
+        string appRedirectUri) => services.AddSingleton<IAuthorizationClient, AuthorizationClient>(p =>
+                                           {
+                                               var httpClient = p.GetRequiredService<HttpClient>();
 
-            return new AuthorizationClient(appClientId, appRedirectUri, httpClient);
-        })
-        .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
-        .AddSingleton<IAuthorizationService, AuthorizationService>();
+                                               return new(appClientId, appRedirectUri, httpClient);
+                                           })
+                                          .AddSingleton<IAuthorizationRepository, AuthorizationRepository>()
+                                          .AddSingleton<IAuthorizationService, AuthorizationService>();
 
-    private static IServiceCollection AddTokenAcquirer(
-        this IServiceCollection services,
-        string appRedirectUri) => services
-        .AddSingleton(p =>
-        {
-            var httpListener = new HttpListener();
+    private static IServiceCollection AddTokenAcquirer(this IServiceCollection services, string appRedirectUri) =>
+        services.AddSingleton(_ =>
+                 {
+                     var httpListener = new HttpListener();
 
-            if (appRedirectUri.EndsWith('/'))
-            {
-                httpListener.Prefixes.Add(appRedirectUri);
-            }
-            else
-            {
-                httpListener.Prefixes.Add(appRedirectUri + '/');
-            }
+                     if (appRedirectUri.EndsWith('/'))
+                     {
+                         httpListener.Prefixes.Add(appRedirectUri);
+                     }
+                     else
+                     {
+                         httpListener.Prefixes.Add(appRedirectUri + '/');
+                     }
 
-            return httpListener;
-        })
-        .AddSingleton<ITokenAcquirerService, TokenAcquirerService>();
+                     return httpListener;
+                 })
+                .AddSingleton<ITokenAcquirerService, TokenAcquirerService>();
 
-    private static IServiceCollection AddWebAPI(
-        this IServiceCollection services) => services
-        .AddSingleton<IWebAPIClient, WebAPIClient>()
-        .AddSingleton<IWebAPIRepository, WebAPIRepository>()
-        .AddSingleton<IWebAPIService, WebAPIService>();
-
+    private static IServiceCollection AddWebAPI(this IServiceCollection services) => services
+       .AddSingleton<IWebAPIClient, WebAPIClient>()
+       .AddSingleton<IWebAPIRepository, WebAPIRepository>()
+       .AddSingleton<IWebAPIService, WebAPIService>();
 
     internal static IServiceCollection AddSpotifyNetServices(
         this IServiceCollection services,
         string appClientId,
-        string appRedirectUri) => services
-        .AddHttpClient()
-        .AddAuthorization(appClientId, appRedirectUri)
-        .AddTokenAcquirer(appRedirectUri)
-        .AddWebAPI();
+        string appRedirectUri) => services.AddHttpClient()
+                                          .AddAuthorization(appClientId, appRedirectUri)
+                                          .AddTokenAcquirer(appRedirectUri)
+                                          .AddWebAPI();
 }

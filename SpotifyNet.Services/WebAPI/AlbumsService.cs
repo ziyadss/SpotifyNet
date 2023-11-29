@@ -1,13 +1,13 @@
-﻿using SpotifyNet.Datastructures.Spotify.Albums;
-using SpotifyNet.Datastructures.Spotify.Authorization;
-using SpotifyNet.Datastructures.Spotify.Tracks;
-using SpotifyNet.Repositories.Interfaces;
-using SpotifyNet.Services.Interfaces;
-using SpotifyNet.Services.Interfaces.WebAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Albums;
+using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Repositories.Abstractions;
+using SpotifyNet.Services.Abstractions;
+using SpotifyNet.Services.Abstractions.WebAPI;
 
 namespace SpotifyNet.Services.WebAPI;
 
@@ -16,17 +16,13 @@ public class AlbumsService : IAlbumsService
     private readonly IAuthorizationService _authorizationService;
     private readonly IWebAPIRepository _webAPIRepository;
 
-    public AlbumsService(
-        IAuthorizationService authorizationService,
-        IWebAPIRepository webAPIRepository)
+    public AlbumsService(IAuthorizationService authorizationService, IWebAPIRepository webAPIRepository)
     {
         _authorizationService = authorizationService;
         _webAPIRepository = webAPIRepository;
     }
 
-    public async Task<Album> GetAlbum(
-        string albumId,
-        CancellationToken cancellationToken)
+    public async Task<Album> GetAlbum(string albumId, CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 
@@ -37,9 +33,7 @@ public class AlbumsService : IAlbumsService
         return album;
     }
 
-    public async Task<IReadOnlyList<Album>> GetAlbums(
-        IEnumerable<string> albumIds,
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Album>> GetAlbums(IEnumerable<string> albumIds, CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 
@@ -52,9 +46,7 @@ public class AlbumsService : IAlbumsService
     }
 
 
-    public async Task<IReadOnlyList<SimplifiedTrack>> GetTracks(
-        string albumId,
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<SimplifiedTrack>> GetTracks(string albumId, CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 
@@ -65,8 +57,7 @@ public class AlbumsService : IAlbumsService
         return tracks;
     }
 
-    public async Task<IReadOnlyList<SavedAlbum>> GetUserSavedAlbums(
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<SavedAlbum>> GetUserSavedAlbums(CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
@@ -77,9 +68,7 @@ public class AlbumsService : IAlbumsService
         return albums;
     }
 
-    public async Task SaveAlbums(
-        IEnumerable<string> albumIds,
-        CancellationToken cancellationToken)
+    public async Task SaveAlbums(IEnumerable<string> albumIds, CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryModify };
 
@@ -88,15 +77,13 @@ public class AlbumsService : IAlbumsService
         await _webAPIRepository.SaveAlbums(albumIds, accessToken, cancellationToken);
     }
 
-    public async Task UnsaveAlbums(
-        IEnumerable<string> albumIds,
-        CancellationToken cancellationToken)
+    public async Task RemoveAlbums(IEnumerable<string> albumIds, CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryModify };
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
-        await _webAPIRepository.SaveAlbums(albumIds, accessToken, cancellationToken);
+        await _webAPIRepository.RemoveAlbums(albumIds, accessToken, cancellationToken);
     }
 
     public async Task<IReadOnlyList<bool>> AreAlbumsSaved(
@@ -112,8 +99,7 @@ public class AlbumsService : IAlbumsService
         return result;
     }
 
-    public async Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 

@@ -1,13 +1,14 @@
-﻿using SpotifyNet.Datastructures.Spotify.Authorization;
-using SpotifyNet.Datastructures.Spotify.Tracks;
-using SpotifyNet.Repositories.Interfaces;
-using SpotifyNet.Services.Interfaces;
-using SpotifyNet.Services.Interfaces.WebAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Core.Utilities;
+using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Repositories.Abstractions;
+using SpotifyNet.Services.Abstractions;
+using SpotifyNet.Services.Abstractions.WebAPI;
 
 namespace SpotifyNet.Services.WebAPI;
 
@@ -16,16 +17,13 @@ public class TracksService : ITracksService
     private readonly IAuthorizationService _authorizationService;
     private readonly IWebAPIRepository _webAPIRepository;
 
-    public TracksService(
-        IAuthorizationService authorizationService,
-        IWebAPIRepository webAPIRepository)
+    public TracksService(IAuthorizationService authorizationService, IWebAPIRepository webAPIRepository)
     {
         _authorizationService = authorizationService;
         _webAPIRepository = webAPIRepository;
     }
 
-    public async Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
@@ -37,9 +35,7 @@ public class TracksService : ITracksService
     }
 
 
-    public async Task<Track> GetTrack(
-        string trackId,
-        CancellationToken cancellationToken)
+    public async Task<Track> GetTrack(string trackId, CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 
@@ -58,15 +54,12 @@ public class TracksService : ITracksService
 
         var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
 
-        var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
-        var result = new List<bool>(trackIdsCollection.Count);
+        var trackIdsCollection = trackIds.ToCollection();
 
-        foreach (var chunk in trackIdsCollection.Chunk(50))
-        {
-            var batch = await _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken);
-            result.AddRange(batch);
-
-        }
+        var result = await trackIdsCollection
+                          .ChunkedSelect(
+                               chunkSize: 50,
+                               chunk => _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken));
 
         return result;
     }

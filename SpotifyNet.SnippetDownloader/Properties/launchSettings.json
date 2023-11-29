@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SpotifyNet.SnippetDownloader": {
+      "commandName": "Project",
+      "commandLineArgs": "playlist\r\n--playlist-id 6bYSnW7DAGaxVGcZu41xWZ\r\n--output-directory \"C:\\Users\\ziyad\\Desktop\\snippets\"\r\n--app-client-id REDACTED\r\n--app-redirect-uri http://localhost:3000"
+    }
+  }
+}

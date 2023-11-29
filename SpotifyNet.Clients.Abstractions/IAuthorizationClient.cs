@@ -1,9 +1,9 @@
-﻿using SpotifyNet.Datastructures.Spotify.Authorization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Authorization;
 
-namespace SpotifyNet.Clients.Interfaces;
+namespace SpotifyNet.Clients.Abstractions;
 
 public interface IAuthorizationClient
 {
@@ -16,7 +16,5 @@ public interface IAuthorizationClient
         string codeVerifier,
         CancellationToken cancellationToken = default);
 
-    Task<AccessToken> RefreshUserAccessToken(
-        string refreshToken,
-        CancellationToken cancellationToken = default);
+    Task<AccessToken> RefreshUserAccessToken(string refreshToken, CancellationToken cancellationToken = default);
 }

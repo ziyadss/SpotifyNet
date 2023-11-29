@@ -1,6 +1,6 @@
-﻿using SpotifyNet.Datastructures.Spotify.Tracks;
-using System;
+﻿using System;
 using System.Text.Json.Serialization;
+using SpotifyNet.Datastructures.Spotify.Tracks;
 
 namespace SpotifyNet.Datastructures.Spotify.Player;
 

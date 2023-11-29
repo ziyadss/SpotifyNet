@@ -1,9 +1,10 @@
-﻿using SpotifyNet.Core.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Core.Exceptions;
 
 namespace SpotifyNet.Core.Utilities;
 
@@ -19,18 +20,19 @@ public static class Ensure
     }
 
     public static void Between<T>(T actual, T minimum, T maximum, bool inclusive)
-        where T : IComparable
+        where T : INumber<T>
     {
         if (inclusive)
         {
-            if (actual.CompareTo(minimum) < 0 || actual.CompareTo(maximum) > 0)
+            if (actual < minimum || actual > maximum)
             {
-                throw new EnsureException($"Expected: `{actual}` to be between `{minimum}` and `{maximum}`, inclusive.");
+                throw new EnsureException(
+                    $"Expected: `{actual}` to be between `{minimum}` and `{maximum}`, inclusive.");
             }
         }
         else
         {
-            if (actual.CompareTo(minimum) <= 0 || actual.CompareTo(maximum) >= 0)
+            if (actual <= minimum || actual >= maximum)
             {
                 throw new EnsureException($"Expected: `{actual}` to be between `{minimum}` and `{maximum}`.");
             }
@@ -45,9 +47,7 @@ public static class Ensure
         }
     }
 
-    public static async Task RequestSuccess(
-        HttpResponseMessage response,
-        CancellationToken cancellationToken)
+    public static async Task RequestSuccess(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(response, nameof(response));
 
@@ -55,13 +55,12 @@ public static class Ensure
         {
             response.EnsureSuccessStatusCode();
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException e)
         {
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            throw new WebAPIException(
-                message: $"Request failed with status code `{response.StatusCode}`. Content: `{responseContent}`",
-                innerException: ex);
+            var uri = response.RequestMessage?.RequestUri?.ToString() ?? string.Empty;
+            throw new WebAPIException(uri, responseContent, response.StatusCode, e);
         }
     }
 }

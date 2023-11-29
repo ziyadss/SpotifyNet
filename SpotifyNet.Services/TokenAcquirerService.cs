@@ -1,22 +1,21 @@
-﻿using SpotifyNet.Repositories.Interfaces;
-using SpotifyNet.Services.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Core.Utilities;
+using SpotifyNet.Repositories.Abstractions;
+using SpotifyNet.Services.Abstractions;
 
-namespace SpotifyNet.Services.Authorization;
+namespace SpotifyNet.Services;
 
 public class TokenAcquirerService : ITokenAcquirerService
 {
     private readonly IAuthorizationRepository _authorizationRepository;
     private readonly HttpListener _httpListener;
 
-    public TokenAcquirerService(
-        IAuthorizationRepository authorizationRepository,
-        HttpListener httpListener)
+    public TokenAcquirerService(IAuthorizationRepository authorizationRepository, HttpListener httpListener)
     {
         _authorizationRepository = authorizationRepository;
         _httpListener = httpListener;
@@ -27,7 +26,7 @@ public class TokenAcquirerService : ITokenAcquirerService
         bool forceGenerate,
         CancellationToken cancellationToken)
     {
-        var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
+        var scopesCollection = scopes.ToCollection();
         var needToGenerate = await NeedToGenerate(forceGenerate, scopesCollection, cancellationToken);
 
         if (needToGenerate)
@@ -54,17 +53,11 @@ public class TokenAcquirerService : ITokenAcquirerService
 
         var accessToken = await _authorizationRepository.GetAccessToken(cancellationToken);
         var missingScopes = scopes.Except(accessToken.AuthorizationScopes);
-        if (missingScopes.Any())
-        {
-            return true;
-        }
 
-        return false;
+        return missingScopes.Any();
     }
 
-    private async Task GenerateToken(
-        ICollection<string> scopes,
-        CancellationToken cancellationToken)
+    private async Task GenerateToken(ICollection<string> scopes, CancellationToken cancellationToken)
     {
         var uri = await _authorizationRepository.GetUserAuthorizeUri(scopes, cancellationToken);
 

@@ -1,5 +1,5 @@
-﻿using SpotifyNet.Datastructures.Spotify.Artists;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using SpotifyNet.Datastructures.Spotify.Artists;
 
 namespace SpotifyNet.Datastructures.Spotify.Tracks;
 

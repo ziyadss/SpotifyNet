@@ -11,4 +11,4 @@ internal enum SnippetDownloadStatus
     Failed,
     Exists,
     LocalFile,
-};
+}

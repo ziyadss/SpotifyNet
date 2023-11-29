@@ -1,6 +1,4 @@
-﻿using SpotifyNet.Services.Interfaces.WebAPI;
-
-namespace SpotifyNet.Services.Interfaces;
+﻿namespace SpotifyNet.Services.Abstractions.WebAPI;
 
 public interface IWebAPIService
 {

@@ -1,8 +1,4 @@
-﻿using SpotifyNet.Clients.Interfaces;
-using SpotifyNet.Core.Exceptions;
-using SpotifyNet.Core.Utilities;
-using SpotifyNet.Datastructures.Spotify.Authorization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -11,8 +7,12 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using SpotifyNet.Clients.Abstractions;
+using SpotifyNet.Core.Exceptions;
+using SpotifyNet.Core.Utilities;
+using SpotifyNet.Datastructures.Spotify.Authorization;
 
-namespace SpotifyNet.Clients.Authorization;
+namespace SpotifyNet.Clients;
 
 public class AuthorizationClient : IAuthorizationClient
 {
@@ -24,10 +24,7 @@ public class AuthorizationClient : IAuthorizationClient
 
     private readonly HttpClient _httpClient;
 
-    public AuthorizationClient(
-        string appClientId,
-        string appRedirectUri,
-        HttpClient httpClient)
+    public AuthorizationClient(string appClientId, string appRedirectUri, HttpClient httpClient)
     {
         _appClientId = appClientId;
         _appRedirectUri = appRedirectUri;
@@ -41,12 +38,12 @@ public class AuthorizationClient : IAuthorizationClient
     {
         ArgumentNullException.ThrowIfNull(scopes, nameof(scopes));
 
-        var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
-        var invalidScopes = scopesCollection.Except(AuthorizationScope.ValidScopes);
+        var scopesCollection = scopes.ToCollection();
+        var invalidScopes = scopesCollection.Except(AuthorizationScope.ValidScopes).ToList();
 
-        if (invalidScopes.Any())
+        if (invalidScopes.Count != 0)
         {
-            throw new AuthorizationException($"Invalid authorzation scopes `{string.Join(", ", invalidScopes)}`");
+            throw new AuthorizationException($"Invalid authorization scopes `{string.Join(", ", invalidScopes)}`");
         }
 
         var (verifier, challenge) = PKCE.GetCodeVerifierAndChallenge(verifierLength: 64);
@@ -72,7 +69,7 @@ public class AuthorizationClient : IAuthorizationClient
         using var response = await _httpClient.GetAsync(builder.Uri, cancellationToken);
         await Ensure.RequestSuccess(response, cancellationToken);
 
-        return new UserAuthorization
+        return new()
         {
             AuthorizationUri = response.RequestMessage!.RequestUri!.AbsoluteUri,
             CodeVerifier = verifier,
@@ -80,10 +77,7 @@ public class AuthorizationClient : IAuthorizationClient
         };
     }
 
-    public Task<AccessToken> GetUserAccessToken(
-        string code,
-        string codeVerifier,
-        CancellationToken cancellationToken)
+    public Task<AccessToken> GetUserAccessToken(string code, string codeVerifier, CancellationToken cancellationToken)
     {
         var payload = new Dictionary<string, string>
         {
@@ -97,9 +91,7 @@ public class AuthorizationClient : IAuthorizationClient
         return PostForAccessToken(payload, cancellationToken);
     }
 
-    public Task<AccessToken> RefreshUserAccessToken(
-        string refreshToken,
-        CancellationToken cancellationToken)
+    public Task<AccessToken> RefreshUserAccessToken(string refreshToken, CancellationToken cancellationToken)
     {
         var payload = new Dictionary<string, string>
         {

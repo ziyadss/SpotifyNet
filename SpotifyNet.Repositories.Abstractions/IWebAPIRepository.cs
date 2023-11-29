@@ -1,23 +1,20 @@
-﻿using SpotifyNet.Datastructures.Spotify.Albums;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Albums;
 using SpotifyNet.Datastructures.Spotify.Artists;
 using SpotifyNet.Datastructures.Spotify.Player;
 using SpotifyNet.Datastructures.Spotify.Playlists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Datastructures.Spotify.Tracks.Analysis;
 using SpotifyNet.Datastructures.Spotify.Users;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace SpotifyNet.Repositories.Interfaces;
+namespace SpotifyNet.Repositories.Abstractions;
 
 public interface IWebAPIRepository
 {
     // Albums
-    Task<Album> GetAlbum(
-        string albumId,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task<Album> GetAlbum(string albumId, string accessToken, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Album>> GetAlbums(
         IEnumerable<string> albumIds,
@@ -29,19 +26,11 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<SavedAlbum>> GetSavedAlbums(
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<SavedAlbum>> GetSavedAlbums(string accessToken, CancellationToken cancellationToken = default);
 
-    Task SaveAlbums(
-        IEnumerable<string> albumIds,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task SaveAlbums(IEnumerable<string> albumIds, string accessToken, CancellationToken cancellationToken = default);
 
-    Task RemoveAlbums(
-        IEnumerable<string> albumIds,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task RemoveAlbums(IEnumerable<string> albumIds, string accessToken, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<bool>> AreAlbumsSaved(
         IEnumerable<string> albumIds,
@@ -53,10 +42,7 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     // Artists
-    Task<Artist> GetArtist(
-        string artistId,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task<Artist> GetArtist(string artistId, string accessToken, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Artist>> GetArtists(
         IEnumerable<string> artistIds,
@@ -76,10 +62,7 @@ public interface IWebAPIRepository
     // Markets
 
     // Player
-    Task SetPlaybackVolume(
-        int volume,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task SetPlaybackVolume(int volume, string accessToken, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
         string accessToken,
@@ -105,10 +88,7 @@ public interface IWebAPIRepository
     // Shows
 
     // Tracks
-    Task<Track> GetTrack(
-        string trackId,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task<Track> GetTrack(string trackId, string accessToken, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Track>> GetTracks(
         IEnumerable<string> trackIds,
@@ -140,9 +120,7 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     // Users
-    Task<User> GetCurrentUserProfile(
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task<User> GetCurrentUserProfile(string accessToken, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Track>> GetCurrentUserTopTracks(
         string timeRange,
@@ -154,8 +132,5 @@ public interface IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken = default);
 
-    Task<User> GetUserProfile(
-        string userId,
-        string accessToken,
-        CancellationToken cancellationToken = default);
+    Task<User> GetUserProfile(string userId, string accessToken, CancellationToken cancellationToken = default);
 }

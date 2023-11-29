@@ -1,9 +1,9 @@
-using SpotifyNet.Clients.Interfaces;
-using SpotifyNet.Datastructures.Spotify;
-using SpotifyNet.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Clients.Abstractions;
+using SpotifyNet.Datastructures.Spotify;
+using SpotifyNet.Repositories.Abstractions;
 
 namespace SpotifyNet.Repositories.WebAPI;
 
@@ -11,8 +11,7 @@ public partial class WebAPIRepository : IWebAPIRepository
 {
     private readonly IWebAPIClient _webAPIClient;
 
-    public WebAPIRepository(
-        IWebAPIClient webAPIClient)
+    public WebAPIRepository(IWebAPIClient webAPIClient)
     {
         _webAPIClient = webAPIClient;
     }
@@ -23,9 +22,7 @@ public partial class WebAPIRepository : IWebAPIRepository
         CancellationToken cancellationToken)
     {
         var batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(
-            initialUri,
-            accessToken,
-            cancellationToken);
+            initialUri, accessToken, cancellationToken);
 
         var capacity = batch.Total ?? batch.Items.Length;
         var items = new List<T>(capacity);
@@ -34,9 +31,7 @@ public partial class WebAPIRepository : IWebAPIRepository
         while (batch.Next is not null)
         {
             batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(
-                batch.Next,
-                accessToken,
-                cancellationToken);
+                batch.Next, accessToken, cancellationToken);
 
             items.AddRange(batch.Items);
         }
@@ -50,9 +45,7 @@ public partial class WebAPIRepository : IWebAPIRepository
         CancellationToken cancellationToken)
     {
         var batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(
-            initialUri,
-            accessToken,
-            cancellationToken);
+            initialUri, accessToken, cancellationToken);
 
         var items = new List<T>(batch.Total);
         items.AddRange(batch.Items);
@@ -60,9 +53,7 @@ public partial class WebAPIRepository : IWebAPIRepository
         while (batch.Next is not null)
         {
             batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(
-                batch.Next,
-                accessToken,
-                cancellationToken);
+                batch.Next, accessToken, cancellationToken);
 
             items.AddRange(batch.Items);
         }

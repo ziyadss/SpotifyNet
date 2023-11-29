@@ -6,9 +6,7 @@ namespace SpotifyNet.SnippetDownloader;
 
 internal interface ISnippetDownloader
 {
-    Task<SnippetDownloadMetadata> DownloadTrack(
-        string trackId,
-        CancellationToken cancellationToken = default);
+    Task<SnippetDownloadMetadata> DownloadTrack(string trackId, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<SnippetDownloadMetadata>> DownloadPlaylist(
         string playlistId,

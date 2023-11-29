@@ -37,8 +37,5 @@ public static class PKCE
         return challenge;
     }
 
-    private static string Base64UrlEncode(byte[] bytes)
-    {
-        return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
-    }
+    private static string Base64UrlEncode(byte[] bytes) => Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
 }

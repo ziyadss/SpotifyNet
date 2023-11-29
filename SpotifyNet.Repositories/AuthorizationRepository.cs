@@ -1,17 +1,17 @@
-﻿using SpotifyNet.Clients.Interfaces;
-using SpotifyNet.Core.Utilities;
-using SpotifyNet.Datastructures.Internal;
-using SpotifyNet.Datastructures.Spotify.Authorization;
-using SpotifyNet.Repositories.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Clients.Abstractions;
+using SpotifyNet.Core.Utilities;
+using SpotifyNet.Datastructures.Internal;
+using SpotifyNet.Datastructures.Spotify.Authorization;
+using SpotifyNet.Repositories.Abstractions;
 
-namespace SpotifyNet.Repositories.Authorization;
+namespace SpotifyNet.Repositories;
 
 public class AuthorizationRepository : IAuthorizationRepository
 {
@@ -20,17 +20,14 @@ public class AuthorizationRepository : IAuthorizationRepository
 
     private readonly IAuthorizationClient _authorizationClient;
 
-    public AuthorizationRepository(
-        IAuthorizationClient authorizationClient)
+    public AuthorizationRepository(IAuthorizationClient authorizationClient)
     {
         _authorizationClient = authorizationClient;
     }
 
-    public async Task<string> GetUserAuthorizeUri(
-        IEnumerable<string> scopes,
-        CancellationToken cancellationToken)
+    public async Task<string> GetUserAuthorizeUri(IEnumerable<string> scopes, CancellationToken cancellationToken)
     {
-        var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
+        var scopesCollection = scopes.ToCollection();
 
         var authorization = await _authorizationClient.GetUserAuthorizeUri(scopesCollection, cancellationToken);
 
@@ -44,19 +41,21 @@ public class AuthorizationRepository : IAuthorizationRepository
         string state,
         CancellationToken cancellationToken)
     {
-        var authorizationMetadata = await Read<UserAuthorizationMetadata>(AuthorizationMetadataFilePath, cancellationToken);
+        var authorizationMetadata =
+            await Read<UserAuthorizationMetadata>(AuthorizationMetadataFilePath, cancellationToken);
 
         Ensure.Equal(state, authorizationMetadata.State);
 
-        var token = await _authorizationClient.GetUserAccessToken(code, authorizationMetadata.CodeVerifier, cancellationToken);
+        var token = await _authorizationClient.GetUserAccessToken(code, authorizationMetadata.CodeVerifier,
+                                                                  cancellationToken);
 
-        var tokenMetadata = await WriteAndReturnToken(token, authorizationMetadata.AuthorizationScopes, cancellationToken);
+        var tokenMetadata =
+            await WriteAndReturnToken(token, authorizationMetadata.AuthorizationScopes, cancellationToken);
 
         return tokenMetadata;
     }
 
-    public async Task<AccessTokenMetadata> GetAccessToken(
-        CancellationToken cancellationToken)
+    public async Task<AccessTokenMetadata> GetAccessToken(CancellationToken cancellationToken)
     {
         var token = await Read<AccessTokenMetadata>(AccessTokenFilePath, cancellationToken);
 
@@ -68,8 +67,7 @@ public class AuthorizationRepository : IAuthorizationRepository
         return token;
     }
 
-    public Task<bool> AccessTokenExists(
-        CancellationToken cancellationToken)
+    public Task<bool> AccessTokenExists(CancellationToken cancellationToken)
     {
         var exists = File.Exists(AccessTokenFilePath);
 
@@ -80,9 +78,11 @@ public class AuthorizationRepository : IAuthorizationRepository
         AccessTokenMetadata existingTokenMetadata,
         CancellationToken cancellationToken)
     {
-        var token = await _authorizationClient.RefreshUserAccessToken(existingTokenMetadata.RefreshToken, cancellationToken);
+        var token = await _authorizationClient.RefreshUserAccessToken(existingTokenMetadata.RefreshToken,
+                                                                      cancellationToken);
 
-        var tokenMetadata = await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken);
+        var tokenMetadata =
+            await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken);
 
         return tokenMetadata;
     }
@@ -95,7 +95,6 @@ public class AuthorizationRepository : IAuthorizationRepository
         var authorizationMetadata = new UserAuthorizationMetadata
         {
             AuthorizationScopes = scopes,
-            AuthorizationUri = authorization.AuthorizationUri,
             CodeVerifier = authorization.CodeVerifier,
             State = authorization.State,
         };
@@ -123,19 +122,14 @@ public class AuthorizationRepository : IAuthorizationRepository
         return tokenMetadata;
     }
 
-    private static async Task<T> Read<T>(
-        string path,
-        CancellationToken cancellationToken)
+    private static async Task<T> Read<T>(string path, CancellationToken cancellationToken)
     {
-        using var fs = File.OpenRead(path);
+        await using var fs = File.OpenRead(path);
         var item = await JsonSerializer.DeserializeAsync<T>(fs, cancellationToken: cancellationToken);
         return item!;
     }
 
-    private static async Task Write<T>(
-        string path,
-        T item,
-        CancellationToken cancellationToken)
+    private static async Task Write<T>(string path, T item, CancellationToken cancellationToken)
     {
         if (File.Exists(path))
         {
@@ -150,7 +144,7 @@ public class AuthorizationRepository : IAuthorizationRepository
             }
         }
 
-        using var fs = File.OpenWrite(path);
+        await using var fs = File.OpenWrite(path);
         await JsonSerializer.SerializeAsync(fs, item, cancellationToken: cancellationToken);
     }
 }

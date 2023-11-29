@@ -18,5 +18,4 @@ public record AccessToken
 
     [JsonPropertyName("refresh_token")]
     public required string RefreshToken { get; init; }
-
 }

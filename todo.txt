@@ -1,0 +1,13 @@
+SpotifyNet
+check all files end with new line
+
+check spacing/empty lines
+
+check trailing commas
+
+TrackObject/EpisodeObject
+multi-type pagination?
+
+static analysis tools, file names, linting, usings order, etc
+
+tests!!

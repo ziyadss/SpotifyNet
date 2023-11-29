@@ -1,7 +1,7 @@
-﻿using SpotifyNet.Datastructures.Spotify.Playlists;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Playlists;
 
 namespace SpotifyNet.Repositories.WebAPI;
 
@@ -13,10 +13,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetCurrentUserPlaylists();
 
-        return GetOffsetPaginated<SimplifiedPlaylist>(
-            uri,
-            accessToken,
-            cancellationToken);
+        return GetOffsetPaginated<SimplifiedPlaylist>(uri, accessToken, cancellationToken);
     }
 
     public Task<IReadOnlyList<PlaylistTrack>> GetPlaylistItems(
@@ -26,10 +23,7 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetPlaylistItems(playlistId);
 
-        return GetOffsetPaginated<PlaylistTrack>(
-            uri,
-            accessToken,
-            cancellationToken);
+        return GetOffsetPaginated<PlaylistTrack>(uri, accessToken, cancellationToken);
     }
 
     public Task<IReadOnlyList<SimplifiedPlaylist>> GetUserPlaylists(
@@ -39,9 +33,6 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetUserPlaylists(userId);
 
-        return GetOffsetPaginated<SimplifiedPlaylist>(
-            uri,
-            accessToken,
-            cancellationToken);
+        return GetOffsetPaginated<SimplifiedPlaylist>(uri, accessToken, cancellationToken);
     }
 }

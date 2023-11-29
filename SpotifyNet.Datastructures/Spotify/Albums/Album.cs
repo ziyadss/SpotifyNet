@@ -1,6 +1,6 @@
-﻿using SpotifyNet.Datastructures.Spotify.Artists;
+﻿using System.Text.Json.Serialization;
+using SpotifyNet.Datastructures.Spotify.Artists;
 using SpotifyNet.Datastructures.Spotify.Tracks;
-using System.Text.Json.Serialization;
 
 namespace SpotifyNet.Datastructures.Spotify.Albums;
 
@@ -50,9 +50,6 @@ public record Album
 
     [JsonPropertyName("external_ids")]
     public ExternalIds? ExternalIds { get; init; }
-
-    [JsonPropertyName("genres")]
-    public string[]? Genres { get; init; }
 
     [JsonPropertyName("label")]
     public string? Label { get; init; }

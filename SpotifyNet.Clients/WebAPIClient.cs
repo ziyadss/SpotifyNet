@@ -1,51 +1,35 @@
-﻿using SpotifyNet.Clients.Interfaces;
-using SpotifyNet.Core.Exceptions;
-using SpotifyNet.Core.Utilities;
-using System;
+﻿using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Clients.Abstractions;
+using SpotifyNet.Core.Exceptions;
+using SpotifyNet.Core.Utilities;
 
-namespace SpotifyNet.Clients.WebAPI;
+namespace SpotifyNet.Clients;
 
 public class WebAPIClient : IWebAPIClient
 {
     private readonly HttpClient _httpClient;
 
-    public WebAPIClient(
-        HttpClient httpClient)
+    public WebAPIClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public Task<TResponse> GetAsync<TResponse>(
-        string uri,
-        string accessToken,
-        CancellationToken cancellationToken)
+    public Task<TResponse> GetAsync<TResponse>(string uri, string accessToken, CancellationToken cancellationToken)
     {
         var method = HttpMethod.Get;
 
-        return SendAsync<TResponse>(
-            method,
-            uri,
-            accessToken,
-            cancellationToken);
+        return SendAsync<TResponse>(method, uri, accessToken, cancellationToken);
     }
 
-    public Task PutAsync(
-        string uri,
-        string accessToken,
-        CancellationToken cancellationToken)
+    public Task PutAsync(string uri, string accessToken, CancellationToken cancellationToken)
     {
         var method = HttpMethod.Put;
 
-        return SendAsync(
-            method,
-            uri,
-            accessToken,
-            cancellationToken);
+        return SendAsync(method, uri, accessToken, cancellationToken);
     }
 
     public Task PutAsync<TPayload>(
@@ -56,12 +40,7 @@ public class WebAPIClient : IWebAPIClient
     {
         var method = HttpMethod.Put;
 
-        return SendAsync(
-            method,
-            uri,
-            payload,
-            accessToken,
-            cancellationToken);
+        return SendAsync(method, uri, payload, accessToken, cancellationToken);
     }
 
     public Task DeleteAsync<TPayload>(
@@ -72,12 +51,7 @@ public class WebAPIClient : IWebAPIClient
     {
         var method = HttpMethod.Delete;
 
-        return SendAsync(
-            method,
-            uri,
-            payload,
-            accessToken,
-            cancellationToken);
+        return SendAsync(method, uri, payload, accessToken, cancellationToken);
     }
 
     private async Task<TResponse> SendAsync<TResponse>(
@@ -87,7 +61,7 @@ public class WebAPIClient : IWebAPIClient
         CancellationToken cancellationToken)
     {
         using var request = new HttpRequestMessage(httpMethod, uri);
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        request.Headers.Authorization = new("Bearer", accessToken);
 
         using var response = await _httpClient.SendAsync(request, cancellationToken);
         await Ensure.RequestSuccess(response, cancellationToken);
@@ -98,13 +72,11 @@ public class WebAPIClient : IWebAPIClient
 
             return result!;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            throw new WebAPIException(
-                message: $"Failed to deserialize response from `{uri}`. Response: `{content}`",
-                innerException: ex);
+            throw new WebAPIException(uri, content, response.StatusCode, e);
         }
     }
 
@@ -117,12 +89,10 @@ public class WebAPIClient : IWebAPIClient
     {
         using var content = JsonContent.Create(payload);
 
-        using var request = new HttpRequestMessage(httpMethod, uri)
-        {
-            Content = content
-        };
+        using var request = new HttpRequestMessage(httpMethod, uri);
+        request.Content = content;
 
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        request.Headers.Authorization = new("Bearer", accessToken);
 
         using var response = await _httpClient.SendAsync(request, cancellationToken);
         await Ensure.RequestSuccess(response, cancellationToken);
@@ -136,7 +106,7 @@ public class WebAPIClient : IWebAPIClient
     {
         using var request = new HttpRequestMessage(httpMethod, uri);
 
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        request.Headers.Authorization = new("Bearer", accessToken);
 
         using var response = await _httpClient.SendAsync(request, cancellationToken);
         await Ensure.RequestSuccess(response, cancellationToken);

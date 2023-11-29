@@ -39,6 +39,13 @@ public static class AuthorizationScope
     public const string UserReadEmail = "user-read-email";
     public const string UserReadPrivate = "user-read-private";
 
+    // Open Access
+    public const string UserSoaLink = "user-soa-link";
+    public const string UserSoaUnlink = "user-soa-unlink";
+    public const string SoaManageEntitlements = "soa-manage-entitlements";
+    public const string SoaManagePartner = "soa-manage-partner";
+    public const string SoaCreatePartner = "soa-create-partner";
+
     public static readonly IReadOnlySet<string> ValidScopes = new HashSet<string>
     {
         UgcImageUpload,
@@ -59,6 +66,11 @@ public static class AuthorizationScope
         UserLibraryModify,
         UserLibraryRead,
         UserReadEmail,
-        UserReadPrivate
+        UserReadPrivate,
+        UserSoaLink,
+        UserSoaUnlink,
+        SoaManageEntitlements,
+        SoaManagePartner,
+        SoaCreatePartner,
     };
 }

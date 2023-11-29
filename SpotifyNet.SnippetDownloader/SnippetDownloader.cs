@@ -1,29 +1,25 @@
-﻿using SpotifyNet.Core.Utilities;
-using SpotifyNet.Datastructures.Spotify.Tracks;
-using SpotifyNet.Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Core.Utilities;
+using SpotifyNet.Datastructures.Spotify.Tracks;
+using SpotifyNet.Services.Abstractions.WebAPI;
 
 namespace SpotifyNet.SnippetDownloader;
 
 internal class SnippetDownloader : ISnippetDownloader
 {
     private static readonly char[] _invalidFileNameChars = Path.GetInvalidFileNameChars();
-
-    private readonly string _outputDirectory;
-
-    private readonly IWebAPIService _webAPIService;
     private readonly HttpClient _httpClient;
 
-    public SnippetDownloader(
-        string outputDirectory,
-        IWebAPIService webAPIService,
-        HttpClient httpClient)
+    private readonly string _outputDirectory;
+    private readonly IWebAPIService _webAPIService;
+
+    public SnippetDownloader(string outputDirectory, IWebAPIService webAPIService, HttpClient httpClient)
     {
         _outputDirectory = outputDirectory;
 
@@ -36,15 +32,13 @@ internal class SnippetDownloader : ISnippetDownloader
         }
     }
 
-    public async Task<SnippetDownloadMetadata> DownloadTrack(
-        string trackId,
-        CancellationToken cancellationToken)
+    public async Task<SnippetDownloadMetadata> DownloadTrack(string trackId, CancellationToken cancellationToken)
     {
         var track = await _webAPIService.Tracks.GetTrack(trackId, cancellationToken);
 
         var (fileName, status) = await DownloadTrack(track, cancellationToken);
 
-        return new SnippetDownloadMetadata
+        return new()
         {
             TrackId = trackId,
             FileName = fileName,
@@ -76,15 +70,13 @@ internal class SnippetDownloader : ISnippetDownloader
         return result;
     }
 
-    private async Task<(string, SnippetDownloadStatus)> DownloadTrack(
-        Track track,
-        CancellationToken cancellationToken)
+    private async Task<(string, SnippetDownloadStatus)> DownloadTrack(Track track, CancellationToken cancellationToken)
     {
         var fileName = GetFileName(track);
 
         var filePath = Path.Combine(_outputDirectory, fileName);
 
-        if (track.IsLocal == true)
+        if (track.IsLocal is true)
         {
             return (fileName, SnippetDownloadStatus.LocalFile);
         }
@@ -104,15 +96,15 @@ internal class SnippetDownloader : ISnippetDownloader
             using var response = await _httpClient.GetAsync(track.PreviewUrl, cancellationToken);
             await Ensure.RequestSuccess(response, cancellationToken);
 
-            using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
+            await using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
             await responseStream.CopyToAsync(fileStream, cancellationToken);
 
             return (fileName, SnippetDownloadStatus.Downloaded);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.Error.WriteLine(ex.ToString());
+            await Console.Error.WriteLineAsync(e.ToString());
             return (fileName, SnippetDownloadStatus.Failed);
         }
     }
