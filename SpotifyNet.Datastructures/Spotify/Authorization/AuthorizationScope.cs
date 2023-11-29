@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Frozen;
+using System.Collections.Generic;
 
 namespace SpotifyNet.Datastructures.Spotify.Authorization;
 
@@ -39,7 +40,7 @@ public static class AuthorizationScope
     public const string UserReadEmail = "user-read-email";
     public const string UserReadPrivate = "user-read-private";
 
-    public static readonly IReadOnlySet<string> ValidScopes = new HashSet<string>
+    public static readonly FrozenSet<string> ValidScopes = new HashSet<string>
     {
         UgcImageUpload,
         UserReadPlaybackState,
@@ -60,5 +61,5 @@ public static class AuthorizationScope
         UserLibraryRead,
         UserReadEmail,
         UserReadPrivate,
-    };
+    }.ToFrozenSet();
 }
