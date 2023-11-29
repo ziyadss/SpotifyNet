@@ -49,9 +49,9 @@ internal sealed class Program
 
         //await webAPIService.Player.SetPlaybackVolume(55);
 
+        const string userId = "ziyad.ss";
         var playlists = await webAPIService.Playlists.GetCurrentUserPlaylists();
         static bool condition(PlaylistTrack t) => t.Track!.Name!.Contains("Waiting Room");
-        const string userId = "ziyad.ss";
 
         foreach (var playlist in playlists)
         {
