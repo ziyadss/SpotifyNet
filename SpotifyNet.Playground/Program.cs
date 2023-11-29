@@ -64,13 +64,15 @@ internal sealed class Program
             var tracks = await webAPIService.Playlists.GetPlaylistTracks(playlist.Id!);
             var result = tracks.Where(condition).Select(FullTrackName).ToList();
 
-            if (result.Count != 0)
+            if (result.Count == 0)
             {
-                Console.WriteLine($"Found {playlist.Name} ({playlist.Uri}), has: ");
-                foreach (var track in result)
-                {
-                    Console.WriteLine($"    {track}");
-                }
+                continue;
+            }
+
+            Console.WriteLine($"Found {playlist.Name} ({playlist.Uri}), has: ");
+            foreach (var track in result)
+            {
+                Console.WriteLine($"    {track}");
             }
         }
     }
@@ -89,7 +91,7 @@ internal sealed class Program
 
     private static async Task<T> Read<T>(string path)
     {
-        using var fs = File.OpenRead(path);
+        await using var fs = File.OpenRead(path);
         var item = await JsonSerializer.DeserializeAsync<T>(fs);
         return item!;
     }
@@ -109,7 +111,7 @@ internal sealed class Program
             }
         }
 
-        using var fs = File.OpenWrite(path);
+        await using var fs = File.OpenWrite(path);
         await JsonSerializer.SerializeAsync(fs, item);
     }
 }

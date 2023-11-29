@@ -31,7 +31,7 @@ internal static class Registrations
                                           .AddSingleton<IAuthorizationService, AuthorizationService>();
 
     private static IServiceCollection AddTokenAcquirer(this IServiceCollection services, string appRedirectUri) =>
-        services.AddSingleton(p =>
+        services.AddSingleton(_ =>
                  {
                      var httpListener = new HttpListener();
 
