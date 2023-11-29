@@ -25,7 +25,8 @@ public class ArtistsService : IArtistsService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var artist = await _webAPIRepository.GetArtist(artistId, accessToken, cancellationToken).ConfigureAwait(false);
 
@@ -38,7 +39,8 @@ public class ArtistsService : IArtistsService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var artistIdsCollection = artistIds as ICollection<string> ?? artistIds.ToList();
         var artists = new List<Artist>(artistIdsCollection.Count);

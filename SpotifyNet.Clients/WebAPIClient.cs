@@ -68,7 +68,8 @@ public class WebAPIClient : IWebAPIClient
 
         try
         {
-            var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken).ConfigureAwait(false);
+            var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken)
+                                       .ConfigureAwait(false);
 
             return result!;
         }

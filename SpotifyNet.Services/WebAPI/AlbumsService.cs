@@ -26,7 +26,8 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var album = await _webAPIRepository.GetAlbum(albumId, accessToken, cancellationToken).ConfigureAwait(false);
 
@@ -37,7 +38,8 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         // TODO: Chunk.
         var albums = await _webAPIRepository.GetAlbums(albumIds, accessToken, cancellationToken).ConfigureAwait(false);
@@ -50,9 +52,11 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
-        var tracks = await _webAPIRepository.GetAlbumTracks(albumId, accessToken, cancellationToken).ConfigureAwait(false);
+        var tracks = await _webAPIRepository.GetAlbumTracks(albumId, accessToken, cancellationToken)
+                                            .ConfigureAwait(false);
 
         return tracks;
     }
@@ -61,7 +65,8 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var albums = await _webAPIRepository.GetSavedAlbums(accessToken, cancellationToken).ConfigureAwait(false);
 
@@ -72,7 +77,8 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryModify };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         await _webAPIRepository.SaveAlbums(albumIds, accessToken, cancellationToken).ConfigureAwait(false);
     }
@@ -81,7 +87,8 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryModify };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         await _webAPIRepository.RemoveAlbums(albumIds, accessToken, cancellationToken).ConfigureAwait(false);
     }
@@ -92,9 +99,11 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
-        var result = await _webAPIRepository.AreAlbumsSaved(albumIds, accessToken, cancellationToken).ConfigureAwait(false);
+        var result = await _webAPIRepository.AreAlbumsSaved(albumIds, accessToken, cancellationToken)
+                                            .ConfigureAwait(false);
 
         return result;
     }
@@ -103,7 +112,8 @@ public class AlbumsService : IAlbumsService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var releases = await _webAPIRepository.GetNewReleases(accessToken, cancellationToken).ConfigureAwait(false);
 

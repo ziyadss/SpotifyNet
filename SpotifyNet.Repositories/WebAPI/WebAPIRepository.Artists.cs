@@ -23,7 +23,8 @@ public partial class WebAPIRepository
 
         var uri = Endpoints.GetSeveralArtists(artistIds);
 
-        var artists = await _webAPIClient.GetAsync<ArtistsSet>(uri, accessToken, cancellationToken).ConfigureAwait(false);
+        var artists = await _webAPIClient.GetAsync<ArtistsSet>(uri, accessToken, cancellationToken)
+                                         .ConfigureAwait(false);
 
         return artists.Artists;
     }

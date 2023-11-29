@@ -26,9 +26,11 @@ public class TracksService : ITracksService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
-        var tracks = await _webAPIRepository.GetCurrentUserSavedTracks(accessToken, cancellationToken).ConfigureAwait(false);
+        var tracks = await _webAPIRepository.GetCurrentUserSavedTracks(accessToken, cancellationToken)
+                                            .ConfigureAwait(false);
 
         return tracks;
     }
@@ -38,7 +40,8 @@ public class TracksService : ITracksService
     {
         var requiredScopes = Array.Empty<string>();
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var tracks = await _webAPIRepository.GetTrack(trackId, accessToken, cancellationToken).ConfigureAwait(false);
 
@@ -51,14 +54,16 @@ public class TracksService : ITracksService
     {
         var requiredScopes = new[] { AuthorizationScope.UserLibraryRead };
 
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken).ConfigureAwait(false);
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
 
         var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
         var result = new List<bool>(trackIdsCollection.Count);
 
         foreach (var chunk in trackIdsCollection.Chunk(50))
         {
-            var batch = await _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken).ConfigureAwait(false);
+            var batch = await _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken)
+                                               .ConfigureAwait(false);
             result.AddRange(batch);
         }
 

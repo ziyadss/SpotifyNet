@@ -29,9 +29,11 @@ public class AuthorizationRepository : IAuthorizationRepository
     {
         var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
 
-        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopesCollection, cancellationToken).ConfigureAwait(false);
+        var authorization = await _authorizationClient.GetUserAuthorizeUri(scopesCollection, cancellationToken)
+                                                      .ConfigureAwait(false);
 
-        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopesCollection, cancellationToken).ConfigureAwait(false);
+        var authorizationUri = await WriteAndReturnAuthorizationUri(authorization, scopesCollection, cancellationToken)
+           .ConfigureAwait(false);
 
         return authorizationUri;
     }
@@ -42,15 +44,18 @@ public class AuthorizationRepository : IAuthorizationRepository
         CancellationToken cancellationToken)
     {
         var authorizationMetadata =
-            await Read<UserAuthorizationMetadata>(AuthorizationMetadataFilePath, cancellationToken).ConfigureAwait(false);
+            await Read<UserAuthorizationMetadata>(AuthorizationMetadataFilePath, cancellationToken)
+               .ConfigureAwait(false);
 
         Ensure.Equal(state, authorizationMetadata.State);
 
-        var token = await _authorizationClient.GetUserAccessToken(code, authorizationMetadata.CodeVerifier,
-                                                                  cancellationToken).ConfigureAwait(false);
+        var token = await _authorizationClient
+                         .GetUserAccessToken(code, authorizationMetadata.CodeVerifier, cancellationToken)
+                         .ConfigureAwait(false);
 
         var tokenMetadata =
-            await WriteAndReturnToken(token, authorizationMetadata.AuthorizationScopes, cancellationToken).ConfigureAwait(false);
+            await WriteAndReturnToken(token, authorizationMetadata.AuthorizationScopes, cancellationToken)
+               .ConfigureAwait(false);
 
         return tokenMetadata;
     }
@@ -78,11 +83,13 @@ public class AuthorizationRepository : IAuthorizationRepository
         AccessTokenMetadata existingTokenMetadata,
         CancellationToken cancellationToken)
     {
-        var token = await _authorizationClient.RefreshUserAccessToken(existingTokenMetadata.RefreshToken,
-                                                                      cancellationToken).ConfigureAwait(false);
+        var token = await _authorizationClient
+                         .RefreshUserAccessToken(existingTokenMetadata.RefreshToken, cancellationToken)
+                         .ConfigureAwait(false);
 
         var tokenMetadata =
-            await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken).ConfigureAwait(false);
+            await WriteAndReturnToken(token, existingTokenMetadata.AuthorizationScopes, cancellationToken)
+               .ConfigureAwait(false);
 
         return tokenMetadata;
     }
@@ -126,7 +133,8 @@ public class AuthorizationRepository : IAuthorizationRepository
     {
         var fs = File.OpenRead(path);
         await using var _ = fs.ConfigureAwait(false);
-        var item = await JsonSerializer.DeserializeAsync<T>(fs, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var item = await JsonSerializer.DeserializeAsync<T>(fs, cancellationToken: cancellationToken)
+                                       .ConfigureAwait(false);
         return item!;
     }
 

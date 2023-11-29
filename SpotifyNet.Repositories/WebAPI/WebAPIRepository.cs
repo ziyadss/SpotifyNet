@@ -21,8 +21,8 @@ public partial class WebAPIRepository : IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(
-            initialUri, accessToken, cancellationToken).ConfigureAwait(false);
+        var batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(initialUri, accessToken, cancellationToken)
+                                       .ConfigureAwait(false);
 
         var capacity = batch.Total ?? batch.Items.Length;
         var items = new List<T>(capacity);
@@ -30,8 +30,8 @@ public partial class WebAPIRepository : IWebAPIRepository
 
         while (batch.Next is not null)
         {
-            batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(
-                batch.Next, accessToken, cancellationToken).ConfigureAwait(false);
+            batch = await _webAPIClient.GetAsync<CursorPaginationWrapper<T>>(batch.Next, accessToken, cancellationToken)
+                                       .ConfigureAwait(false);
 
             items.AddRange(batch.Items);
         }
@@ -44,16 +44,16 @@ public partial class WebAPIRepository : IWebAPIRepository
         string accessToken,
         CancellationToken cancellationToken)
     {
-        var batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(
-            initialUri, accessToken, cancellationToken).ConfigureAwait(false);
+        var batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(initialUri, accessToken, cancellationToken)
+                                       .ConfigureAwait(false);
 
         var items = new List<T>(batch.Total);
         items.AddRange(batch.Items);
 
         while (batch.Next is not null)
         {
-            batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(
-                batch.Next, accessToken, cancellationToken).ConfigureAwait(false);
+            batch = await _webAPIClient.GetAsync<OffsetPaginationWrapper<T>>(batch.Next, accessToken, cancellationToken)
+                                       .ConfigureAwait(false);
 
             items.AddRange(batch.Items);
         }

@@ -26,7 +26,8 @@ public class TokenAcquirerService : ITokenAcquirerService
         CancellationToken cancellationToken)
     {
         var scopesCollection = scopes as ICollection<string> ?? scopes.ToList();
-        var needToGenerate = await NeedToGenerate(forceGenerate, scopesCollection, cancellationToken).ConfigureAwait(false);
+        var needToGenerate =
+            await NeedToGenerate(forceGenerate, scopesCollection, cancellationToken).ConfigureAwait(false);
 
         if (needToGenerate)
         {

@@ -58,7 +58,8 @@ public partial class WebAPIRepository
 
         var uri = Endpoints.GetTracksAudioFeatures(trackIdsCollection);
 
-        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(uri, accessToken, cancellationToken).ConfigureAwait(false);
+        var features = await _webAPIClient.GetAsync<AudioFeaturesSet>(uri, accessToken, cancellationToken)
+                                          .ConfigureAwait(false);
 
         return features.AudioFeatures;
     }
@@ -70,7 +71,8 @@ public partial class WebAPIRepository
     {
         var uri = Endpoints.GetTrackAudioFeatures(trackId);
 
-        var features = await _webAPIClient.GetAsync<AudioFeatures>(uri, accessToken, cancellationToken).ConfigureAwait(false);
+        var features = await _webAPIClient.GetAsync<AudioFeatures>(uri, accessToken, cancellationToken)
+                                          .ConfigureAwait(false);
 
         return features;
     }
