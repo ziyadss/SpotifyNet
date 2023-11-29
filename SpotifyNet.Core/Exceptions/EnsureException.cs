@@ -4,10 +4,6 @@ namespace SpotifyNet.Core.Exceptions;
 
 public class EnsureException : Exception
 {
-    public EnsureException()
-    {
-    }
-
     public EnsureException(string message)
         : base(message)
     {

@@ -4,10 +4,6 @@ namespace SpotifyNet.Core.Exceptions;
 
 public class WebAPIException : Exception
 {
-    public WebAPIException()
-    {
-    }
-
     public WebAPIException(string message)
         : base(message)
     {
