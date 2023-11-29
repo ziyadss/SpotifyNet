@@ -1,18 +1,15 @@
-﻿using SpotifyNet.Datastructures.Spotify.Tracks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Tracks;
 
-namespace SpotifyNet.Services.Interfaces.WebAPI;
+namespace SpotifyNet.Services.Abstractions.WebAPI;
 
 public interface ITracksService
 {
-    Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(
-        CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<SavedTrack>> GetCurrentUserSavedTracks(CancellationToken cancellationToken = default);
 
-    Task<Track> GetTrack(
-        string trackId,
-        CancellationToken cancellationToken = default);
+    Task<Track> GetTrack(string trackId, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<bool>> AreTracksSaved(
         IEnumerable<string> trackids,

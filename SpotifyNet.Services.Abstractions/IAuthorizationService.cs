@@ -2,11 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Services.Interfaces;
+namespace SpotifyNet.Services.Abstractions;
 
 public interface IAuthorizationService
 {
-    Task<string> GetAccessToken(
-        IEnumerable<string> scopes,
-        CancellationToken cancellationToken = default);
+    Task<string> GetAccessToken(IEnumerable<string> scopes, CancellationToken cancellationToken = default);
 }

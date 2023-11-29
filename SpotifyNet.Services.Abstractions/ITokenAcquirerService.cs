@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpotifyNet.Services.Interfaces;
+namespace SpotifyNet.Services.Abstractions;
 
 public interface ITokenAcquirerService
 {

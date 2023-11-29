@@ -1,16 +1,13 @@
-﻿using SpotifyNet.Datastructures.Spotify.Player;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Player;
 
-namespace SpotifyNet.Services.Interfaces.WebAPI;
+namespace SpotifyNet.Services.Abstractions.WebAPI;
 
 public interface IPlayerService
 {
-    Task SetPlaybackVolume(
-        int volume,
-        CancellationToken cancellationToken = default);
+    Task SetPlaybackVolume(int volume, CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(
-        CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<PlayHistory>> GetRecentlyPlayedTracks(CancellationToken cancellationToken = default);
 }

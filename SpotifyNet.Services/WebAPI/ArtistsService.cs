@@ -1,12 +1,12 @@
-﻿using SpotifyNet.Datastructures.Spotify.Artists;
-using SpotifyNet.Repositories.Interfaces;
-using SpotifyNet.Services.Interfaces;
-using SpotifyNet.Services.Interfaces.WebAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Datastructures.Spotify.Artists;
+using SpotifyNet.Repositories.Abstractions;
+using SpotifyNet.Services.Abstractions;
+using SpotifyNet.Services.Abstractions.WebAPI;
 
 namespace SpotifyNet.Services.WebAPI;
 
@@ -15,17 +15,13 @@ public class ArtistsService : IArtistsService
     private readonly IAuthorizationService _authorizationService;
     private readonly IWebAPIRepository _webAPIRepository;
 
-    public ArtistsService(
-        IAuthorizationService authorizationService,
-        IWebAPIRepository webAPIRepository)
+    public ArtistsService(IAuthorizationService authorizationService, IWebAPIRepository webAPIRepository)
     {
         _authorizationService = authorizationService;
         _webAPIRepository = webAPIRepository;
     }
 
-    public async Task<Artist> GetArtist(
-        string artistId,
-        CancellationToken cancellationToken)
+    public async Task<Artist> GetArtist(string artistId, CancellationToken cancellationToken)
     {
         var requiredScopes = Array.Empty<string>();
 
