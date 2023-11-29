@@ -46,7 +46,7 @@ public class AuthorizationClient : IAuthorizationClient
 
         if (invalidScopes.Any())
         {
-            throw new AuthorizationException($"Invalid authorzation scopes `{string.Join(", ", invalidScopes)}`");
+            throw new AuthorizationException($"Invalid authorization scopes `{string.Join(", ", invalidScopes)}`");
         }
 
         var (verifier, challenge) = PKCE.GetCodeVerifierAndChallenge(verifierLength: 64);
