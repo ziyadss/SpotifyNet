@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify.Artists;
 using SpotifyNet.Repositories.Abstractions;
 using SpotifyNet.Services.Abstractions;
@@ -33,7 +34,10 @@ public class ArtistsService : IArtistsService
         return artist;
     }
 
-    public async Task<IReadOnlyList<Artist>> GetArtists(
+    public Task<IReadOnlyList<Artist>> GetArtists(IEnumerable<string> artistIds, CancellationToken cancellationToken) =>
+        GetArtistsOne(artistIds, cancellationToken);
+
+    public async Task<IReadOnlyList<Artist>> GetArtistsOne(
         IEnumerable<string> artistIds,
         CancellationToken cancellationToken)
     {
@@ -50,6 +54,25 @@ public class ArtistsService : IArtistsService
             var batch = await _webAPIRepository.GetArtists(chunk, accessToken, cancellationToken).ConfigureAwait(false);
             artists.AddRange(batch);
         }
+
+        return artists;
+    }
+
+    public async Task<IReadOnlyList<Artist>> GetArtistsTwo(
+        IEnumerable<string> artistIds,
+        CancellationToken cancellationToken)
+    {
+        var requiredScopes = Array.Empty<string>();
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken)
+                                                     .ConfigureAwait(false);
+
+        var artistIdsCollection = artistIds as ICollection<string> ?? artistIds.ToList();
+
+        var artists = await artistIdsCollection
+                           .ChunkedSelect(
+                                50, chunk => _webAPIRepository.GetArtists(chunk, accessToken, cancellationToken))
+                           .ConfigureAwait(false);
 
         return artists;
     }

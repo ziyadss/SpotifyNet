@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyNet.Core.Utilities;
 using SpotifyNet.Datastructures.Spotify.Authorization;
 using SpotifyNet.Datastructures.Spotify.Tracks;
 using SpotifyNet.Repositories.Abstractions;
@@ -58,14 +59,12 @@ public class TracksService : ITracksService
                                                      .ConfigureAwait(false);
 
         var trackIdsCollection = trackIds as ICollection<string> ?? trackIds.ToList();
-        var result = new List<bool>(trackIdsCollection.Count);
 
-        foreach (var chunk in trackIdsCollection.Chunk(50))
-        {
-            var batch = await _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken)
-                                               .ConfigureAwait(false);
-            result.AddRange(batch);
-        }
+        var result = await trackIdsCollection
+                          .ChunkedSelect(
+                               chunkSize: 50,
+                               chunk => _webAPIRepository.AreTracksSaved(chunk, accessToken, cancellationToken))
+                          .ConfigureAwait(false);
 
         return result;
     }
