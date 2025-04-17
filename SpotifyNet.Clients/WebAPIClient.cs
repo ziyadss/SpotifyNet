@@ -43,6 +43,18 @@ public class WebAPIClient : IWebAPIClient
         return SendAsync(method, uri, payload, accessToken, cancellationToken);
     }
 
+    public Task PutAsync(
+        string uri,
+        string payload,
+        string contentType,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        var method = HttpMethod.Put;
+
+        return SendAsync(method, uri, payload, contentType, accessToken, cancellationToken);
+    }
+
     public Task DeleteAsync<TPayload>(
         string uri,
         TPayload payload,
@@ -88,6 +100,25 @@ public class WebAPIClient : IWebAPIClient
         CancellationToken cancellationToken)
     {
         using var content = JsonContent.Create(payload);
+
+        using var request = new HttpRequestMessage(httpMethod, uri);
+        request.Content = content;
+
+        request.Headers.Authorization = new("Bearer", accessToken);
+
+        using var response = await _httpClient.SendAsync(request, cancellationToken);
+        await Ensure.RequestSuccess(response, cancellationToken);
+    }
+
+    private async Task SendAsync(
+        HttpMethod httpMethod,
+        string uri,
+        string payload,
+        string contentType,
+        string accessToken,
+        CancellationToken cancellationToken)
+    {
+        using var content = new StringContent(payload, System.Text.Encoding.UTF8, contentType);
 
         using var request = new HttpRequestMessage(httpMethod, uri);
         request.Content = content;

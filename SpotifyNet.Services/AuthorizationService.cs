@@ -17,6 +17,13 @@ public class AuthorizationService : IAuthorizationService
         _authorizationRepository = authorizationRepository;
     }
 
+    public async Task<string> GetAccessToken(CancellationToken cancellationToken = default)
+    {
+        var token = await _authorizationRepository.GetAccessToken(cancellationToken);
+
+        return token.Token;
+    }
+
     public async Task<string> GetAccessToken(IEnumerable<string> scopes, CancellationToken cancellationToken)
     {
         var token = await _authorizationRepository.GetAccessToken(cancellationToken);

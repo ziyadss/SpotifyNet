@@ -69,6 +69,11 @@ public interface IWebAPIRepository
         CancellationToken cancellationToken = default);
 
     // Playlists
+    Task<Playlist> GetPlaylist(
+        string playlistId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
     Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(
         string accessToken,
         CancellationToken cancellationToken = default);
@@ -80,6 +85,12 @@ public interface IWebAPIRepository
 
     Task<IReadOnlyList<SimplifiedPlaylist>> GetUserPlaylists(
         string userId,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task AddCustomPlaylistCoverImage(
+        string playlistId,
+        string base64Image,
         string accessToken,
         CancellationToken cancellationToken = default);
 

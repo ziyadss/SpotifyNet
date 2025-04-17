@@ -37,9 +37,7 @@ public class TracksService : ITracksService
 
     public async Task<Track> GetTrack(string trackId, CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var tracks = await _webAPIRepository.GetTrack(trackId, accessToken, cancellationToken);
 

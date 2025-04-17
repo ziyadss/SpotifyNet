@@ -24,9 +24,7 @@ public class ArtistsService : IArtistsService
 
     public async Task<Artist> GetArtist(string artistId, CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var artist = await _webAPIRepository.GetArtist(artistId, accessToken, cancellationToken);
 
@@ -40,9 +38,7 @@ public class ArtistsService : IArtistsService
         IEnumerable<string> artistIds,
         CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var artistIdsCollection = artistIds.ToCollection();
         var artists = new List<Artist>(artistIdsCollection.Count);
@@ -60,9 +56,7 @@ public class ArtistsService : IArtistsService
         IEnumerable<string> artistIds,
         CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var artistIdsCollection = artistIds.ToCollection();
 

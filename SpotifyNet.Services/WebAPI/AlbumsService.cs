@@ -24,9 +24,7 @@ public class AlbumsService : IAlbumsService
 
     public async Task<Album> GetAlbum(string albumId, CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var album = await _webAPIRepository.GetAlbum(albumId, accessToken, cancellationToken);
 
@@ -35,9 +33,7 @@ public class AlbumsService : IAlbumsService
 
     public async Task<IReadOnlyList<Album>> GetAlbums(IEnumerable<string> albumIds, CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         // TODO: Chunk.
         var albums = await _webAPIRepository.GetAlbums(albumIds, accessToken, cancellationToken);
@@ -48,9 +44,7 @@ public class AlbumsService : IAlbumsService
 
     public async Task<IReadOnlyList<SimplifiedTrack>> GetTracks(string albumId, CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var tracks = await _webAPIRepository.GetAlbumTracks(albumId, accessToken, cancellationToken);
 
@@ -101,9 +95,7 @@ public class AlbumsService : IAlbumsService
 
     public async Task<IReadOnlyList<SimplifiedAlbum>> GetNewReleases(CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var releases = await _webAPIRepository.GetNewReleases(accessToken, cancellationToken);
 

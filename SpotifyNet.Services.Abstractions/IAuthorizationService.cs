@@ -6,5 +6,7 @@ namespace SpotifyNet.Services.Abstractions;
 
 public interface IAuthorizationService
 {
+    Task<string> GetAccessToken(CancellationToken cancellationToken = default);
+
     Task<string> GetAccessToken(IEnumerable<string> scopes, CancellationToken cancellationToken = default);
 }

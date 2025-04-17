@@ -20,6 +20,17 @@ public class PlaylistsService : IPlaylistsService
         _webAPIRepository = webAPIRepository;
     }
 
+    public async Task<Playlist> GetPlaylist(
+        string playlistId,
+        CancellationToken cancellationToken)
+    {
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
+
+        var playlist = await _webAPIRepository.GetPlaylist(playlistId, accessToken, cancellationToken);
+
+        return playlist;
+    }
+
     public async Task<IReadOnlyList<SimplifiedPlaylist>> GetCurrentUserPlaylists(CancellationToken cancellationToken)
     {
         var requiredScopes = new[] { AuthorizationScope.PlaylistReadPrivate };
@@ -57,5 +68,18 @@ public class PlaylistsService : IPlaylistsService
         var playlists = await _webAPIRepository.GetUserPlaylists(userId, accessToken, cancellationToken);
 
         return playlists;
+    }
+
+    public async Task AddCustomPlaylistCoverImage(
+        string playlistId,
+        string base64Image,
+        CancellationToken cancellationToken)
+    {
+        // TODO: Only require one of the PlaylistModify scopes
+        var requiredScopes = new[] { AuthorizationScope.UgcImageUpload, AuthorizationScope.PlaylistModifyPublic, AuthorizationScope.PlaylistModifyPrivate };
+
+        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+
+        await _webAPIRepository.AddCustomPlaylistCoverImage(playlistId, base64Image, accessToken, cancellationToken);
     }
 }

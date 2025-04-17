@@ -62,9 +62,7 @@ public class UsersService : IUsersService
 
     public async Task<User> GetUserProfile(string userId, CancellationToken cancellationToken)
     {
-        var requiredScopes = Array.Empty<string>();
-
-        var accessToken = await _authorizationService.GetAccessToken(requiredScopes, cancellationToken);
+        var accessToken = await _authorizationService.GetAccessToken(cancellationToken);
 
         var user = await _webAPIRepository.GetUserProfile(userId, accessToken, cancellationToken);
 

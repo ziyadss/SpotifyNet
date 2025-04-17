@@ -45,11 +45,15 @@ internal static class Endpoints
     public static string GetRecentlyPlayedTracks() => $"{BaseUrl}/me/player/recently-played";
 
     // Playlists
+    public static string GetPlaylist(string playlistId) => $"{BaseUrl}/playlists/{playlistId}";
+
     public static string GetCurrentUserPlaylists() => $"{BaseUrl}/me/playlists";
 
     public static string GetPlaylistItems(string playlistId) => $"{BaseUrl}/playlists/{playlistId}/tracks";
 
     public static string GetUserPlaylists(string userId) => $"{BaseUrl}/users/{userId}/playlists";
+
+    public static string AddCustomPlaylistCoverImage(string playlistId) => $"{BaseUrl}/playlists/{playlistId}/images";
 
     // Search
 
